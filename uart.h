@@ -1,8 +1,7 @@
  #ifndef _UART_H
  #define _UART_H
 
-#define printf_P(format, args...)   _printf_P(&uart_putchar, format , ## args)
-#define printf(format, args...)     _printf_P(&uart_putchar, PSTR(format) , ## args)
+
 
 void BearbeiteRxDaten(void);
 

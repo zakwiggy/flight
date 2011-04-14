@@ -1,0 +1,1315 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	LipoDetection
+  13               	LipoDetection:
+  14 0000 1F93      		push r17
+  15 0002 CF93      		push r28
+  16 0004 DF93      		push r29
+  17               	/* prologue: function */
+  18               	/* frame size = 0 */
+  19 0006 182F      		mov r17,r24
+  20 0008 8823      		tst r24
+  21 000a 01F0      		breq .L2
+  22 000c 00D0      		rcall .
+  23 000e 0F92      		push __tmp_reg__
+  24 0010 ADB7      		in r26,__SP_L__
+  25 0012 BEB7      		in r27,__SP_H__
+  26 0014 1196      		adiw r26,1
+  27 0016 1C92      		st X,__zero_reg__
+  28 0018 1197      		sbiw r26,1
+  29 001a 80E0      		ldi r24,lo8(__c.2236)
+  30 001c 90E0      		ldi r25,hi8(__c.2236)
+  31 001e 1396      		adiw r26,2+1
+  32 0020 9C93      		st X,r25
+  33 0022 8E93      		st -X,r24
+  34 0024 1297      		sbiw r26,2
+  35 0026 0E94 0000 		call _printf_P
+  36 002a 0F90      		pop __tmp_reg__
+  37 002c 0F90      		pop __tmp_reg__
+  38 002e 0F90      		pop __tmp_reg__
+  39               	.L2:
+  40 0030 8091 0000 		lds r24,EE_Parameter+36
+  41 0034 8233      		cpi r24,lo8(50)
+  42 0036 00F0      		brlo .+2
+  43 0038 00C0      		rjmp .L3
+  44 003a 84EF      		ldi r24,lo8(500)
+  45 003c 91E0      		ldi r25,hi8(500)
+  46 003e 0E94 0000 		call SetDelay
+  47 0042 EC01      		movw r28,r24
+  48 0044 1123      		tst r17
+  49 0046 01F0      		breq .L4
+  50               	.L11:
+  51 0048 CE01      		movw r24,r28
+  52 004a 0E94 0000 		call CheckDelay
+  53 004e 8823      		tst r24
+  54 0050 01F0      		breq .L11
+  55               	.L4:
+  56 0052 C2E0      		ldi r28,lo8(2)
+  57 0054 D0E0      		ldi r29,hi8(2)
+  58 0056 26E5      		ldi r18,lo8(86)
+  59 0058 30E0      		ldi r19,hi8(86)
+  60               	.L7:
+  61 005a 8091 0000 		lds r24,UBat
+  62 005e 9091 0000 		lds r25,(UBat)+1
+  63 0062 8217      		cp r24,r18
+  64 0064 9307      		cpc r25,r19
+  65 0066 00F0      		brlo .L6
+  66 0068 2196      		adiw r28,1
+  67 006a 255D      		subi r18,lo8(-(43))
+  68 006c 3F4F      		sbci r19,hi8(-(43))
+  69 006e C730      		cpi r28,7
+  70 0070 D105      		cpc r29,__zero_reg__
+  71 0072 01F4      		brne .L7
+  72               	.L6:
+  73 0074 8091 0000 		lds r24,EE_Parameter+36
+  74 0078 90E0      		ldi r25,lo8(0)
+  75 007a FC01      		movw r30,r24
+  76 007c CE9F      		mul r28,r30
+  77 007e C001      		movw r24,r0
+  78 0080 CF9F      		mul r28,r31
+  79 0082 900D      		add r25,r0
+  80 0084 DE9F      		mul r29,r30
+  81 0086 900D      		add r25,r0
+  82 0088 1124      		clr r1
+  83 008a 8093 0000 		sts BattLowVoltageWarning,r24
+  84 008e 1123      		tst r17
+  85 0090 01F4      		brne .+2
+  86 0092 00C0      		rjmp .L10
+  87 0094 8C2F      		mov r24,r28
+  88 0096 68EC      		ldi r22,lo8(200)
+  89 0098 70E0      		ldi r23,hi8(200)
+  90 009a 0E94 0000 		call Piep
+  91 009e 00D0      		rcall .
+  92 00a0 00D0      		rcall .
+  93 00a2 0F92      		push __tmp_reg__
+  94 00a4 EDB7      		in r30,__SP_L__
+  95 00a6 FEB7      		in r31,__SP_H__
+  96 00a8 3196      		adiw r30,1
+  97 00aa ADB7      		in r26,__SP_L__
+  98 00ac BEB7      		in r27,__SP_H__
+  99 00ae 1196      		adiw r26,1
+ 100 00b0 1C92      		st X,__zero_reg__
+ 101 00b2 80E0      		ldi r24,lo8(__c.2244)
+ 102 00b4 90E0      		ldi r25,hi8(__c.2244)
+ 103 00b6 9283      		std Z+2,r25
+ 104 00b8 8183      		std Z+1,r24
+ 105 00ba D483      		std Z+4,r29
+ 106 00bc C383      		std Z+3,r28
+ 107 00be 0E94 0000 		call _printf_P
+ 108 00c2 0F90      		pop __tmp_reg__
+ 109 00c4 0F90      		pop __tmp_reg__
+ 110 00c6 0F90      		pop __tmp_reg__
+ 111 00c8 0F90      		pop __tmp_reg__
+ 112 00ca 0F90      		pop __tmp_reg__
+ 113 00cc 00C0      		rjmp .L9
+ 114               	.L3:
+ 115 00ce 8093 0000 		sts BattLowVoltageWarning,r24
+ 116 00d2 1123      		tst r17
+ 117 00d4 01F0      		breq .L10
+ 118               	.L9:
+ 119 00d6 2091 0000 		lds r18,BattLowVoltageWarning
+ 120 00da EDB7      		in r30,__SP_L__
+ 121 00dc FEB7      		in r31,__SP_H__
+ 122 00de 3797      		sbiw r30,7
+ 123 00e0 EDBF      		out __SP_L__,r30
+ 124 00e2 3196      		adiw r30,1
+ 125 00e4 ADB7      		in r26,__SP_L__
+ 126 00e6 BEB7      		in r27,__SP_H__
+ 127 00e8 1196      		adiw r26,1
+ 128 00ea 1C92      		st X,__zero_reg__
+ 129 00ec 80E0      		ldi r24,lo8(__c.2246)
+ 130 00ee 90E0      		ldi r25,hi8(__c.2246)
+ 131 00f0 9283      		std Z+2,r25
+ 132 00f2 8183      		std Z+1,r24
+ 133 00f4 822F      		mov r24,r18
+ 134 00f6 6AE0      		ldi r22,lo8(10)
+ 135 00f8 0E94 0000 		call __udivmodqi4
+ 136 00fc 8383      		std Z+3,r24
+ 137 00fe 1482      		std Z+4,__zero_reg__
+ 138 0100 822F      		mov r24,r18
+ 139 0102 0E94 0000 		call __udivmodqi4
+ 140 0106 9583      		std Z+5,r25
+ 141 0108 1682      		std Z+6,__zero_reg__
+ 142 010a 0E94 0000 		call _printf_P
+ 143 010e EDB7      		in r30,__SP_L__
+ 144 0110 FEB7      		in r31,__SP_H__
+ 145 0112 3796      		adiw r30,7
+ 146 0114 EDBF      		out __SP_L__,r30
+ 147               	.L10:
+ 148               	/* epilogue start */
+ 149 0116 DF91      		pop r29
+ 150 0118 CF91      		pop r28
+ 151 011a 1F91      		pop r17
+ 152 011c 0895      		ret
+ 154               	.global	CalMk3Mag
+ 156               	CalMk3Mag:
+ 157               	/* prologue: function */
+ 158               	/* frame size = 0 */
+ 159 011e 8091 0000 		lds r24,EE_Parameter+1
+ 160 0122 A82F      		mov r26,r24
+ 161 0124 B0E0      		ldi r27,lo8(0)
+ 162 0126 FD01      		movw r30,r26
+ 163 0128 EE0F      		lsl r30
+ 164 012a FF1F      		rol r31
+ 165 012c E050      		subi r30,lo8(-(PPM_in))
+ 166 012e F040      		sbci r31,hi8(-(PPM_in))
+ 167 0130 8081      		ld r24,Z
+ 168 0132 9181      		ldd r25,Z+1
+ 169 0134 8D5E      		subi r24,lo8(-19)
+ 170 0136 9F4F      		sbci r25,hi8(-19)
+ 171 0138 04F0      		brlt .L15
+ 172 013a 1092 0000 		sts stick.2222,__zero_reg__
+ 173               	.L15:
+ 174 013e AA0F      		lsl r26
+ 175 0140 BB1F      		rol r27
+ 176 0142 A050      		subi r26,lo8(-(PPM_in))
+ 177 0144 B040      		sbci r27,hi8(-(PPM_in))
+ 178 0146 8D91      		ld r24,X+
+ 179 0148 9C91      		ld r25,X
+ 180 014a 8A5B      		subi r24,lo8(-70)
+ 181 014c 9F4F      		sbci r25,hi8(-70)
+ 182 014e 04F4      		brge .L16
+ 183 0150 8091 0000 		lds r24,stick.2222
+ 184 0154 8823      		tst r24
+ 185 0156 01F4      		brne .L16
+ 186 0158 81E0      		ldi r24,lo8(1)
+ 187 015a 8093 0000 		sts stick.2222,r24
+ 188 015e 8091 0000 		lds r24,WinkelOut+6
+ 189 0162 8F5F      		subi r24,lo8(-(1))
+ 190 0164 8093 0000 		sts WinkelOut+6,r24
+ 191 0168 8530      		cpi r24,lo8(5)
+ 192 016a 00F0      		brlo .L17
+ 193 016c 88EE      		ldi r24,lo8(1000)
+ 194 016e 93E0      		ldi r25,hi8(1000)
+ 195 0170 9093 0000 		sts (beeptime)+1,r25
+ 196 0174 8093 0000 		sts beeptime,r24
+ 197 0178 00C0      		rjmp .L16
+ 198               	.L17:
+ 199 017a 66E9      		ldi r22,lo8(150)
+ 200 017c 70E0      		ldi r23,hi8(150)
+ 201 017e 0E94 0000 		call Piep
+ 202               	.L16:
+ 203 0182 8091 0000 		lds r24,WinkelOut+6
+ 204 0186 8093 0000 		sts DebugOut+40,r24
+ 205 018a 1092 0000 		sts DebugOut+41,__zero_reg__
+ 206               	/* epilogue start */
+ 207 018e 0895      		ret
+ 209               	.global	main
+ 211               	main:
+ 212 0190 A0E0      		ldi r26,lo8(0)
+ 213 0192 B0E0      		ldi r27,hi8(0)
+ 214 0194 E0E0      		ldi r30,lo8(gs(1f))
+ 215 0196 F0E0      		ldi r31,hi8(gs(1f))
+ 216 0198 0C94 0000 		jmp __prologue_saves__+((18 - 18) * 2)
+ 217               	1:
+ 218               	/* prologue: function */
+ 219               	/* frame size = 0 */
+ 220 019c 14B8      		out 36-32,__zero_reg__
+ 221 019e 15B8      		out 37-32,__zero_reg__
+ 222 01a0 189B      		sbis 35-32,0
+ 223 01a2 00C0      		rjmp .L20
+ 224 01a4 199B      		sbis 35-32,1
+ 225 01a6 00C0      		rjmp .L21
+ 226 01a8 8DE0      		ldi r24,lo8(13)
+ 227 01aa 00C0      		rjmp .L101
+ 228               	.L21:
+ 229 01ac 8BE0      		ldi r24,lo8(11)
+ 230 01ae 00C0      		rjmp .L101
+ 231               	.L20:
+ 232 01b0 199B      		sbis 35-32,1
+ 233 01b2 00C0      		rjmp .L23
+ 234 01b4 84E1      		ldi r24,lo8(20)
+ 235 01b6 00C0      		rjmp .L101
+ 236               	.L23:
+ 237 01b8 8AE0      		ldi r24,lo8(10)
+ 238               	.L101:
+ 239 01ba 8093 0000 		sts PlatinenVersion,r24
+ 240 01be 81E8      		ldi r24,lo8(-127)
+ 241 01c0 87B9      		out 39-32,r24
+ 242 01c2 3E9A      		sbi 39-32,6
+ 243 01c4 8FEF      		ldi r24,lo8(-1)
+ 244 01c6 88B9      		out 40-32,r24
+ 245 01c8 8BE1      		ldi r24,lo8(27)
+ 246 01ca 84B9      		out 36-32,r24
+ 247 01cc 81E0      		ldi r24,lo8(1)
+ 248 01ce 85B9      		out 37-32,r24
+ 249 01d0 8EE3      		ldi r24,lo8(62)
+ 250 01d2 8AB9      		out 42-32,r24
+ 251 01d4 87E4      		ldi r24,lo8(71)
+ 252 01d6 8BB9      		out 43-32,r24
+ 253 01d8 469A      		sbi 40-32,6
+ 254 01da 84B7      		in r24,84-32
+ 255 01dc 877F      		andi r24,lo8(-9)
+ 256 01de 84BF      		out 84-32,r24
+ 257 01e0 8091 6000 		lds r24,96
+ 258 01e4 8861      		ori r24,lo8(24)
+ 259 01e6 8093 6000 		sts 96,r24
+ 260 01ea 1092 6000 		sts 96,__zero_reg__
+ 261 01ee 84EC      		ldi r24,lo8(2500)
+ 262 01f0 99E0      		ldi r25,hi8(2500)
+ 263 01f2 9093 0000 		sts (beeptime)+1,r25
+ 264 01f6 8093 0000 		sts beeptime,r24
+ 265 01fa 1092 0000 		sts (StickGier)+1,__zero_reg__
+ 266 01fe 1092 0000 		sts StickGier,__zero_reg__
+ 267 0202 1092 0000 		sts (PPM_in+4)+1,__zero_reg__
+ 268 0206 1092 0000 		sts PPM_in+4,__zero_reg__
+ 269 020a 1092 0000 		sts (StickRoll)+1,__zero_reg__
+ 270 020e 1092 0000 		sts StickRoll,__zero_reg__
+ 271 0212 1092 0000 		sts (StickNick)+1,__zero_reg__
+ 272 0216 1092 0000 		sts StickNick,__zero_reg__
+ 273 021a 8091 0000 		lds r24,PlatinenVersion
+ 274 021e 8431      		cpi r24,lo8(20)
+ 275 0220 00F0      		brlo .L24
+ 276 0222 84EC      		ldi r24,lo8(1220)
+ 277 0224 94E0      		ldi r25,hi8(1220)
+ 278 0226 A0E0      		ldi r26,hlo8(1220)
+ 279 0228 B0E0      		ldi r27,hhi8(1220)
+ 280 022a 00C0      		rjmp .L102
+ 281               	.L24:
+ 282 022c 8BE0      		ldi r24,lo8(1291)
+ 283 022e 95E0      		ldi r25,hi8(1291)
+ 284 0230 A0E0      		ldi r26,hlo8(1291)
+ 285 0232 B0E0      		ldi r27,hhi8(1291)
+ 286               	.L102:
+ 287 0234 8093 0000 		sts GIER_GRAD_FAKTOR,r24
+ 288 0238 9093 0000 		sts (GIER_GRAD_FAKTOR)+1,r25
+ 289 023c A093 0000 		sts (GIER_GRAD_FAKTOR)+2,r26
+ 290 0240 B093 0000 		sts (GIER_GRAD_FAKTOR)+3,r27
+ 291 0244 8091 0000 		lds r24,PlatinenVersion
+ 292 0248 8A30      		cpi r24,lo8(10)
+ 293 024a 01F0      		breq .L26
+ 294 024c 8431      		cpi r24,lo8(20)
+ 295 024e 00F0      		brlo .L27
+ 296               	.L26:
+ 297 0250 2898      		cbi 37-32,0
+ 298 0252 00C0      		rjmp .L28
+ 299               	.L27:
+ 300 0254 289A      		sbi 37-32,0
+ 301               	.L28:
+ 302 0256 0E94 0000 		call Timer_Init
+ 303 025a 0E94 0000 		call TIMER2_Init
+ 304 025e 0E94 0000 		call UART_Init
+ 305 0262 0E94 0000 		call rc_sum_init
+ 306 0266 0E94 0000 		call ADC_Init
+ 307 026a 81E0      		ldi r24,lo8(1)
+ 308 026c 0E94 0000 		call I2C_Init
+ 309 0270 0E94 0000 		call SPI_MasterInit
+ 310 0274 0E94 0000 		call Capacity_Init
+ 311 0278 0E94 0000 		call LIBFC_Init
+ 312 027c 8091 0000 		lds r24,PlatinenVersion
+ 313 0280 8C30      		cpi r24,lo8(12)
+ 314 0282 00F4      		brsh .L29
+ 315 0284 299A      		sbi 37-32,1
+ 316 0286 00C0      		rjmp .L30
+ 317               	.L29:
+ 318 0288 2998      		cbi 37-32,1
+ 319               	.L30:
+ 320               	/* #APP */
+ 321               	 ;  160 "main.c" 1
+ 322 028a 7894      		sei
+ 323               	 ;  0 "" 2
+ 324               	/* #NOAPP */
+ 325 028c 0E94 0000 		call ParamSet_Init
+ 326 0290 8091 0000 		lds r24,BLFlags
+ 327 0294 8260      		ori r24,lo8(2)
+ 328 0296 8093 0000 		sts BLFlags,r24
+ 329 029a 1092 0000 		sts motor_read,__zero_reg__
+ 330 029e 0E94 0000 		call SendMotorData
+ 331 02a2 84EF      		ldi r24,lo8(500)
+ 332 02a4 91E0      		ldi r25,hi8(500)
+ 333 02a6 0E94 0000 		call SetDelay
+ 334 02aa EC01      		movw r28,r24
+ 335               	.L32:
+ 336 02ac 8091 0000 		lds r24,BLFlags
+ 337 02b0 80FD      		sbrc r24,0
+ 338 02b2 00C0      		rjmp .L31
+ 339 02b4 CE01      		movw r24,r28
+ 340 02b6 0E94 0000 		call CheckDelay
+ 341 02ba 8823      		tst r24
+ 342 02bc 01F0      		breq .L32
+ 343               	.L31:
+ 344 02be 00D0      		rcall .
+ 345 02c0 0F92      		push __tmp_reg__
+ 346 02c2 ADB7      		in r26,__SP_L__
+ 347 02c4 BEB7      		in r27,__SP_H__
+ 348 02c6 1196      		adiw r26,1
+ 349 02c8 1C92      		st X,__zero_reg__
+ 350 02ca 1197      		sbiw r26,1
+ 351 02cc 80E0      		ldi r24,lo8(__c.2276)
+ 352 02ce 90E0      		ldi r25,hi8(__c.2276)
+ 353 02d0 1396      		adiw r26,2+1
+ 354 02d2 9C93      		st X,r25
+ 355 02d4 8E93      		st -X,r24
+ 356 02d6 1297      		sbiw r26,2
+ 357 02d8 0E94 0000 		call _printf_P
+ 358 02dc 0F90      		pop __tmp_reg__
+ 359 02de 0F90      		pop __tmp_reg__
+ 360 02e0 0F90      		pop __tmp_reg__
+ 361 02e2 80EA      		ldi r24,lo8(4000)
+ 362 02e4 9FE0      		ldi r25,hi8(4000)
+ 363 02e6 0E94 0000 		call SetDelay
+ 364 02ea 5C01      		movw r10,r24
+ 365 02ec B0E0      		ldi r27,lo8(Motor+3)
+ 366 02ee EB2E      		mov r14,r27
+ 367 02f0 B0E0      		ldi r27,hi8(Motor+3)
+ 368 02f2 FB2E      		mov r15,r27
+ 369 02f4 A0E0      		ldi r26,lo8(Mixer+13)
+ 370 02f6 8A2E      		mov r8,r26
+ 371 02f8 A0E0      		ldi r26,hi8(Mixer+13)
+ 372 02fa 9A2E      		mov r9,r26
+ 373 02fc 8701      		movw r16,r14
+ 374 02fe 6401      		movw r12,r8
+ 375 0300 C1E0      		ldi r28,lo8(1)
+ 376 0302 D0E0      		ldi r29,hi8(1)
+ 377 0304 F0E0      		ldi r31,lo8(__c.2287)
+ 378 0306 6F2E      		mov r6,r31
+ 379 0308 F0E0      		ldi r31,hi8(__c.2287)
+ 380 030a 7F2E      		mov r7,r31
+ 381               	.L40:
+ 382 030c 0E94 0000 		call SendMotorData
+ 383               	.L34:
+ 384 0310 8091 0000 		lds r24,BLFlags
+ 385 0314 80FD      		sbrc r24,0
+ 386 0316 00C0      		rjmp .L33
+ 387 0318 C501      		movw r24,r10
+ 388 031a 0E94 0000 		call CheckDelay
+ 389 031e 8823      		tst r24
+ 390 0320 01F0      		breq .L34
+ 391               	.L33:
+ 392 0322 F601      		movw r30,r12
+ 393 0324 8081      		ld r24,Z
+ 394 0326 1816      		cp __zero_reg__,r24
+ 395 0328 04F0      		brlt .L98
+ 396 032a 00C0      		rjmp .L36
+ 397               	.L38:
+ 398 032c 0E94 0000 		call SendMotorData
+ 399               	.L37:
+ 400 0330 8091 0000 		lds r24,BLFlags
+ 401 0334 80FD      		sbrc r24,0
+ 402 0336 00C0      		rjmp .L98
+ 403 0338 C501      		movw r24,r10
+ 404 033a 0E94 0000 		call CheckDelay
+ 405 033e 8823      		tst r24
+ 406 0340 01F0      		breq .L37
+ 407               	.L98:
+ 408 0342 C501      		movw r24,r10
+ 409 0344 0E94 0000 		call CheckDelay
+ 410 0348 8823      		tst r24
+ 411 034a 01F4      		brne .L36
+ 412 034c D801      		movw r26,r16
+ 413 034e 8C91      		ld r24,X
+ 414 0350 87FF      		sbrs r24,7
+ 415 0352 00C0      		rjmp .L38
+ 416               	.L36:
+ 417 0354 F801      		movw r30,r16
+ 418 0356 8081      		ld r24,Z
+ 419 0358 87FF      		sbrs r24,7
+ 420 035a 00C0      		rjmp .L39
+ 421 035c 00D0      		rcall .
+ 422 035e 00D0      		rcall .
+ 423 0360 0F92      		push __tmp_reg__
+ 424 0362 EDB7      		in r30,__SP_L__
+ 425 0364 FEB7      		in r31,__SP_H__
+ 426 0366 3196      		adiw r30,1
+ 427 0368 ADB7      		in r26,__SP_L__
+ 428 036a BEB7      		in r27,__SP_H__
+ 429 036c 1196      		adiw r26,1
+ 430 036e 1C92      		st X,__zero_reg__
+ 431 0370 7282      		std Z+2,r7
+ 432 0372 6182      		std Z+1,r6
+ 433 0374 D483      		std Z+4,r29
+ 434 0376 C383      		std Z+3,r28
+ 435 0378 0E94 0000 		call _printf_P
+ 436 037c 8091 0000 		lds r24,FoundMotors
+ 437 0380 8F5F      		subi r24,lo8(-(1))
+ 438 0382 8093 0000 		sts FoundMotors,r24
+ 439 0386 0F90      		pop __tmp_reg__
+ 440 0388 0F90      		pop __tmp_reg__
+ 441 038a 0F90      		pop __tmp_reg__
+ 442 038c 0F90      		pop __tmp_reg__
+ 443 038e 0F90      		pop __tmp_reg__
+ 444               	.L39:
+ 445 0390 2196      		adiw r28,1
+ 446 0392 085F      		subi r16,lo8(-(8))
+ 447 0394 1F4F      		sbci r17,hi8(-(8))
+ 448 0396 E4E0      		ldi r30,lo8(4)
+ 449 0398 F0E0      		ldi r31,hi8(4)
+ 450 039a CE0E      		add r12,r30
+ 451 039c DF1E      		adc r13,r31
+ 452 039e CD30      		cpi r28,13
+ 453 03a0 D105      		cpc r29,__zero_reg__
+ 454 03a2 01F0      		breq .+2
+ 455 03a4 00C0      		rjmp .L40
+ 456 03a6 C1E0      		ldi r28,lo8(1)
+ 457 03a8 D0E0      		ldi r29,hi8(1)
+ 458 03aa 00E0      		ldi r16,lo8(__c.2292)
+ 459 03ac 10E0      		ldi r17,hi8(__c.2292)
+ 460 03ae E2E0      		ldi r30,lo8(2)
+ 461 03b0 DE2E      		mov r13,r30
+ 462               	.L42:
+ 463 03b2 D701      		movw r26,r14
+ 464 03b4 8C91      		ld r24,X
+ 465 03b6 87FD      		sbrc r24,7
+ 466 03b8 00C0      		rjmp .L41
+ 467 03ba F401      		movw r30,r8
+ 468 03bc 8081      		ld r24,Z
+ 469 03be 1816      		cp __zero_reg__,r24
+ 470 03c0 04F4      		brge .L41
+ 471 03c2 00D0      		rcall .
+ 472 03c4 00D0      		rcall .
+ 473 03c6 0F92      		push __tmp_reg__
+ 474 03c8 EDB7      		in r30,__SP_L__
+ 475 03ca FEB7      		in r31,__SP_H__
+ 476 03cc 3196      		adiw r30,1
+ 477 03ce ADB7      		in r26,__SP_L__
+ 478 03d0 BEB7      		in r27,__SP_H__
+ 479 03d2 1196      		adiw r26,1
+ 480 03d4 1C92      		st X,__zero_reg__
+ 481 03d6 1283      		std Z+2,r17
+ 482 03d8 0183      		std Z+1,r16
+ 483 03da D483      		std Z+4,r29
+ 484 03dc C383      		std Z+3,r28
+ 485 03de 0E94 0000 		call _printf_P
+ 486 03e2 D092 0000 		sts ServoActive,r13
+ 487 03e6 0F90      		pop __tmp_reg__
+ 488 03e8 0F90      		pop __tmp_reg__
+ 489 03ea 0F90      		pop __tmp_reg__
+ 490 03ec 0F90      		pop __tmp_reg__
+ 491 03ee 0F90      		pop __tmp_reg__
+ 492               	.L41:
+ 493 03f0 F701      		movw r30,r14
+ 494 03f2 8081      		ld r24,Z
+ 495 03f4 8078      		andi r24,lo8(-128)
+ 496 03f6 8083      		st Z,r24
+ 497 03f8 2196      		adiw r28,1
+ 498 03fa 88E0      		ldi r24,lo8(8)
+ 499 03fc 90E0      		ldi r25,hi8(8)
+ 500 03fe E80E      		add r14,r24
+ 501 0400 F91E      		adc r15,r25
+ 502 0402 A4E0      		ldi r26,lo8(4)
+ 503 0404 B0E0      		ldi r27,hi8(4)
+ 504 0406 8A0E      		add r8,r26
+ 505 0408 9B1E      		adc r9,r27
+ 506 040a CD30      		cpi r28,13
+ 507 040c D105      		cpc r29,__zero_reg__
+ 508 040e 01F4      		brne .L42
+ 509 0410 00D0      		rcall .
+ 510 0412 0F92      		push __tmp_reg__
+ 511 0414 EDB7      		in r30,__SP_L__
+ 512 0416 FEB7      		in r31,__SP_H__
+ 513 0418 1182      		std Z+1,__zero_reg__
+ 514 041a 80E0      		ldi r24,lo8(__c.2297)
+ 515 041c 90E0      		ldi r25,hi8(__c.2297)
+ 516 041e 9383      		std Z+3,r25
+ 517 0420 8283      		std Z+2,r24
+ 518 0422 0E94 0000 		call _printf_P
+ 519 0426 0F90      		pop __tmp_reg__
+ 520 0428 0F90      		pop __tmp_reg__
+ 521 042a 0F90      		pop __tmp_reg__
+ 522 042c 9091 0000 		lds r25,RequiredMotors
+ 523 0430 8091 0000 		lds r24,FoundMotors
+ 524 0434 9817      		cp r25,r24
+ 525 0436 00F4      		brsh .L43
+ 526 0438 8091 0000 		lds r24,VersionInfo+6
+ 527 043c 8061      		ori r24,lo8(16)
+ 528 043e 8093 0000 		sts VersionInfo+6,r24
+ 529               	.L43:
+ 530 0442 00D0      		rcall .
+ 531 0444 0F92      		push __tmp_reg__
+ 532 0446 ADB7      		in r26,__SP_L__
+ 533 0448 BEB7      		in r27,__SP_H__
+ 534 044a 1196      		adiw r26,1
+ 535 044c 1C92      		st X,__zero_reg__
+ 536 044e 1197      		sbiw r26,1
+ 537 0450 80E0      		ldi r24,lo8(__c.2299)
+ 538 0452 90E0      		ldi r25,hi8(__c.2299)
+ 539 0454 1396      		adiw r26,2+1
+ 540 0456 9C93      		st X,r25
+ 541 0458 8E93      		st -X,r24
+ 542 045a 1297      		sbiw r26,2
+ 543 045c 0E94 0000 		call _printf_P
+ 544 0460 0F90      		pop __tmp_reg__
+ 545 0462 0F90      		pop __tmp_reg__
+ 546 0464 0F90      		pop __tmp_reg__
+ 547 0466 88EE      		ldi r24,lo8(1000)
+ 548 0468 93E0      		ldi r25,hi8(1000)
+ 549 046a 0E94 0000 		call SetDelay
+ 550 046e EC01      		movw r28,r24
+ 551 0470 0E94 0000 		call SucheLuftruckOffset
+ 552               	.L44:
+ 553 0474 CE01      		movw r24,r28
+ 554 0476 0E94 0000 		call CheckDelay
+ 555 047a 8823      		tst r24
+ 556 047c 01F0      		breq .L44
+ 557 047e 00D0      		rcall .
+ 558 0480 0F92      		push __tmp_reg__
+ 559 0482 EDB7      		in r30,__SP_L__
+ 560 0484 FEB7      		in r31,__SP_H__
+ 561 0486 1182      		std Z+1,__zero_reg__
+ 562 0488 80E0      		ldi r24,lo8(__c.2304)
+ 563 048a 90E0      		ldi r25,hi8(__c.2304)
+ 564 048c 9383      		std Z+3,r25
+ 565 048e 8283      		std Z+2,r24
+ 566 0490 0E94 0000 		call _printf_P
+ 567 0494 0F90      		pop __tmp_reg__
+ 568 0496 0F90      		pop __tmp_reg__
+ 569 0498 0F90      		pop __tmp_reg__
+ 570 049a 80E0      		ldi r24,lo8(0)
+ 571 049c 0E94 0000 		call SetNeutral
+ 572 04a0 8091 0000 		lds r24,PlatinenVersion
+ 573 04a4 8A30      		cpi r24,lo8(10)
+ 574 04a6 01F0      		breq .L45
+ 575 04a8 8431      		cpi r24,lo8(20)
+ 576 04aa 00F0      		brlo .L46
+ 577               	.L45:
+ 578 04ac 2898      		cbi 37-32,0
+ 579 04ae 00C0      		rjmp .L47
+ 580               	.L46:
+ 581 04b0 289A      		sbi 37-32,0
+ 582               	.L47:
+ 583 04b2 80ED      		ldi r24,lo8(2000)
+ 584 04b4 97E0      		ldi r25,hi8(2000)
+ 585 04b6 9093 0000 		sts (beeptime)+1,r25
+ 586 04ba 8093 0000 		sts beeptime,r24
+ 587 04be 85E5      		ldi r24,lo8(85)
+ 588 04c0 8093 0000 		sts ExternControl,r24
+ 589 04c4 8EE0      		ldi r24,lo8(14)
+ 590 04c6 90E0      		ldi r25,hi8(14)
+ 591 04c8 0E94 0000 		call GetParamByte
+ 592 04cc 182F      		mov r17,r24
+ 593 04ce 8FE0      		ldi r24,lo8(15)
+ 594 04d0 90E0      		ldi r25,hi8(15)
+ 595 04d2 0E94 0000 		call GetParamByte
+ 596 04d6 312F      		mov r19,r17
+ 597 04d8 20E0      		ldi r18,lo8(0)
+ 598 04da 280F      		add r18,r24
+ 599 04dc 311D      		adc r19,__zero_reg__
+ 600 04de 3093 0000 		sts (FlugMinuten)+1,r19
+ 601 04e2 2093 0000 		sts FlugMinuten,r18
+ 602 04e6 8AE0      		ldi r24,lo8(10)
+ 603 04e8 90E0      		ldi r25,hi8(10)
+ 604 04ea 0E94 0000 		call GetParamByte
+ 605 04ee 182F      		mov r17,r24
+ 606 04f0 8BE0      		ldi r24,lo8(11)
+ 607 04f2 90E0      		ldi r25,hi8(11)
+ 608 04f4 0E94 0000 		call GetParamByte
+ 609 04f8 312F      		mov r19,r17
+ 610 04fa 20E0      		ldi r18,lo8(0)
+ 611 04fc 280F      		add r18,r24
+ 612 04fe 311D      		adc r19,__zero_reg__
+ 613 0500 3093 0000 		sts (FlugMinutenGesamt)+1,r19
+ 614 0504 2093 0000 		sts FlugMinutenGesamt,r18
+ 615 0508 2F5F      		subi r18,lo8(-1)
+ 616 050a 3F4F      		sbci r19,hi8(-1)
+ 617 050c 01F0      		breq .L48
+ 618 050e 8091 0000 		lds r24,FlugMinuten
+ 619 0512 9091 0000 		lds r25,(FlugMinuten)+1
+ 620 0516 8F5F      		subi r24,lo8(-1)
+ 621 0518 9F4F      		sbci r25,hi8(-1)
+ 622 051a 01F4      		brne .L49
+ 623               	.L48:
+ 624 051c 1092 0000 		sts (FlugMinuten)+1,__zero_reg__
+ 625 0520 1092 0000 		sts FlugMinuten,__zero_reg__
+ 626 0524 1092 0000 		sts (FlugMinutenGesamt)+1,__zero_reg__
+ 627 0528 1092 0000 		sts FlugMinutenGesamt,__zero_reg__
+ 628               	.L49:
+ 629 052c 8DB7      		in r24,__SP_L__
+ 630 052e 9EB7      		in r25,__SP_H__
+ 631 0530 0797      		sbiw r24,7
+ 632 0532 8DBF      		out __SP_L__,r24
+ 633 0534 EDB7      		in r30,__SP_L__
+ 634 0536 FEB7      		in r31,__SP_H__
+ 635 0538 3196      		adiw r30,1
+ 636 053a ADB7      		in r26,__SP_L__
+ 637 053c BEB7      		in r27,__SP_H__
+ 638 053e 1196      		adiw r26,1
+ 639 0540 1C92      		st X,__zero_reg__
+ 640 0542 80E0      		ldi r24,lo8(__c.2306)
+ 641 0544 90E0      		ldi r25,hi8(__c.2306)
+ 642 0546 9283      		std Z+2,r25
+ 643 0548 8183      		std Z+1,r24
+ 644 054a 8091 0000 		lds r24,FlugMinuten
+ 645 054e 9091 0000 		lds r25,(FlugMinuten)+1
+ 646 0552 9483      		std Z+4,r25
+ 647 0554 8383      		std Z+3,r24
+ 648 0556 8091 0000 		lds r24,FlugMinutenGesamt
+ 649 055a 9091 0000 		lds r25,(FlugMinutenGesamt)+1
+ 650 055e 9683      		std Z+6,r25
+ 651 0560 8583      		std Z+5,r24
+ 652 0562 0E94 0000 		call _printf_P
+ 653 0566 0F90      		pop __tmp_reg__
+ 654 0568 0F90      		pop __tmp_reg__
+ 655 056a 0F90      		pop __tmp_reg__
+ 656 056c 0F90      		pop __tmp_reg__
+ 657 056e EDB7      		in r30,__SP_L__
+ 658 0570 FEB7      		in r31,__SP_H__
+ 659 0572 1182      		std Z+1,__zero_reg__
+ 660 0574 80E0      		ldi r24,lo8(__c.2308)
+ 661 0576 90E0      		ldi r25,hi8(__c.2308)
+ 662 0578 9383      		std Z+3,r25
+ 663 057a 8283      		std Z+2,r24
+ 664 057c 0E94 0000 		call _printf_P
+ 665 0580 8091 0000 		lds r24,EE_Parameter+13
+ 666 0584 0F90      		pop __tmp_reg__
+ 667 0586 0F90      		pop __tmp_reg__
+ 668 0588 0F90      		pop __tmp_reg__
+ 669 058a 82FF      		sbrs r24,2
+ 670 058c 00C0      		rjmp .L50
+ 671 058e 00D0      		rcall .
+ 672 0590 0F92      		push __tmp_reg__
+ 673 0592 ADB7      		in r26,__SP_L__
+ 674 0594 BEB7      		in r27,__SP_H__
+ 675 0596 1196      		adiw r26,1
+ 676 0598 1C92      		st X,__zero_reg__
+ 677 059a 1197      		sbiw r26,1
+ 678 059c 80E0      		ldi r24,lo8(__c.2310)
+ 679 059e 90E0      		ldi r25,hi8(__c.2310)
+ 680 05a0 1396      		adiw r26,2+1
+ 681 05a2 9C93      		st X,r25
+ 682 05a4 8E93      		st -X,r24
+ 683 05a6 1297      		sbiw r26,2
+ 684 05a8 00C0      		rjmp .L103
+ 685               	.L50:
+ 686 05aa 00D0      		rcall .
+ 687 05ac 0F92      		push __tmp_reg__
+ 688 05ae EDB7      		in r30,__SP_L__
+ 689 05b0 FEB7      		in r31,__SP_H__
+ 690 05b2 1182      		std Z+1,__zero_reg__
+ 691 05b4 80E0      		ldi r24,lo8(__c.2312)
+ 692 05b6 90E0      		ldi r25,hi8(__c.2312)
+ 693 05b8 9383      		std Z+3,r25
+ 694 05ba 8283      		std Z+2,r24
+ 695               	.L103:
+ 696 05bc 0E94 0000 		call _printf_P
+ 697 05c0 0F90      		pop __tmp_reg__
+ 698 05c2 0F90      		pop __tmp_reg__
+ 699 05c4 0F90      		pop __tmp_reg__
+ 700 05c6 0E94 0000 		call LcdClear
+ 701 05ca 88E8      		ldi r24,lo8(5000)
+ 702 05cc 93E1      		ldi r25,hi8(5000)
+ 703 05ce 9093 0000 		sts (I2CTimeout)+1,r25
+ 704 05d2 8093 0000 		sts I2CTimeout,r24
+ 705 05d6 81E0      		ldi r24,lo8(1)
+ 706 05d8 8093 0000 		sts WinkelOut+7,r24
+ 707 05dc 0E94 0000 		call LipoDetection
+ 708 05e0 8091 0000 		lds r24,EE_Parameter+39
+ 709 05e4 0E94 0000 		call LIBFC_ReceiverInit
+ 710 05e8 00D0      		rcall .
+ 711 05ea 0F92      		push __tmp_reg__
+ 712 05ec ADB7      		in r26,__SP_L__
+ 713 05ee BEB7      		in r27,__SP_H__
+ 714 05f0 1196      		adiw r26,1
+ 715 05f2 1C92      		st X,__zero_reg__
+ 716 05f4 1197      		sbiw r26,1
+ 717 05f6 80E0      		ldi r24,lo8(__c.2314)
+ 718 05f8 90E0      		ldi r25,hi8(__c.2314)
+ 719 05fa 1396      		adiw r26,2+1
+ 720 05fc 9C93      		st X,r25
+ 721 05fe 8E93      		st -X,r24
+ 722 0600 1297      		sbiw r26,2
+ 723 0602 0E94 0000 		call _printf_P
+ 724 0606 0F90      		pop __tmp_reg__
+ 725 0608 0F90      		pop __tmp_reg__
+ 726 060a 0F90      		pop __tmp_reg__
+ 727 060c 80ED      		ldi r24,lo8(2000)
+ 728 060e 97E0      		ldi r25,hi8(2000)
+ 729 0610 0E94 0000 		call SetDelay
+ 730 0614 8C01      		movw r16,r24
+ 731 0616 8AEF      		ldi r24,lo8(250)
+ 732 0618 90E0      		ldi r25,hi8(250)
+ 733 061a 0E94 0000 		call SetDelay
+ 734 061e 7C01      		movw r14,r24
+ 735 0620 83E0      		ldi r24,lo8(3)
+ 736 0622 8093 0000 		sts DebugOut,r24
+ 737 0626 1092 0000 		sts JetiBeep,__zero_reg__
+ 738 062a C0E0      		ldi r28,lo8(0)
+ 739 062c D0E0      		ldi r29,hi8(0)
+ 740 062e 78E9      		ldi r23,lo8(15000)
+ 741 0630 C72E      		mov r12,r23
+ 742 0632 7AE3      		ldi r23,hi8(15000)
+ 743 0634 D72E      		mov r13,r23
+ 744 0636 612C      		mov r6,__zero_reg__
+ 745 0638 68EA      		ldi r22,hi8(-22528)
+ 746 063a 762E      		mov r7,r22
+ 747 063c 412C      		mov r4,__zero_reg__
+ 748 063e 5CE0      		ldi r21,hi8(3072)
+ 749 0640 552E      		mov r5,r21
+ 750 0642 40E1      		ldi r20,lo8(10000)
+ 751 0644 242E      		mov r2,r20
+ 752 0646 47E2      		ldi r20,hi8(10000)
+ 753 0648 342E      		mov r3,r20
+ 754 064a 30E8      		ldi r19,lo8(128)
+ 755 064c A32E      		mov r10,r19
+ 756 064e B12C      		mov r11,__zero_reg__
+ 757 0650 25E0      		ldi r18,lo8(5)
+ 758 0652 822E      		mov r8,r18
+ 759 0654 912C      		mov r9,__zero_reg__
+ 760               	.L99:
+ 761 0656 8091 0000 		lds r24,JetiUpdateModeActive
+ 762 065a 8111      		cpse r24,__zero_reg__
+ 763               	.L100:
+ 764 065c 00C0      		rjmp .L100
+ 765               	.L52:
+ 766 065e C701      		movw r24,r14
+ 767 0660 0E94 0000 		call CheckDelay
+ 768 0664 8823      		tst r24
+ 769 0666 01F0      		breq .L54
+ 770 0668 84E6      		ldi r24,lo8(100)
+ 771 066a 90E0      		ldi r25,hi8(100)
+ 772 066c 0E94 0000 		call SetDelay
+ 773 0670 7C01      		movw r14,r24
+ 774 0672 0E94 0000 		call LIBFC_Polling
+ 775               	.L54:
+ 776 0676 8091 0000 		lds r24,UpdateMotor
+ 777 067a 8823      		tst r24
+ 778 067c 01F4      		brne .+2
+ 779 067e 00C0      		rjmp .L55
+ 780 0680 8091 0000 		lds r24,AdReady
+ 781 0684 8823      		tst r24
+ 782 0686 01F4      		brne .+2
+ 783 0688 00C0      		rjmp .L55
+ 784 068a 1092 0000 		sts UpdateMotor,__zero_reg__
+ 785 068e 8091 0000 		lds r24,WinkelOut+6
+ 786 0692 8823      		tst r24
+ 787 0694 01F0      		breq .L56
+ 788 0696 0E94 0000 		call CalMk3Mag
+ 789 069a 00C0      		rjmp .L57
+ 790               	.L56:
+ 791 069c 0E94 0000 		call MotorRegler
+ 792               	.L57:
+ 793 06a0 0E94 0000 		call SendMotorData
+ 794 06a4 8091 0000 		lds r24,PlatinenVersion
+ 795 06a8 8A30      		cpi r24,lo8(10)
+ 796 06aa 01F0      		breq .L58
+ 797 06ac 8431      		cpi r24,lo8(20)
+ 798 06ae 00F0      		brlo .L59
+ 799               	.L58:
+ 800 06b0 2898      		cbi 37-32,0
+ 801 06b2 00C0      		rjmp .L60
+ 802               	.L59:
+ 803 06b4 289A      		sbi 37-32,0
+ 804               	.L60:
+ 805 06b6 8091 0000 		lds r24,SenderOkay
+ 806 06ba 8823      		tst r24
+ 807 06bc 01F0      		breq .L61
+ 808 06be 8091 0000 		lds r24,SenderOkay
+ 809 06c2 8150      		subi r24,lo8(-(-1))
+ 810 06c4 8093 0000 		sts SenderOkay,r24
+ 811 06c8 8091 0000 		lds r24,VersionInfo+6
+ 812 06cc 877F      		andi r24,lo8(-9)
+ 813 06ce 00C0      		rjmp .L104
+ 814               	.L61:
+ 815 06d0 8091 6F00 		lds r24,111
+ 816 06d4 8062      		ori r24,lo8(32)
+ 817 06d6 8093 6F00 		sts 111,r24
+ 818 06da 1092 0000 		sts (PPM_in)+1,__zero_reg__
+ 819 06de 1092 0000 		sts PPM_in,__zero_reg__
+ 820 06e2 8091 0000 		lds r24,VersionInfo+6
+ 821 06e6 8860      		ori r24,lo8(8)
+ 822               	.L104:
+ 823 06e8 8093 0000 		sts VersionInfo+6,r24
+ 824 06ec 8091 0000 		lds r24,I2CTimeout
+ 825 06f0 9091 0000 		lds r25,(I2CTimeout)+1
+ 826 06f4 0197      		sbiw r24,1
+ 827 06f6 9093 0000 		sts (I2CTimeout)+1,r25
+ 828 06fa 8093 0000 		sts I2CTimeout,r24
+ 829 06fe 8091 0000 		lds r24,I2CTimeout
+ 830 0702 9091 0000 		lds r25,(I2CTimeout)+1
+ 831 0706 892B      		or r24,r25
+ 832 0708 01F0      		breq .L63
+ 833 070a 8091 0000 		lds r24,MissingMotor
+ 834 070e 8823      		tst r24
+ 835 0710 01F0      		breq .L64
+ 836               	.L63:
+ 837 0712 8091 0000 		lds r24,I2CTimeout
+ 838 0716 9091 0000 		lds r25,(I2CTimeout)+1
+ 839 071a 892B      		or r24,r25
+ 840 071c 01F4      		brne .L65
+ 841 071e 0E94 0000 		call I2C_Reset
+ 842 0722 9092 0000 		sts (I2CTimeout)+1,r9
+ 843 0726 8092 0000 		sts I2CTimeout,r8
+ 844 072a 8091 0000 		lds r24,DebugOut+58
+ 845 072e 9091 0000 		lds r25,(DebugOut+58)+1
+ 846 0732 0196      		adiw r24,1
+ 847 0734 9093 0000 		sts (DebugOut+58)+1,r25
+ 848 0738 8093 0000 		sts DebugOut+58,r24
+ 849 073c 8091 0000 		lds r24,VersionInfo+6
+ 850 0740 8160      		ori r24,lo8(1)
+ 851 0742 8093 0000 		sts VersionInfo+6,r24
+ 852 0746 8091 0000 		lds r24,DebugOut+1
+ 853 074a 8260      		ori r24,lo8(2)
+ 854 074c 8093 0000 		sts DebugOut+1,r24
+ 855               	.L65:
+ 856 0750 8091 0000 		lds r24,BeepMuster
+ 857 0754 9091 0000 		lds r25,(BeepMuster)+1
+ 858 0758 8F5F      		subi r24,lo8(-1)
+ 859 075a 9F4F      		sbci r25,hi8(-1)
+ 860 075c 01F4      		brne .L66
+ 861 075e 8091 0000 		lds r24,MotorenEin
+ 862 0762 8823      		tst r24
+ 863 0764 01F0      		breq .L66
+ 864 0766 3092 0000 		sts (beeptime)+1,r3
+ 865 076a 2092 0000 		sts beeptime,r2
+ 866 076e B092 0000 		sts (BeepMuster)+1,r11
+ 867 0772 A092 0000 		sts BeepMuster,r10
+ 868 0776 00C0      		rjmp .L66
+ 869               	.L64:
+ 870 0778 8091 0000 		lds r24,PlatinenVersion
+ 871 077c 8A30      		cpi r24,lo8(10)
+ 872 077e 01F0      		breq .L67
+ 873 0780 8431      		cpi r24,lo8(20)
+ 874 0782 00F0      		brlo .L68
+ 875               	.L67:
+ 876 0784 2898      		cbi 37-32,0
+ 877 0786 00C0      		rjmp .L69
+ 878               	.L68:
+ 879 0788 289A      		sbi 37-32,0
+ 880               	.L69:
+ 881 078a 8091 0000 		lds r24,beeptime
+ 882 078e 9091 0000 		lds r25,(beeptime)+1
+ 883 0792 892B      		or r24,r25
+ 884 0794 01F4      		brne .L66
+ 885 0796 8091 0000 		lds r24,VersionInfo+6
+ 886 079a 8E7F      		andi r24,lo8(-2)
+ 887 079c 8093 0000 		sts VersionInfo+6,r24
+ 888               	.L66:
+ 889 07a0 8091 0000 		lds r24,UpdateMotor
+ 890 07a4 8823      		tst r24
+ 891 07a6 01F0      		breq .+2
+ 892 07a8 00C0      		rjmp .L55
+ 893 07aa 8091 0000 		lds r24,CalculateServoSignals
+ 894 07ae 8823      		tst r24
+ 895 07b0 01F0      		breq .L70
+ 896 07b2 0E94 0000 		call CalculateServo
+ 897               	.L70:
+ 898 07b6 0E94 0000 		call DatenUebertragung
+ 899 07ba 0E94 0000 		call BearbeiteRxDaten
+ 900 07be C801      		movw r24,r16
+ 901 07c0 0E94 0000 		call CheckDelay
+ 902 07c4 8823      		tst r24
+ 903 07c6 01F4      		brne .+2
+ 904 07c8 00C0      		rjmp .L71
+ 905 07ca 8091 0000 		lds r24,MissingMotor
+ 906 07ce 8823      		tst r24
+ 907 07d0 01F0      		breq .L72
+ 908 07d2 8091 0000 		lds r24,VersionInfo+6
+ 909 07d6 8260      		ori r24,lo8(2)
+ 910 07d8 8093 0000 		sts VersionInfo+6,r24
+ 911 07dc 8091 0000 		lds r24,DebugOut+1
+ 912 07e0 8260      		ori r24,lo8(2)
+ 913 07e2 00C0      		rjmp .L105
+ 914               	.L72:
+ 915 07e4 8091 0000 		lds r24,VersionInfo+6
+ 916 07e8 8D7F      		andi r24,lo8(-3)
+ 917 07ea 8093 0000 		sts VersionInfo+6,r24
+ 918 07ee 8091 0000 		lds r24,I2CTimeout
+ 919 07f2 9091 0000 		lds r25,(I2CTimeout)+1
+ 920 07f6 0797      		sbiw r24,7
+ 921 07f8 00F0      		brlo .L73
+ 922 07fa 8091 0000 		lds r24,DebugOut+1
+ 923 07fe 8D7F      		andi r24,lo8(-3)
+ 924               	.L105:
+ 925 0800 8093 0000 		sts DebugOut+1,r24
+ 926               	.L73:
+ 927 0804 8091 0000 		lds r24,I2CTimeout
+ 928 0808 9091 0000 		lds r25,(I2CTimeout)+1
+ 929 080c 0797      		sbiw r24,7
+ 930 080e 00F0      		brlo .L74
+ 931 0810 8091 0000 		lds r24,VersionInfo+6
+ 932 0814 8E7F      		andi r24,lo8(-2)
+ 933 0816 8093 0000 		sts VersionInfo+6,r24
+ 934               	.L74:
+ 935 081a 8091 0000 		lds r24,PcZugriff
+ 936 081e 8823      		tst r24
+ 937 0820 01F0      		breq .L75
+ 938 0822 8150      		subi r24,lo8(-(-1))
+ 939 0824 8093 0000 		sts PcZugriff,r24
+ 940 0828 00C0      		rjmp .L76
+ 941               	.L75:
+ 942 082a 1092 0000 		sts ExternControl+10,__zero_reg__
+ 943 082e 1092 0000 		sts (ExternStickNick)+1,__zero_reg__
+ 944 0832 1092 0000 		sts ExternStickNick,__zero_reg__
+ 945 0836 1092 0000 		sts (ExternStickRoll)+1,__zero_reg__
+ 946 083a 1092 0000 		sts ExternStickRoll,__zero_reg__
+ 947 083e 1092 0000 		sts (ExternStickGier)+1,__zero_reg__
+ 948 0842 1092 0000 		sts ExternStickGier,__zero_reg__
+ 949 0846 8091 0000 		lds r24,BeepMuster
+ 950 084a 9091 0000 		lds r25,(BeepMuster)+1
+ 951 084e 8F5F      		subi r24,lo8(-1)
+ 952 0850 9F4F      		sbci r25,hi8(-1)
+ 953 0852 01F4      		brne .L76
+ 954 0854 8091 0000 		lds r24,SenderOkay
+ 955 0858 8823      		tst r24
+ 956 085a 01F4      		brne .L76
+ 957 085c D092 0000 		sts (beeptime)+1,r13
+ 958 0860 C092 0000 		sts beeptime,r12
+ 959 0864 5092 0000 		sts (BeepMuster)+1,r5
+ 960 0868 4092 0000 		sts BeepMuster,r4
+ 961               	.L76:
+ 962 086c 8091 0000 		lds r24,NaviDataOkay
+ 963 0870 893C      		cpi r24,lo8(-55)
+ 964 0872 00F0      		brlo .L77
+ 965 0874 8150      		subi r24,lo8(-(-1))
+ 966 0876 8093 0000 		sts NaviDataOkay,r24
+ 967 087a 8091 0000 		lds r24,VersionInfo+6
+ 968 087e 8B7F      		andi r24,lo8(-5)
+ 969 0880 8093 0000 		sts VersionInfo+6,r24
+ 970 0884 00C0      		rjmp .L78
+ 971               	.L77:
+ 972 0886 8091 0000 		lds r24,NC_Version+3
+ 973 088a 8823      		tst r24
+ 974 088c 01F0      		breq .L79
+ 975 088e 8091 0000 		lds r24,VersionInfo+6
+ 976 0892 8460      		ori r24,lo8(4)
+ 977 0894 8093 0000 		sts VersionInfo+6,r24
+ 978 0898 8091 0000 		lds r24,BeepMuster
+ 979 089c 9091 0000 		lds r25,(BeepMuster)+1
+ 980 08a0 8F5F      		subi r24,lo8(-1)
+ 981 08a2 9F4F      		sbci r25,hi8(-1)
+ 982 08a4 01F4      		brne .L79
+ 983 08a6 8091 0000 		lds r24,MotorenEin
+ 984 08aa 8823      		tst r24
+ 985 08ac 01F0      		breq .L79
+ 986 08ae D092 0000 		sts (beeptime)+1,r13
+ 987 08b2 C092 0000 		sts beeptime,r12
+ 988 08b6 7092 0000 		sts (BeepMuster)+1,r7
+ 989 08ba 6092 0000 		sts BeepMuster,r6
+ 990               	.L79:
+ 991 08be 1092 0000 		sts (GPS_Nick)+1,__zero_reg__
+ 992 08c2 1092 0000 		sts GPS_Nick,__zero_reg__
+ 993 08c6 1092 0000 		sts (GPS_Roll)+1,__zero_reg__
+ 994 08ca 1092 0000 		sts GPS_Roll,__zero_reg__
+ 995 08ce 8FEF      		ldi r24,lo8(-1)
+ 996 08d0 9FEF      		ldi r25,hi8(-1)
+ 997 08d2 9093 0000 		sts (FromNaviCtrl+7)+1,r25
+ 998 08d6 8093 0000 		sts FromNaviCtrl+7,r24
+ 999 08da 1092 0000 		sts NaviDataOkay,__zero_reg__
+ 1000               	.L78:
+ 1001 08de 2091 0000 		lds r18,UBat
+ 1002 08e2 3091 0000 		lds r19,(UBat)+1
+ 1003 08e6 8091 0000 		lds r24,BattLowVoltageWarning
+ 1004 08ea 90E0      		ldi r25,lo8(0)
+ 1005 08ec 2817      		cp r18,r24
+ 1006 08ee 3907      		cpc r19,r25
+ 1007 08f0 04F4      		brge .L80
+ 1008 08f2 8091 0000 		lds r24,FC_StatusFlags
+ 1009 08f6 8062      		ori r24,lo8(32)
+ 1010 08f8 8093 0000 		sts FC_StatusFlags,r24
+ 1011 08fc 8091 0000 		lds r24,BeepMuster
+ 1012 0900 9091 0000 		lds r25,(BeepMuster)+1
+ 1013 0904 8F5F      		subi r24,lo8(-1)
+ 1014 0906 9F4F      		sbci r25,hi8(-1)
+ 1015 0908 01F4      		brne .L81
+ 1016 090a E0E7      		ldi r30,lo8(6000)
+ 1017 090c F7E1      		ldi r31,hi8(6000)
+ 1018 090e F093 0000 		sts (beeptime)+1,r31
+ 1019 0912 E093 0000 		sts beeptime,r30
+ 1020 0916 80E0      		ldi r24,lo8(768)
+ 1021 0918 93E0      		ldi r25,hi8(768)
+ 1022 091a 9093 0000 		sts (BeepMuster)+1,r25
+ 1023 091e 8093 0000 		sts BeepMuster,r24
+ 1024 0922 00C0      		rjmp .L81
+ 1025               	.L80:
+ 1026 0924 8091 0000 		lds r24,beeptime
+ 1027 0928 9091 0000 		lds r25,(beeptime)+1
+ 1028 092c 892B      		or r24,r25
+ 1029 092e 01F4      		brne .L81
+ 1030 0930 8091 0000 		lds r24,FC_StatusFlags
+ 1031 0934 8F7D      		andi r24,lo8(-33)
+ 1032 0936 8093 0000 		sts FC_StatusFlags,r24
+ 1033               	.L81:
+ 1034 093a 0E94 0000 		call SPI_StartTransmitPacket
+ 1035 093e 94E0      		ldi r25,lo8(4)
+ 1036 0940 9093 0000 		sts SendSPI,r25
+ 1037 0944 8091 0000 		lds r24,MotorenEin
+ 1038 0948 8823      		tst r24
+ 1039 094a 01F4      		brne .L82
+ 1040 094c CAEA      		ldi r28,lo8(1450)
+ 1041 094e D5E0      		ldi r29,hi8(1450)
+ 1042 0950 00C0      		rjmp .L83
+ 1043               	.L82:
+ 1044 0952 8091 0000 		lds r24,second.2317
+ 1045 0956 8F5F      		subi r24,lo8(-(1))
+ 1046 0958 8093 0000 		sts second.2317,r24
+ 1047 095c 8133      		cpi r24,lo8(49)
+ 1048 095e 01F4      		brne .L83
+ 1049 0960 1092 0000 		sts second.2317,__zero_reg__
+ 1050 0964 8091 0000 		lds r24,FlugSekunden
+ 1051 0968 9091 0000 		lds r25,(FlugSekunden)+1
+ 1052 096c 0196      		adiw r24,1
+ 1053 096e 9093 0000 		sts (FlugSekunden)+1,r25
+ 1054 0972 8093 0000 		sts FlugSekunden,r24
+ 1055               	.L83:
+ 1056 0976 2196      		adiw r28,1
+ 1057 0978 ABE0      		ldi r26,hi8(2930)
+ 1058 097a C237      		cpi r28,lo8(2930)
+ 1059 097c DA07      		cpc r29,r26
+ 1060 097e 01F0      		breq .L84
+ 1061 0980 0C5E      		subi r16,lo8(-(20))
+ 1062 0982 1F4F      		sbci r17,hi8(-(20))
+ 1063 0984 00C0      		rjmp .L71
+ 1064               	.L84:
+ 1065 0986 8091 0000 		lds r24,FlugMinuten
+ 1066 098a 9091 0000 		lds r25,(FlugMinuten)+1
+ 1067 098e 0196      		adiw r24,1
+ 1068 0990 9093 0000 		sts (FlugMinuten)+1,r25
+ 1069 0994 8093 0000 		sts FlugMinuten,r24
+ 1070 0998 8091 0000 		lds r24,FlugMinutenGesamt
+ 1071 099c 9091 0000 		lds r25,(FlugMinutenGesamt)+1
+ 1072 09a0 0196      		adiw r24,1
+ 1073 09a2 9093 0000 		sts (FlugMinutenGesamt)+1,r25
+ 1074 09a6 8093 0000 		sts FlugMinutenGesamt,r24
+ 1075 09aa 6091 0000 		lds r22,FlugMinuten+1
+ 1076 09ae 8EE0      		ldi r24,lo8(14)
+ 1077 09b0 90E0      		ldi r25,hi8(14)
+ 1078 09b2 0E94 0000 		call SetParamByte
+ 1079 09b6 8FE0      		ldi r24,lo8(15)
+ 1080 09b8 90E0      		ldi r25,hi8(15)
+ 1081 09ba 6091 0000 		lds r22,FlugMinuten
+ 1082 09be 0E94 0000 		call SetParamByte
+ 1083 09c2 6091 0000 		lds r22,FlugMinutenGesamt+1
+ 1084 09c6 8AE0      		ldi r24,lo8(10)
+ 1085 09c8 90E0      		ldi r25,hi8(10)
+ 1086 09ca 0E94 0000 		call SetParamByte
+ 1087 09ce 8BE0      		ldi r24,lo8(11)
+ 1088 09d0 90E0      		ldi r25,hi8(11)
+ 1089 09d2 6091 0000 		lds r22,FlugMinutenGesamt
+ 1090 09d6 0E94 0000 		call SetParamByte
+ 1091 09da 84E1      		ldi r24,lo8(20)
+ 1092 09dc 90E0      		ldi r25,hi8(20)
+ 1093 09de 0E94 0000 		call SetDelay
+ 1094 09e2 8C01      		movw r16,r24
+ 1095 09e4 C0E0      		ldi r28,lo8(0)
+ 1096 09e6 D0E0      		ldi r29,hi8(0)
+ 1097               	.L71:
+ 1098 09e8 0E94 0000 		call LED_Update
+ 1099 09ec 0E94 0000 		call Capacity_Update
+ 1100               	.L55:
+ 1101 09f0 8091 0000 		lds r24,SendSPI
+ 1102 09f4 8823      		tst r24
+ 1103 09f6 01F0      		breq .+2
+ 1104 09f8 00C0      		rjmp .L99
+ 1105 09fa 0E94 0000 		call SPI_TransmitByte
+ 1106 09fe 00C0      		rjmp .L99
+ 1108               	.global	PlatinenVersion
+ 1109               		.data
+ 1112               	PlatinenVersion:
+ 1113 0000 0A        		.byte	10
+ 1114               	.global	SendVersionToNavi
+ 1117               	SendVersionToNavi:
+ 1118 0001 01        		.byte	1
+ 1119               	.global	BattLowVoltageWarning
+ 1122               	BattLowVoltageWarning:
+ 1123 0002 5E        		.byte	94
+ 1124               	.global	FlugMinuten
+ 1125               	.global	FlugMinuten
+ 1126               		.section .bss
+ 1129               	FlugMinuten:
+ 1130 0000 0000      		.skip 2,0
+ 1131               	.global	FlugMinutenGesamt
+ 1132               	.global	FlugMinutenGesamt
+ 1135               	FlugMinutenGesamt:
+ 1136 0002 0000      		.skip 2,0
+ 1137               	.global	FlugSekunden
+ 1138               	.global	FlugSekunden
+ 1141               	FlugSekunden:
+ 1142 0004 0000      		.skip 2,0
+ 1143               	.global	FoundMotors
+ 1144               	.global	FoundMotors
+ 1147               	FoundMotors:
+ 1148 0006 00        		.skip 1,0
+ 1149               	.global	JetiBeep
+ 1150               	.global	JetiBeep
+ 1153               	JetiBeep:
+ 1154 0007 00        		.skip 1,0
+ 1155               		.lcomm second.2317,1
+ 1156               		.section	.progmem.data,"a",@progbits
+ 1159               	__c.2314:
+ 1160 0000 0A0D 3D3D 		.string	"\n\r===================================\n\r"
+ 1160      3D3D 3D3D 
+ 1160      3D3D 3D3D 
+ 1160      3D3D 3D3D 
+ 1160      3D3D 3D3D 
+ 1163               	__c.2312:
+ 1164 0028 4E6F 726D 		.string	"Normal (ACC-Mode)"
+ 1164      616C 2028 
+ 1164      4143 432D 
+ 1164      4D6F 6465 
+ 1164      2900 
+ 1167               	__c.2310:
+ 1168 003a 4865 6164 		.string	"HeadingHold"
+ 1168      696E 6748 
+ 1168      6F6C 6400 
+ 1171               	__c.2308:
+ 1172 0046 0A0D 436F 		.string	"\n\rControl: "
+ 1172      6E74 726F 
+ 1172      6C3A 2000 
+ 1175               	__c.2306:
+ 1176 0052 0A0D 466C 		.string	"\n\rFlight-time %u min  Total:%u min"
+ 1176      6967 6874 
+ 1176      2D74 696D 
+ 1176      6520 2575 
+ 1176      206D 696E 
+ 1179               	__c.2304:
+ 1180 0075 4F4B 0A0D 		.string	"OK\n\r"
+ 1180      00
+ 1183               	__c.2299:
+ 1184 007a 0A0D 4361 		.string	"\n\rCalibrating pressure sensor.."
+ 1184      6C69 6272 
+ 1184      6174 696E 
+ 1184      6720 7072 
+ 1184      6573 7375 
+ 1187               	__c.2297:
+ 1188 009a 0A0D 3D3D 		.string	"\n\r==================================="
+ 1188      3D3D 3D3D 
+ 1188      3D3D 3D3D 
+ 1188      3D3D 3D3D 
+ 1188      3D3D 3D3D 
+ 1191               	__c.2292:
+ 1192 00c0 0A0D 0A0D 		.string	"\n\r\n\r!! MISSING BL-CTRL: %d !!"
+ 1192      2121 204D 
+ 1192      4953 5349 
+ 1192      4E47 2042 
+ 1192      4C2D 4354 
+ 1195               	__c.2287:
+ 1196 00de 2564 00   		.string	"%d"
+ 1199               	__c.2276:
+ 1200 00e1 0A0D 466F 		.string	"\n\rFound BL-Ctrl: "
+ 1200      756E 6420 
+ 1200      424C 2D43 
+ 1200      7472 6C3A 
+ 1200      2000 
+ 1203               	__c.2246:
+ 1204 00f3 204C 6F77 		.string	" Low warning level: %d.%d"
+ 1204      2077 6172 
+ 1204      6E69 6E67 
+ 1204      206C 6576 
+ 1204      656C 3A20 
+ 1207               	__c.2244:
+ 1208 010d 2025 6420 		.string	" %d Cells "
+ 1208      4365 6C6C 
+ 1208      7320 00
+ 1211               	__c.2236:
+ 1212 0118 0A0D 4261 		.string	"\n\rBatt:"
+ 1212      7474 3A00 
+ 1213               		.data
+ 1216               	stick.2222:
+ 1217 0003 01        		.byte	1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccMeXD4u.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccMeXD4u.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccMeXD4u.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccMeXD4u.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccMeXD4u.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccMeXD4u.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccMeXD4u.s:13     .text:0000000000000000 LipoDetection
+     /tmp/ccMeXD4u.s:1211   .progmem.data:0000000000000118 __c.2236
+     /tmp/ccMeXD4u.s:1122   .data:0000000000000002 BattLowVoltageWarning
+     /tmp/ccMeXD4u.s:1207   .progmem.data:000000000000010d __c.2244
+     /tmp/ccMeXD4u.s:1203   .progmem.data:00000000000000f3 __c.2246
+     /tmp/ccMeXD4u.s:156    .text:000000000000011e CalMk3Mag
+     /tmp/ccMeXD4u.s:1216   .data:0000000000000003 stick.2222
+     /tmp/ccMeXD4u.s:211    .text:0000000000000190 main
+     /tmp/ccMeXD4u.s:1112   .data:0000000000000000 PlatinenVersion
+     /tmp/ccMeXD4u.s:1199   .progmem.data:00000000000000e1 __c.2276
+     /tmp/ccMeXD4u.s:1195   .progmem.data:00000000000000de __c.2287
+     /tmp/ccMeXD4u.s:1147   .bss:0000000000000006 FoundMotors
+     /tmp/ccMeXD4u.s:1191   .progmem.data:00000000000000c0 __c.2292
+     /tmp/ccMeXD4u.s:1187   .progmem.data:000000000000009a __c.2297
+     /tmp/ccMeXD4u.s:1183   .progmem.data:000000000000007a __c.2299
+     /tmp/ccMeXD4u.s:1179   .progmem.data:0000000000000075 __c.2304
+     /tmp/ccMeXD4u.s:1129   .bss:0000000000000000 FlugMinuten
+     /tmp/ccMeXD4u.s:1135   .bss:0000000000000002 FlugMinutenGesamt
+     /tmp/ccMeXD4u.s:1175   .progmem.data:0000000000000052 __c.2306
+     /tmp/ccMeXD4u.s:1171   .progmem.data:0000000000000046 __c.2308
+     /tmp/ccMeXD4u.s:1167   .progmem.data:000000000000003a __c.2310
+     /tmp/ccMeXD4u.s:1163   .progmem.data:0000000000000028 __c.2312
+     /tmp/ccMeXD4u.s:1159   .progmem.data:0000000000000000 __c.2314
+     /tmp/ccMeXD4u.s:1153   .bss:0000000000000007 JetiBeep
+                             .bss:0000000000000008 second.2317
+     /tmp/ccMeXD4u.s:1141   .bss:0000000000000004 FlugSekunden
+     /tmp/ccMeXD4u.s:1117   .data:0000000000000001 SendVersionToNavi
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+_printf_P
+EE_Parameter
+SetDelay
+CheckDelay
+UBat
+Piep
+__udivmodqi4
+PPM_in
+WinkelOut
+beeptime
+DebugOut
+__prologue_saves__
+StickGier
+StickRoll
+StickNick
+GIER_GRAD_FAKTOR
+Timer_Init
+TIMER2_Init
+UART_Init
+rc_sum_init
+ADC_Init
+I2C_Init
+SPI_MasterInit
+Capacity_Init
+LIBFC_Init
+ParamSet_Init
+BLFlags
+motor_read
+SendMotorData
+Motor
+Mixer
+ServoActive
+RequiredMotors
+VersionInfo
+SucheLuftruckOffset
+SetNeutral
+ExternControl
+GetParamByte
+LcdClear
+I2CTimeout
+LIBFC_ReceiverInit
+JetiUpdateModeActive
+LIBFC_Polling
+UpdateMotor
+AdReady
+MotorRegler
+SenderOkay
+MissingMotor
+I2C_Reset
+BeepMuster
+MotorenEin
+CalculateServoSignals
+CalculateServo
+DatenUebertragung
+BearbeiteRxDaten
+PcZugriff
+ExternStickNick
+ExternStickRoll
+ExternStickGier
+NaviDataOkay
+NC_Version
+GPS_Nick
+GPS_Roll
+FromNaviCtrl
+FC_StatusFlags
+SPI_StartTransmitPacket
+SendSPI
+SetParamByte
+LED_Update
+Capacity_Update
+SPI_TransmitByte

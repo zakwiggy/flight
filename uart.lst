@@ -1,0 +1,2708 @@
+   1               		.file	"uart.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	__vector_22
+  13               	__vector_22:
+  14 0000 1F92      		push __zero_reg__
+  15 0002 0F92      		push r0
+  16 0004 0FB6      		in r0,__SREG__
+  17 0006 0F92      		push r0
+  18 0008 1124      		clr __zero_reg__
+  19 000a 8F93      		push r24
+  20 000c 9F93      		push r25
+  21 000e EF93      		push r30
+  22 0010 FF93      		push r31
+  23               	/* prologue: Signal */
+  24               	/* frame size = 0 */
+  25 0012 8091 0000 		lds r24,UebertragungAbgeschlossen
+  26 0016 8823      		tst r24
+  27 0018 01F4      		brne .L2
+  28 001a 8091 0000 		lds r24,ptr.2268
+  29 001e 9091 0000 		lds r25,(ptr.2268)+1
+  30 0022 0196      		adiw r24,1
+  31 0024 9093 0000 		sts (ptr.2268)+1,r25
+  32 0028 8093 0000 		sts ptr.2268,r24
+  33 002c FC01      		movw r30,r24
+  34 002e E050      		subi r30,lo8(-(TxdBuffer))
+  35 0030 F040      		sbci r31,hi8(-(TxdBuffer))
+  36 0032 E081      		ld r30,Z
+  37 0034 ED30      		cpi r30,lo8(13)
+  38 0036 01F0      		breq .L3
+  39 0038 8A3A      		cpi r24,170
+  40 003a 9105      		cpc r25,__zero_reg__
+  41 003c 01F4      		brne .L4
+  42               	.L3:
+  43 003e 1092 0000 		sts (ptr.2268)+1,__zero_reg__
+  44 0042 1092 0000 		sts ptr.2268,__zero_reg__
+  45 0046 81E0      		ldi r24,lo8(1)
+  46 0048 8093 0000 		sts UebertragungAbgeschlossen,r24
+  47               	.L4:
+  48 004c E093 C600 		sts 198,r30
+  49 0050 00C0      		rjmp .L6
+  50               	.L2:
+  51 0052 1092 0000 		sts (ptr.2268)+1,__zero_reg__
+  52 0056 1092 0000 		sts ptr.2268,__zero_reg__
+  53               	.L6:
+  54               	/* epilogue start */
+  55 005a FF91      		pop r31
+  56 005c EF91      		pop r30
+  57 005e 9F91      		pop r25
+  58 0060 8F91      		pop r24
+  59 0062 0F90      		pop r0
+  60 0064 0FBE      		out __SREG__,r0
+  61 0066 0F90      		pop r0
+  62 0068 1F90      		pop __zero_reg__
+  63 006a 1895      		reti
+  65               	.global	AddCRC
+  67               	AddCRC:
+  68               	/* prologue: function */
+  69               	/* frame size = 0 */
+  70 006c DC01      		movw r26,r24
+  71 006e 20E0      		ldi r18,lo8(0)
+  72 0070 30E0      		ldi r19,hi8(0)
+  73 0072 40E0      		ldi r20,lo8(0)
+  74 0074 50E0      		ldi r21,hi8(0)
+  75 0076 00C0      		rjmp .L8
+  76               	.L9:
+  77 0078 FA01      		movw r30,r20
+  78 007a E050      		subi r30,lo8(-(TxdBuffer))
+  79 007c F040      		sbci r31,hi8(-(TxdBuffer))
+  80 007e 8081      		ld r24,Z
+  81 0080 280F      		add r18,r24
+  82 0082 311D      		adc r19,__zero_reg__
+  83 0084 4F5F      		subi r20,lo8(-(1))
+  84 0086 5F4F      		sbci r21,hi8(-(1))
+  85               	.L8:
+  86 0088 4A17      		cp r20,r26
+  87 008a 5B07      		cpc r21,r27
+  88 008c 00F0      		brlo .L9
+  89 008e 3F70      		andi r19,hi8(4095)
+  90 0090 C901      		movw r24,r18
+  91 0092 36E0      		ldi r19,6
+  92 0094 9695      	1:	lsr r25
+  93 0096 8795      		ror r24
+  94 0098 3A95      		dec r19
+  95 009a 01F4      		brne 1b
+  96 009c 835C      		subi r24,lo8(-(61))
+  97 009e FD01      		movw r30,r26
+  98 00a0 E050      		subi r30,lo8(-(TxdBuffer))
+  99 00a2 F040      		sbci r31,hi8(-(TxdBuffer))
+ 100 00a4 8083      		st Z,r24
+ 101 00a6 1196      		adiw r26,1
+ 102 00a8 2F73      		andi r18,lo8(63)
+ 103 00aa 235C      		subi r18,lo8(-(61))
+ 104 00ac FD01      		movw r30,r26
+ 105 00ae E050      		subi r30,lo8(-(TxdBuffer))
+ 106 00b0 F040      		sbci r31,hi8(-(TxdBuffer))
+ 107 00b2 2083      		st Z,r18
+ 108 00b4 A050      		subi r26,lo8(-(TxdBuffer+1))
+ 109 00b6 B040      		sbci r27,hi8(-(TxdBuffer+1))
+ 110 00b8 8DE0      		ldi r24,lo8(13)
+ 111 00ba 8C93      		st X,r24
+ 112 00bc 1092 0000 		sts UebertragungAbgeschlossen,__zero_reg__
+ 113 00c0 8091 0000 		lds r24,TxdBuffer
+ 114 00c4 8093 C600 		sts 198,r24
+ 115               	/* epilogue start */
+ 116 00c8 0895      		ret
+ 118               	.global	Decode64
+ 120               	Decode64:
+ 121               	/* prologue: function */
+ 122               	/* frame size = 0 */
+ 123 00ca 5091 0000 		lds r21,AnzahlEmpfangsBytes
+ 124 00ce 5650      		subi r21,lo8(-(-6))
+ 125 00d0 43E0      		ldi r20,lo8(3)
+ 126 00d2 33E0      		ldi r19,lo8(3)
+ 127 00d4 00C0      		rjmp .L12
+ 128               	.L16:
+ 129 00d6 E32F      		mov r30,r19
+ 130 00d8 F0E0      		ldi r31,lo8(0)
+ 131 00da E050      		subi r30,lo8(-(RxdBuffer))
+ 132 00dc F040      		sbci r31,hi8(-(RxdBuffer))
+ 133 00de 8081      		ld r24,Z
+ 134 00e0 3F5F      		subi r19,lo8(-(1))
+ 135 00e2 E32F      		mov r30,r19
+ 136 00e4 F0E0      		ldi r31,lo8(0)
+ 137 00e6 E050      		subi r30,lo8(-(RxdBuffer))
+ 138 00e8 F040      		sbci r31,hi8(-(RxdBuffer))
+ 139 00ea 2081      		ld r18,Z
+ 140 00ec 2D53      		subi r18,lo8(-(-61))
+ 141 00ee 3F5F      		subi r19,lo8(-(1))
+ 142 00f0 E32F      		mov r30,r19
+ 143 00f2 F0E0      		ldi r31,lo8(0)
+ 144 00f4 E050      		subi r30,lo8(-(RxdBuffer))
+ 145 00f6 F040      		sbci r31,hi8(-(RxdBuffer))
+ 146 00f8 7081      		ld r23,Z
+ 147 00fa 3F5F      		subi r19,lo8(-(1))
+ 148 00fc E32F      		mov r30,r19
+ 149 00fe F0E0      		ldi r31,lo8(0)
+ 150 0100 3350      		subi r19,lo8(-(-3))
+ 151 0102 E050      		subi r30,lo8(-(RxdBuffer))
+ 152 0104 F040      		sbci r31,hi8(-(RxdBuffer))
+ 153 0106 6081      		ld r22,Z
+ 154 0108 922F      		mov r25,r18
+ 155 010a 9295      		swap r25
+ 156 010c 9F70      		andi r25,0x0f
+ 157 010e 8D53      		subi r24,lo8(-(-61))
+ 158 0110 880F      		lsl r24
+ 159 0112 880F      		lsl r24
+ 160 0114 892B      		or r24,r25
+ 161 0116 E42F      		mov r30,r20
+ 162 0118 F0E0      		ldi r31,lo8(0)
+ 163 011a E050      		subi r30,lo8(-(RxdBuffer))
+ 164 011c F040      		sbci r31,hi8(-(RxdBuffer))
+ 165 011e 8083      		st Z,r24
+ 166 0120 E42F      		mov r30,r20
+ 167 0122 EF5F      		subi r30,lo8(-(1))
+ 168 0124 5130      		cpi r21,lo8(1)
+ 169 0126 01F0      		breq .L18
+ 170               	.L13:
+ 171 0128 972F      		mov r25,r23
+ 172 012a 9D53      		subi r25,lo8(-(-61))
+ 173 012c F0E0      		ldi r31,lo8(0)
+ 174 012e 2295      		swap r18
+ 175 0130 207F      		andi r18,0xf0
+ 176 0132 892F      		mov r24,r25
+ 177 0134 8695      		lsr r24
+ 178 0136 8695      		lsr r24
+ 179 0138 282B      		or r18,r24
+ 180 013a E050      		subi r30,lo8(-(RxdBuffer))
+ 181 013c F040      		sbci r31,hi8(-(RxdBuffer))
+ 182 013e 2083      		st Z,r18
+ 183 0140 E42F      		mov r30,r20
+ 184 0142 EE5F      		subi r30,lo8(-(2))
+ 185 0144 5230      		cpi r21,lo8(2)
+ 186 0146 01F4      		brne .L15
+ 187               	.L18:
+ 188 0148 4E2F      		mov r20,r30
+ 189 014a 00C0      		rjmp .L14
+ 190               	.L15:
+ 191 014c 3C5F      		subi r19,lo8(-(4))
+ 192 014e 5350      		subi r21,lo8(-(-3))
+ 193 0150 F0E0      		ldi r31,lo8(0)
+ 194 0152 9295      		swap r25
+ 195 0154 990F      		lsl r25
+ 196 0156 990F      		lsl r25
+ 197 0158 907C      		andi r25,0xc0
+ 198 015a 6D53      		subi r22,lo8(-(-61))
+ 199 015c 962B      		or r25,r22
+ 200 015e E050      		subi r30,lo8(-(RxdBuffer))
+ 201 0160 F040      		sbci r31,hi8(-(RxdBuffer))
+ 202 0162 9083      		st Z,r25
+ 203 0164 4D5F      		subi r20,lo8(-(3))
+ 204               	.L12:
+ 205 0166 5523      		tst r21
+ 206 0168 01F0      		breq .+2
+ 207 016a 00C0      		rjmp .L16
+ 208               	.L14:
+ 209 016c 80E0      		ldi r24,lo8(RxdBuffer+3)
+ 210 016e 90E0      		ldi r25,hi8(RxdBuffer+3)
+ 211 0170 9093 0000 		sts (pRxData)+1,r25
+ 212 0174 8093 0000 		sts pRxData,r24
+ 213 0178 4350      		subi r20,lo8(-(-3))
+ 214 017a 4093 0000 		sts RxDataLen,r20
+ 215               	/* epilogue start */
+ 216 017e 0895      		ret
+ 218               	.global	uart_putchar
+ 220               	uart_putchar:
+ 221               	/* prologue: function */
+ 222               	/* frame size = 0 */
+ 223 0180 982F      		mov r25,r24
+ 224               	.L20:
+ 225 0182 8091 C000 		lds r24,192
+ 226 0186 85FF      		sbrs r24,5
+ 227 0188 00C0      		rjmp .L20
+ 228 018a 9093 C600 		sts 198,r25
+ 229               	/* epilogue start */
+ 230 018e 0895      		ret
+ 232               	.global	UART_Init
+ 234               	UART_Init:
+ 235               	/* prologue: function */
+ 236               	/* frame size = 0 */
+ 237 0190 E1EC      		ldi r30,lo8(193)
+ 238 0192 F0E0      		ldi r31,hi8(193)
+ 239 0194 88E1      		ldi r24,lo8(24)
+ 240 0196 8083      		st Z,r24
+ 241 0198 A0EC      		ldi r26,lo8(192)
+ 242 019a B0E0      		ldi r27,hi8(192)
+ 243 019c 8C91      		ld r24,X
+ 244 019e 8260      		ori r24,lo8(2)
+ 245 01a0 8C93      		st X,r24
+ 246 01a2 8081      		ld r24,Z
+ 247 01a4 8068      		ori r24,lo8(-128)
+ 248 01a6 8083      		st Z,r24
+ 249 01a8 8081      		ld r24,Z
+ 250 01aa 8064      		ori r24,lo8(64)
+ 251 01ac 8083      		st Z,r24
+ 252 01ae 1092 C500 		sts 197,__zero_reg__
+ 253 01b2 8AE2      		ldi r24,lo8(42)
+ 254 01b4 8093 C400 		sts 196,r24
+ 255 01b8 8091 0000 		lds r24,DebugDataIntervall
+ 256 01bc 9091 0000 		lds r25,(DebugDataIntervall)+1
+ 257 01c0 0E94 0000 		call SetDelay
+ 258 01c4 9093 0000 		sts (Debug_Timer)+1,r25
+ 259 01c8 8093 0000 		sts Debug_Timer,r24
+ 260 01cc 8CED      		ldi r24,lo8(220)
+ 261 01ce 90E0      		ldi r25,hi8(220)
+ 262 01d0 0E94 0000 		call SetDelay
+ 263 01d4 9093 0000 		sts (Kompass_Timer)+1,r25
+ 264 01d8 8093 0000 		sts Kompass_Timer,r24
+ 265 01dc 1092 0000 		sts VersionInfo,__zero_reg__
+ 266 01e0 84E5      		ldi r24,lo8(84)
+ 267 01e2 8093 0000 		sts VersionInfo+1,r24
+ 268 01e6 1092 0000 		sts VersionInfo+4,__zero_reg__
+ 269 01ea 8BE0      		ldi r24,lo8(11)
+ 270 01ec 8093 0000 		sts VersionInfo+2,r24
+ 271 01f0 1092 0000 		sts VersionInfo+3,__zero_reg__
+ 272 01f4 1092 0000 		sts (pRxData)+1,__zero_reg__
+ 273 01f8 1092 0000 		sts pRxData,__zero_reg__
+ 274 01fc 1092 0000 		sts RxDataLen,__zero_reg__
+ 275               	/* epilogue start */
+ 276 0200 0895      		ret
+ 278               	.global	SendOutData
+ 280               	SendOutData:
+ 281 0202 A0E0      		ldi r26,lo8(0)
+ 282 0204 B0E0      		ldi r27,hi8(0)
+ 283 0206 E0E0      		ldi r30,lo8(gs(1f))
+ 284 0208 F0E0      		ldi r31,hi8(gs(1f))
+ 285 020a 0C94 0000 		jmp __prologue_saves__+((18 - 7) * 2)
+ 286               	1:
+ 287               	/* prologue: function */
+ 288               	/* frame size = 0 */
+ 289 020e 8B85      		ldd r24,Y+11
+ 290 0210 7C85      		ldd r23,Y+12
+ 291 0212 93E2      		ldi r25,lo8(35)
+ 292 0214 9093 0000 		sts TxdBuffer,r25
+ 293 0218 8F59      		subi r24,lo8(-(97))
+ 294 021a 8093 0000 		sts TxdBuffer+1,r24
+ 295 021e 8A85      		ldd r24,Y+10
+ 296 0220 8093 0000 		sts TxdBuffer+2,r24
+ 297 0224 DE01      		movw r26,r28
+ 298 0226 1D96      		adiw r26,13
+ 299 0228 7723      		tst r23
+ 300 022a 01F4      		brne .L26
+ 301 022c EE24      		clr r14
+ 302 022e FF24      		clr r15
+ 303 0230 40E0      		ldi r20,lo8(0)
+ 304 0232 50E0      		ldi r21,hi8(0)
+ 305 0234 00C0      		rjmp .L27
+ 306               	.L26:
+ 307 0236 ED84      		ldd r14,Y+13
+ 308 0238 FE84      		ldd r15,Y+14
+ 309 023a DE01      		movw r26,r28
+ 310 023c 5196      		adiw r26,17
+ 311 023e 4F85      		ldd r20,Y+15
+ 312 0240 5889      		ldd r21,Y+16
+ 313 0242 7150      		subi r23,lo8(-(-1))
+ 314               	.L27:
+ 315 0244 03E0      		ldi r16,lo8(3)
+ 316 0246 10E0      		ldi r17,hi8(3)
+ 317 0248 30E0      		ldi r19,lo8(0)
+ 318 024a 00C0      		rjmp .L28
+ 319               	.L36:
+ 320 024c F701      		movw r30,r14
+ 321 024e E30F      		add r30,r19
+ 322 0250 F11D      		adc r31,__zero_reg__
+ 323 0252 9081      		ld r25,Z
+ 324 0254 3F5F      		subi r19,lo8(-(1))
+ 325 0256 4150      		subi r20,lo8(-(-1))
+ 326 0258 5040      		sbci r21,hi8(-(-1))
+ 327 025a 01F4      		brne .L29
+ 328 025c 7723      		tst r23
+ 329 025e 01F4      		brne .+2
+ 330 0260 00C0      		rjmp .L30
+ 331 0262 FD01      		movw r30,r26
+ 332 0264 3296      		adiw r30,2
+ 333 0266 ED90      		ld r14,X+
+ 334 0268 FC90      		ld r15,X
+ 335 026a DF01      		movw r26,r30
+ 336 026c 1296      		adiw r26,2
+ 337 026e 0190      		ld __tmp_reg__,Z+
+ 338 0270 F081      		ld r31,Z
+ 339 0272 E02D      		mov r30,__tmp_reg__
+ 340 0274 7150      		subi r23,lo8(-(-1))
+ 341 0276 3097      		sbiw r30,0
+ 342 0278 01F4      		brne .+2
+ 343 027a 00C0      		rjmp .L31
+ 344 027c AF01      		movw r20,r30
+ 345 027e 30E0      		ldi r19,lo8(0)
+ 346               	.L29:
+ 347 0280 F701      		movw r30,r14
+ 348 0282 E30F      		add r30,r19
+ 349 0284 F11D      		adc r31,__zero_reg__
+ 350 0286 D080      		ld r13,Z
+ 351 0288 3F5F      		subi r19,lo8(-(1))
+ 352 028a 4150      		subi r20,lo8(-(-1))
+ 353 028c 5040      		sbci r21,hi8(-(-1))
+ 354 028e 01F4      		brne .L32
+ 355 0290 7723      		tst r23
+ 356 0292 01F4      		brne .L33
+ 357 0294 60E0      		ldi r22,lo8(0)
+ 358 0296 00C0      		rjmp .L34
+ 359               	.L33:
+ 360 0298 FD01      		movw r30,r26
+ 361 029a 3296      		adiw r30,2
+ 362 029c ED90      		ld r14,X+
+ 363 029e FC90      		ld r15,X
+ 364 02a0 DF01      		movw r26,r30
+ 365 02a2 1296      		adiw r26,2
+ 366 02a4 4081      		ld r20,Z
+ 367 02a6 5181      		ldd r21,Z+1
+ 368 02a8 7150      		subi r23,lo8(-(-1))
+ 369 02aa 4115      		cp r20,__zero_reg__
+ 370 02ac 5105      		cpc r21,__zero_reg__
+ 371 02ae 01F4      		brne .L35
+ 372 02b0 60E0      		ldi r22,lo8(0)
+ 373 02b2 00C0      		rjmp .L38
+ 374               	.L35:
+ 375 02b4 30E0      		ldi r19,lo8(0)
+ 376               	.L32:
+ 377 02b6 F701      		movw r30,r14
+ 378 02b8 E30F      		add r30,r19
+ 379 02ba F11D      		adc r31,__zero_reg__
+ 380 02bc 6081      		ld r22,Z
+ 381 02be 3F5F      		subi r19,lo8(-(1))
+ 382 02c0 4150      		subi r20,lo8(-(-1))
+ 383 02c2 5040      		sbci r21,hi8(-(-1))
+ 384 02c4 01F4      		brne .L34
+ 385 02c6 7723      		tst r23
+ 386 02c8 01F0      		breq .L34
+ 387 02ca FD01      		movw r30,r26
+ 388 02cc 3296      		adiw r30,2
+ 389 02ce ED90      		ld r14,X+
+ 390 02d0 FC90      		ld r15,X
+ 391 02d2 DF01      		movw r26,r30
+ 392 02d4 1296      		adiw r26,2
+ 393 02d6 4081      		ld r20,Z
+ 394 02d8 5181      		ldd r21,Z+1
+ 395 02da 7150      		subi r23,lo8(-(-1))
+ 396               	.L38:
+ 397 02dc 30E0      		ldi r19,lo8(0)
+ 398               	.L34:
+ 399 02de 892F      		mov r24,r25
+ 400 02e0 8695      		lsr r24
+ 401 02e2 8695      		lsr r24
+ 402 02e4 835C      		subi r24,lo8(-(61))
+ 403 02e6 F801      		movw r30,r16
+ 404 02e8 E050      		subi r30,lo8(-(TxdBuffer))
+ 405 02ea F040      		sbci r31,hi8(-(TxdBuffer))
+ 406 02ec 8083      		st Z,r24
+ 407 02ee 2D2D      		mov r18,r13
+ 408 02f0 2295      		swap r18
+ 409 02f2 2F70      		andi r18,0x0f
+ 410 02f4 892F      		mov r24,r25
+ 411 02f6 90E0      		ldi r25,lo8(0)
+ 412 02f8 8370      		andi r24,lo8(3)
+ 413 02fa 9070      		andi r25,hi8(3)
+ 414 02fc F4E0      		ldi r31,4
+ 415 02fe 880F      	1:	lsl r24
+ 416 0300 991F      		rol r25
+ 417 0302 FA95      		dec r31
+ 418 0304 01F4      		brne 1b
+ 419 0306 282B      		or r18,r24
+ 420 0308 235C      		subi r18,lo8(-(61))
+ 421 030a F801      		movw r30,r16
+ 422 030c E050      		subi r30,lo8(-(TxdBuffer+1))
+ 423 030e F040      		sbci r31,hi8(-(TxdBuffer+1))
+ 424 0310 2083      		st Z,r18
+ 425 0312 8D2D      		mov r24,r13
+ 426 0314 90E0      		ldi r25,lo8(0)
+ 427 0316 8F70      		andi r24,lo8(15)
+ 428 0318 9070      		andi r25,hi8(15)
+ 429 031a 880F      		lsl r24
+ 430 031c 991F      		rol r25
+ 431 031e 880F      		lsl r24
+ 432 0320 991F      		rol r25
+ 433 0322 262F      		mov r18,r22
+ 434 0324 2295      		swap r18
+ 435 0326 2695      		lsr r18
+ 436 0328 2695      		lsr r18
+ 437 032a 2370      		andi r18,0x3
+ 438 032c 282B      		or r18,r24
+ 439 032e 235C      		subi r18,lo8(-(61))
+ 440 0330 F801      		movw r30,r16
+ 441 0332 E050      		subi r30,lo8(-(TxdBuffer+2))
+ 442 0334 F040      		sbci r31,hi8(-(TxdBuffer+2))
+ 443 0336 2083      		st Z,r18
+ 444 0338 6F73      		andi r22,lo8(63)
+ 445 033a 635C      		subi r22,lo8(-(61))
+ 446 033c F801      		movw r30,r16
+ 447 033e E050      		subi r30,lo8(-(TxdBuffer+3))
+ 448 0340 F040      		sbci r31,hi8(-(TxdBuffer+3))
+ 449 0342 6083      		st Z,r22
+ 450 0344 0C5F      		subi r16,lo8(-(4))
+ 451 0346 1F4F      		sbci r17,hi8(-(4))
+ 452               	.L28:
+ 453 0348 4115      		cp r20,__zero_reg__
+ 454 034a 5105      		cpc r21,__zero_reg__
+ 455 034c 01F0      		breq .+2
+ 456 034e 00C0      		rjmp .L36
+ 457 0350 C801      		movw r24,r16
+ 458 0352 0E94 0000 		call AddCRC
+ 459               	/* epilogue start */
+ 460 0356 2096      		adiw r28,0
+ 461 0358 E7E0      		ldi r30, lo8(7)
+ 462 035a 0C94 0000 		jmp __epilogue_restores__ + ((18 - 7) * 2)
+ 463               	.L31:
+ 464 035e 30E0      		ldi r19,lo8(0)
+ 465               	.L30:
+ 466 0360 60E0      		ldi r22,lo8(0)
+ 467 0362 DD24      		clr r13
+ 468 0364 00C0      		rjmp .L34
+ 470               	.global	DatenUebertragung
+ 472               	DatenUebertragung:
+ 473 0366 A0E1      		ldi r26,lo8(16)
+ 474 0368 B0E0      		ldi r27,hi8(16)
+ 475 036a E0E0      		ldi r30,lo8(gs(1f))
+ 476 036c F0E0      		ldi r31,hi8(gs(1f))
+ 477 036e 0C94 0000 		jmp __prologue_saves__+((18 - 6) * 2)
+ 478               	1:
+ 479               	/* prologue: function */
+ 480               	/* frame size = 16 */
+ 481 0372 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 482 0376 8823      		tst r24
+ 483 0378 01F4      		brne .+2
+ 484 037a 00C0      		rjmp .L58
+ 485 037c 8091 0000 		lds r24,AboTimeOut
+ 486 0380 9091 0000 		lds r25,(AboTimeOut)+1
+ 487 0384 0E94 0000 		call CheckDelay
+ 488 0388 8823      		tst r24
+ 489 038a 01F0      		breq .L41
+ 490 038c 1092 0000 		sts (Display_Interval)+1,__zero_reg__
+ 491 0390 1092 0000 		sts Display_Interval,__zero_reg__
+ 492 0394 1092 0000 		sts (DebugDataIntervall)+1,__zero_reg__
+ 493 0398 1092 0000 		sts DebugDataIntervall,__zero_reg__
+ 494 039c 1092 0000 		sts (Intervall3D)+1,__zero_reg__
+ 495 03a0 1092 0000 		sts Intervall3D,__zero_reg__
+ 496               	.L41:
+ 497 03a4 8091 0000 		lds r24,Display_Interval
+ 498 03a8 9091 0000 		lds r25,(Display_Interval)+1
+ 499 03ac 892B      		or r24,r25
+ 500 03ae 01F0      		breq .L42
+ 501 03b0 8091 0000 		lds r24,Display_Timer
+ 502 03b4 9091 0000 		lds r25,(Display_Timer)+1
+ 503 03b8 0E94 0000 		call CheckDelay
+ 504 03bc 8823      		tst r24
+ 505 03be 01F4      		brne .L43
+ 506               	.L42:
+ 507 03c0 8091 0000 		lds r24,DebugDisplayAnforderung
+ 508 03c4 8823      		tst r24
+ 509 03c6 01F4      		brne .+2
+ 510 03c8 00C0      		rjmp .L44
+ 511               	.L43:
+ 512 03ca 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 513 03ce 8823      		tst r24
+ 514 03d0 01F4      		brne .+2
+ 515 03d2 00C0      		rjmp .L44
+ 516 03d4 8091 0000 		lds r24,DisplayLine
+ 517 03d8 00E0      		ldi r16,lo8(DisplayBuff)
+ 518 03da 10E0      		ldi r17,hi8(DisplayBuff)
+ 519 03dc 8430      		cpi r24,lo8(4)
+ 520 03de 00F0      		brlo .L45
+ 521 03e0 0E94 0000 		call Menu
+ 522 03e4 2DB7      		in r18,__SP_L__
+ 523 03e6 3EB7      		in r19,__SP_H__
+ 524 03e8 2750      		subi r18,lo8(-(-7))
+ 525 03ea 3040      		sbci r19,hi8(-(-7))
+ 526 03ec 2DBF      		out __SP_L__,r18
+ 527 03ee EDB7      		in r30,__SP_L__
+ 528 03f0 FEB7      		in r31,__SP_H__
+ 529 03f2 3196      		adiw r30,1
+ 530 03f4 88E4      		ldi r24,lo8(72)
+ 531 03f6 ADB7      		in r26,__SP_L__
+ 532 03f8 BEB7      		in r27,__SP_H__
+ 533 03fa 1196      		adiw r26,1
+ 534 03fc 8C93      		st X,r24
+ 535 03fe 81E0      		ldi r24,lo8(1)
+ 536 0400 8183      		std Z+1,r24
+ 537 0402 8283      		std Z+2,r24
+ 538 0404 1483      		std Z+4,r17
+ 539 0406 0383      		std Z+3,r16
+ 540 0408 80E5      		ldi r24,lo8(80)
+ 541 040a 90E0      		ldi r25,hi8(80)
+ 542 040c 9683      		std Z+6,r25
+ 543 040e 8583      		std Z+5,r24
+ 544 0410 0E94 0000 		call SendOutData
+ 545 0414 2DB7      		in r18,__SP_L__
+ 546 0416 3EB7      		in r19,__SP_H__
+ 547 0418 295F      		subi r18,lo8(-(7))
+ 548 041a 3F4F      		sbci r19,hi8(-(7))
+ 549 041c 2DBF      		out __SP_L__,r18
+ 550 041e 00C0      		rjmp .L46
+ 551               	.L45:
+ 552 0420 8DB7      		in r24,__SP_L__
+ 553 0422 9EB7      		in r25,__SP_H__
+ 554 0424 0B97      		sbiw r24,11
+ 555 0426 8DBF      		out __SP_L__,r24
+ 556 0428 EDB7      		in r30,__SP_L__
+ 557 042a FEB7      		in r31,__SP_H__
+ 558 042c 3196      		adiw r30,1
+ 559 042e 88E4      		ldi r24,lo8(72)
+ 560 0430 ADB7      		in r26,__SP_L__
+ 561 0432 BEB7      		in r27,__SP_H__
+ 562 0434 1196      		adiw r26,1
+ 563 0436 8C93      		st X,r24
+ 564 0438 81E0      		ldi r24,lo8(1)
+ 565 043a 8183      		std Z+1,r24
+ 566 043c 82E0      		ldi r24,lo8(2)
+ 567 043e 8283      		std Z+2,r24
+ 568 0440 80E0      		ldi r24,lo8(DisplayLine)
+ 569 0442 90E0      		ldi r25,hi8(DisplayLine)
+ 570 0444 9483      		std Z+4,r25
+ 571 0446 8383      		std Z+3,r24
+ 572 0448 81E0      		ldi r24,lo8(1)
+ 573 044a 90E0      		ldi r25,hi8(1)
+ 574 044c 9683      		std Z+6,r25
+ 575 044e 8583      		std Z+5,r24
+ 576 0450 1087      		std Z+8,r17
+ 577 0452 0783      		std Z+7,r16
+ 578 0454 84E1      		ldi r24,lo8(20)
+ 579 0456 90E0      		ldi r25,hi8(20)
+ 580 0458 9287      		std Z+10,r25
+ 581 045a 8187      		std Z+9,r24
+ 582 045c 0E94 0000 		call SendOutData
+ 583 0460 8091 0000 		lds r24,DisplayLine
+ 584 0464 8F5F      		subi r24,lo8(-(1))
+ 585 0466 8093 0000 		sts DisplayLine,r24
+ 586 046a 8150      		subi r24,lo8(-(-1))
+ 587 046c 2DB7      		in r18,__SP_L__
+ 588 046e 3EB7      		in r19,__SP_H__
+ 589 0470 255F      		subi r18,lo8(-(11))
+ 590 0472 3F4F      		sbci r19,hi8(-(11))
+ 591 0474 2DBF      		out __SP_L__,r18
+ 592 0476 8430      		cpi r24,lo8(4)
+ 593 0478 00F0      		brlo .L46
+ 594 047a 1092 0000 		sts DisplayLine,__zero_reg__
+ 595               	.L46:
+ 596 047e 8091 0000 		lds r24,Display_Interval
+ 597 0482 9091 0000 		lds r25,(Display_Interval)+1
+ 598 0486 0E94 0000 		call SetDelay
+ 599 048a 9093 0000 		sts (Display_Timer)+1,r25
+ 600 048e 8093 0000 		sts Display_Timer,r24
+ 601 0492 1092 0000 		sts DebugDisplayAnforderung,__zero_reg__
+ 602               	.L44:
+ 603 0496 8091 0000 		lds r24,DebugDisplayAnforderung1
+ 604 049a 8823      		tst r24
+ 605 049c 01F0      		breq .L47
+ 606 049e 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 607 04a2 8823      		tst r24
+ 608 04a4 01F0      		breq .L47
+ 609 04a6 0E94 0000 		call Menu
+ 610 04aa 8DB7      		in r24,__SP_L__
+ 611 04ac 9EB7      		in r25,__SP_H__
+ 612 04ae 0F97      		sbiw r24,15
+ 613 04b0 8DBF      		out __SP_L__,r24
+ 614 04b2 EDB7      		in r30,__SP_L__
+ 615 04b4 FEB7      		in r31,__SP_H__
+ 616 04b6 3196      		adiw r30,1
+ 617 04b8 8CE4      		ldi r24,lo8(76)
+ 618 04ba ADB7      		in r26,__SP_L__
+ 619 04bc BEB7      		in r27,__SP_H__
+ 620 04be 1196      		adiw r26,1
+ 621 04c0 8C93      		st X,r24
+ 622 04c2 81E0      		ldi r24,lo8(1)
+ 623 04c4 8183      		std Z+1,r24
+ 624 04c6 83E0      		ldi r24,lo8(3)
+ 625 04c8 8283      		std Z+2,r24
+ 626 04ca 80E0      		ldi r24,lo8(MenuePunkt)
+ 627 04cc 90E0      		ldi r25,hi8(MenuePunkt)
+ 628 04ce 9483      		std Z+4,r25
+ 629 04d0 8383      		std Z+3,r24
+ 630 04d2 21E0      		ldi r18,lo8(1)
+ 631 04d4 30E0      		ldi r19,hi8(1)
+ 632 04d6 3683      		std Z+6,r19
+ 633 04d8 2583      		std Z+5,r18
+ 634 04da 80E0      		ldi r24,lo8(MaxMenue)
+ 635 04dc 90E0      		ldi r25,hi8(MaxMenue)
+ 636 04de 9087      		std Z+8,r25
+ 637 04e0 8783      		std Z+7,r24
+ 638 04e2 3287      		std Z+10,r19
+ 639 04e4 2187      		std Z+9,r18
+ 640 04e6 80E0      		ldi r24,lo8(DisplayBuff)
+ 641 04e8 90E0      		ldi r25,hi8(DisplayBuff)
+ 642 04ea 9487      		std Z+12,r25
+ 643 04ec 8387      		std Z+11,r24
+ 644 04ee 80E5      		ldi r24,lo8(80)
+ 645 04f0 90E0      		ldi r25,hi8(80)
+ 646 04f2 9687      		std Z+14,r25
+ 647 04f4 8587      		std Z+13,r24
+ 648 04f6 0E94 0000 		call SendOutData
+ 649 04fa 1092 0000 		sts DebugDisplayAnforderung1,__zero_reg__
+ 650 04fe 2DB7      		in r18,__SP_L__
+ 651 0500 3EB7      		in r19,__SP_H__
+ 652 0502 215F      		subi r18,lo8(-(15))
+ 653 0504 3F4F      		sbci r19,hi8(-(15))
+ 654 0506 2DBF      		out __SP_L__,r18
+ 655               	.L47:
+ 656 0508 8091 0000 		lds r24,GetVersionAnforderung
+ 657 050c 8823      		tst r24
+ 658 050e 01F0      		breq .L48
+ 659 0510 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 660 0514 8823      		tst r24
+ 661 0516 01F0      		breq .L48
+ 662 0518 8DB7      		in r24,__SP_L__
+ 663 051a 9EB7      		in r25,__SP_H__
+ 664 051c 0797      		sbiw r24,7
+ 665 051e 8DBF      		out __SP_L__,r24
+ 666 0520 EDB7      		in r30,__SP_L__
+ 667 0522 FEB7      		in r31,__SP_H__
+ 668 0524 3196      		adiw r30,1
+ 669 0526 86E5      		ldi r24,lo8(86)
+ 670 0528 ADB7      		in r26,__SP_L__
+ 671 052a BEB7      		in r27,__SP_H__
+ 672 052c 1196      		adiw r26,1
+ 673 052e 8C93      		st X,r24
+ 674 0530 81E0      		ldi r24,lo8(1)
+ 675 0532 8183      		std Z+1,r24
+ 676 0534 8283      		std Z+2,r24
+ 677 0536 80E0      		ldi r24,lo8(VersionInfo)
+ 678 0538 90E0      		ldi r25,hi8(VersionInfo)
+ 679 053a 9483      		std Z+4,r25
+ 680 053c 8383      		std Z+3,r24
+ 681 053e 8AE0      		ldi r24,lo8(10)
+ 682 0540 90E0      		ldi r25,hi8(10)
+ 683 0542 9683      		std Z+6,r25
+ 684 0544 8583      		std Z+5,r24
+ 685 0546 0E94 0000 		call SendOutData
+ 686 054a 1092 0000 		sts GetVersionAnforderung,__zero_reg__
+ 687 054e 2DB7      		in r18,__SP_L__
+ 688 0550 3EB7      		in r19,__SP_H__
+ 689 0552 295F      		subi r18,lo8(-(7))
+ 690 0554 3F4F      		sbci r19,hi8(-(7))
+ 691 0556 2DBF      		out __SP_L__,r18
+ 692               	.L48:
+ 693 0558 8091 0000 		lds r24,GetExternalControl
+ 694 055c 8823      		tst r24
+ 695 055e 01F0      		breq .L49
+ 696 0560 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 697 0564 8823      		tst r24
+ 698 0566 01F0      		breq .L49
+ 699 0568 8DB7      		in r24,__SP_L__
+ 700 056a 9EB7      		in r25,__SP_H__
+ 701 056c 0797      		sbiw r24,7
+ 702 056e 8DBF      		out __SP_L__,r24
+ 703 0570 EDB7      		in r30,__SP_L__
+ 704 0572 FEB7      		in r31,__SP_H__
+ 705 0574 3196      		adiw r30,1
+ 706 0576 87E4      		ldi r24,lo8(71)
+ 707 0578 ADB7      		in r26,__SP_L__
+ 708 057a BEB7      		in r27,__SP_H__
+ 709 057c 1196      		adiw r26,1
+ 710 057e 8C93      		st X,r24
+ 711 0580 8091 0000 		lds r24,MeineSlaveAdresse
+ 712 0584 8183      		std Z+1,r24
+ 713 0586 81E0      		ldi r24,lo8(1)
+ 714 0588 8283      		std Z+2,r24
+ 715 058a 80E0      		ldi r24,lo8(ExternControl)
+ 716 058c 90E0      		ldi r25,hi8(ExternControl)
+ 717 058e 9483      		std Z+4,r25
+ 718 0590 8383      		std Z+3,r24
+ 719 0592 8BE0      		ldi r24,lo8(11)
+ 720 0594 90E0      		ldi r25,hi8(11)
+ 721 0596 9683      		std Z+6,r25
+ 722 0598 8583      		std Z+5,r24
+ 723 059a 0E94 0000 		call SendOutData
+ 724 059e 1092 0000 		sts GetExternalControl,__zero_reg__
+ 725 05a2 2DB7      		in r18,__SP_L__
+ 726 05a4 3EB7      		in r19,__SP_H__
+ 727 05a6 295F      		subi r18,lo8(-(7))
+ 728 05a8 3F4F      		sbci r19,hi8(-(7))
+ 729 05aa 2DBF      		out __SP_L__,r18
+ 730               	.L49:
+ 731 05ac 8091 0000 		lds r24,Kompass_Timer
+ 732 05b0 9091 0000 		lds r25,(Kompass_Timer)+1
+ 733 05b4 0E94 0000 		call CheckDelay
+ 734 05b8 8823      		tst r24
+ 735 05ba 01F4      		brne .+2
+ 736 05bc 00C0      		rjmp .L50
+ 737 05be 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 738 05c2 8823      		tst r24
+ 739 05c4 01F4      		brne .+2
+ 740 05c6 00C0      		rjmp .L50
+ 741 05c8 E090 0000 		lds r14,EE_Parameter+28
+ 742 05cc FF24      		clr r15
+ 743 05ce EE0C      		lsl r14
+ 744 05d0 FF1C      		rol r15
+ 745 05d2 EE0C      		lsl r14
+ 746 05d4 FF1C      		rol r15
+ 747 05d6 0027      		clr r16
+ 748 05d8 F7FC      		sbrc r15,7
+ 749 05da 0095      		com r16
+ 750 05dc 102F      		mov r17,r16
+ 751 05de 6091 0000 		lds r22,IntegralNick
+ 752 05e2 7091 0000 		lds r23,(IntegralNick)+1
+ 753 05e6 8091 0000 		lds r24,(IntegralNick)+2
+ 754 05ea 9091 0000 		lds r25,(IntegralNick)+3
+ 755 05ee A801      		movw r20,r16
+ 756 05f0 9701      		movw r18,r14
+ 757 05f2 0E94 0000 		call __divmodsi4
+ 758 05f6 3093 0000 		sts (WinkelOut)+1,r19
+ 759 05fa 2093 0000 		sts WinkelOut,r18
+ 760 05fe 6091 0000 		lds r22,IntegralRoll
+ 761 0602 7091 0000 		lds r23,(IntegralRoll)+1
+ 762 0606 8091 0000 		lds r24,(IntegralRoll)+2
+ 763 060a 9091 0000 		lds r25,(IntegralRoll)+3
+ 764 060e A801      		movw r20,r16
+ 765 0610 9701      		movw r18,r14
+ 766 0612 0E94 0000 		call __divmodsi4
+ 767 0616 3093 0000 		sts (WinkelOut+2)+1,r19
+ 768 061a 2093 0000 		sts WinkelOut+2,r18
+ 769 061e 8091 0000 		lds r24,Parameter_UserParam1
+ 770 0622 8093 0000 		sts WinkelOut+4,r24
+ 771 0626 8091 0000 		lds r24,Parameter_UserParam2
+ 772 062a 8093 0000 		sts WinkelOut+5,r24
+ 773 062e 8DB7      		in r24,__SP_L__
+ 774 0630 9EB7      		in r25,__SP_H__
+ 775 0632 0797      		sbiw r24,7
+ 776 0634 8DBF      		out __SP_L__,r24
+ 777 0636 EDB7      		in r30,__SP_L__
+ 778 0638 FEB7      		in r31,__SP_H__
+ 779 063a 3196      		adiw r30,1
+ 780 063c 8BE6      		ldi r24,lo8(107)
+ 781 063e ADB7      		in r26,__SP_L__
+ 782 0640 BEB7      		in r27,__SP_H__
+ 783 0642 1196      		adiw r26,1
+ 784 0644 8C93      		st X,r24
+ 785 0646 83E0      		ldi r24,lo8(3)
+ 786 0648 8183      		std Z+1,r24
+ 787 064a 81E0      		ldi r24,lo8(1)
+ 788 064c 8283      		std Z+2,r24
+ 789 064e 80E0      		ldi r24,lo8(WinkelOut)
+ 790 0650 90E0      		ldi r25,hi8(WinkelOut)
+ 791 0652 9483      		std Z+4,r25
+ 792 0654 8383      		std Z+3,r24
+ 793 0656 88E0      		ldi r24,lo8(8)
+ 794 0658 90E0      		ldi r25,hi8(8)
+ 795 065a 9683      		std Z+6,r25
+ 796 065c 8583      		std Z+5,r24
+ 797 065e 0E94 0000 		call SendOutData
+ 798 0662 2DB7      		in r18,__SP_L__
+ 799 0664 3EB7      		in r19,__SP_H__
+ 800 0666 295F      		subi r18,lo8(-(7))
+ 801 0668 3F4F      		sbci r19,hi8(-(7))
+ 802 066a 2DBF      		out __SP_L__,r18
+ 803 066c 8091 0000 		lds r24,WinkelOut+6
+ 804 0670 8530      		cpi r24,lo8(5)
+ 805 0672 00F0      		brlo .L51
+ 806 0674 86E0      		ldi r24,lo8(6)
+ 807 0676 8093 0000 		sts WinkelOut+6,r24
+ 808               	.L51:
+ 809 067a 83E6      		ldi r24,lo8(99)
+ 810 067c 90E0      		ldi r25,hi8(99)
+ 811 067e 0E94 0000 		call SetDelay
+ 812 0682 9093 0000 		sts (Kompass_Timer)+1,r25
+ 813 0686 8093 0000 		sts Kompass_Timer,r24
+ 814               	.L50:
+ 815 068a 8091 0000 		lds r24,DebugDataIntervall
+ 816 068e 9091 0000 		lds r25,(DebugDataIntervall)+1
+ 817 0692 892B      		or r24,r25
+ 818 0694 01F0      		breq .L52
+ 819 0696 8091 0000 		lds r24,Debug_Timer
+ 820 069a 9091 0000 		lds r25,(Debug_Timer)+1
+ 821 069e 0E94 0000 		call CheckDelay
+ 822 06a2 8823      		tst r24
+ 823 06a4 01F4      		brne .L53
+ 824               	.L52:
+ 825 06a6 8091 0000 		lds r24,DebugDataAnforderung
+ 826 06aa 8823      		tst r24
+ 827 06ac 01F0      		breq .L54
+ 828               	.L53:
+ 829 06ae 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 830 06b2 8823      		tst r24
+ 831 06b4 01F0      		breq .L54
+ 832 06b6 0E94 0000 		call CopyDebugValues
+ 833 06ba 8DB7      		in r24,__SP_L__
+ 834 06bc 9EB7      		in r25,__SP_H__
+ 835 06be 0797      		sbiw r24,7
+ 836 06c0 8DBF      		out __SP_L__,r24
+ 837 06c2 EDB7      		in r30,__SP_L__
+ 838 06c4 FEB7      		in r31,__SP_H__
+ 839 06c6 3196      		adiw r30,1
+ 840 06c8 84E4      		ldi r24,lo8(68)
+ 841 06ca ADB7      		in r26,__SP_L__
+ 842 06cc BEB7      		in r27,__SP_H__
+ 843 06ce 1196      		adiw r26,1
+ 844 06d0 8C93      		st X,r24
+ 845 06d2 81E0      		ldi r24,lo8(1)
+ 846 06d4 8183      		std Z+1,r24
+ 847 06d6 8283      		std Z+2,r24
+ 848 06d8 80E0      		ldi r24,lo8(DebugOut)
+ 849 06da 90E0      		ldi r25,hi8(DebugOut)
+ 850 06dc 9483      		std Z+4,r25
+ 851 06de 8383      		std Z+3,r24
+ 852 06e0 82E4      		ldi r24,lo8(66)
+ 853 06e2 90E0      		ldi r25,hi8(66)
+ 854 06e4 9683      		std Z+6,r25
+ 855 06e6 8583      		std Z+5,r24
+ 856 06e8 0E94 0000 		call SendOutData
+ 857 06ec 1092 0000 		sts DebugDataAnforderung,__zero_reg__
+ 858 06f0 8091 0000 		lds r24,DebugDataIntervall
+ 859 06f4 9091 0000 		lds r25,(DebugDataIntervall)+1
+ 860 06f8 2DB7      		in r18,__SP_L__
+ 861 06fa 3EB7      		in r19,__SP_H__
+ 862 06fc 295F      		subi r18,lo8(-(7))
+ 863 06fe 3F4F      		sbci r19,hi8(-(7))
+ 864 0700 2DBF      		out __SP_L__,r18
+ 865 0702 0097      		sbiw r24,0
+ 866 0704 01F0      		breq .L54
+ 867 0706 0E94 0000 		call SetDelay
+ 868 070a 9093 0000 		sts (Debug_Timer)+1,r25
+ 869 070e 8093 0000 		sts Debug_Timer,r24
+ 870               	.L54:
+ 871 0712 8091 0000 		lds r24,Intervall3D
+ 872 0716 9091 0000 		lds r25,(Intervall3D)+1
+ 873 071a 892B      		or r24,r25
+ 874 071c 01F4      		brne .+2
+ 875 071e 00C0      		rjmp .L55
+ 876 0720 8091 0000 		lds r24,Timer3D
+ 877 0724 9091 0000 		lds r25,(Timer3D)+1
+ 878 0728 0E94 0000 		call CheckDelay
+ 879 072c 8823      		tst r24
+ 880 072e 01F4      		brne .+2
+ 881 0730 00C0      		rjmp .L55
+ 882 0732 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 883 0736 8823      		tst r24
+ 884 0738 01F4      		brne .+2
+ 885 073a 00C0      		rjmp .L55
+ 886 073c E090 0000 		lds r14,EE_Parameter+28
+ 887 0740 FF24      		clr r15
+ 888 0742 EE0C      		lsl r14
+ 889 0744 FF1C      		rol r15
+ 890 0746 EE0C      		lsl r14
+ 891 0748 FF1C      		rol r15
+ 892 074a 0027      		clr r16
+ 893 074c F7FC      		sbrc r15,7
+ 894 074e 0095      		com r16
+ 895 0750 102F      		mov r17,r16
+ 896 0752 6091 0000 		lds r22,IntegralNick
+ 897 0756 7091 0000 		lds r23,(IntegralNick)+1
+ 898 075a 8091 0000 		lds r24,(IntegralNick)+2
+ 899 075e 9091 0000 		lds r25,(IntegralNick)+3
+ 900 0762 A801      		movw r20,r16
+ 901 0764 9701      		movw r18,r14
+ 902 0766 0E94 0000 		call __divmodsi4
+ 903 076a 3093 0000 		sts (Data3D)+1,r19
+ 904 076e 2093 0000 		sts Data3D,r18
+ 905 0772 6091 0000 		lds r22,IntegralRoll
+ 906 0776 7091 0000 		lds r23,(IntegralRoll)+1
+ 907 077a 8091 0000 		lds r24,(IntegralRoll)+2
+ 908 077e 9091 0000 		lds r25,(IntegralRoll)+3
+ 909 0782 A801      		movw r20,r16
+ 910 0784 9701      		movw r18,r14
+ 911 0786 0E94 0000 		call __divmodsi4
+ 912 078a 3093 0000 		sts (Data3D+2)+1,r19
+ 913 078e 2093 0000 		sts Data3D+2,r18
+ 914 0792 6091 0000 		lds r22,ErsatzKompass
+ 915 0796 7091 0000 		lds r23,(ErsatzKompass)+1
+ 916 079a 8091 0000 		lds r24,(ErsatzKompass)+2
+ 917 079e 9091 0000 		lds r25,(ErsatzKompass)+3
+ 918 07a2 2AE0      		ldi r18,lo8(10)
+ 919 07a4 30E0      		ldi r19,hi8(10)
+ 920 07a6 40E0      		ldi r20,hlo8(10)
+ 921 07a8 50E0      		ldi r21,hhi8(10)
+ 922 07aa 0E94 0000 		call __mulsi3
+ 923 07ae 2091 0000 		lds r18,GIER_GRAD_FAKTOR
+ 924 07b2 3091 0000 		lds r19,(GIER_GRAD_FAKTOR)+1
+ 925 07b6 4091 0000 		lds r20,(GIER_GRAD_FAKTOR)+2
+ 926 07ba 5091 0000 		lds r21,(GIER_GRAD_FAKTOR)+3
+ 927 07be 0E94 0000 		call __divmodsi4
+ 928 07c2 3093 0000 		sts (Data3D+4)+1,r19
+ 929 07c6 2093 0000 		sts Data3D+4,r18
+ 930 07ca 8091 0000 		lds r24,SummeNick
+ 931 07ce 9091 0000 		lds r25,(SummeNick)+1
+ 932 07d2 A091 0000 		lds r26,(SummeNick)+2
+ 933 07d6 B091 0000 		lds r27,(SummeNick)+3
+ 934 07da 49E0      		ldi r20,9
+ 935 07dc B595      	1:	asr r27
+ 936 07de A795      		ror r26
+ 937 07e0 9795      		ror r25
+ 938 07e2 8795      		ror r24
+ 939 07e4 4A95      		dec r20
+ 940 07e6 01F4      		brne 1b
+ 941 07e8 8093 0000 		sts Data3D+6,r24
+ 942 07ec 8091 0000 		lds r24,SummeRoll
+ 943 07f0 9091 0000 		lds r25,(SummeRoll)+1
+ 944 07f4 A091 0000 		lds r26,(SummeRoll)+2
+ 945 07f8 B091 0000 		lds r27,(SummeRoll)+3
+ 946 07fc 39E0      		ldi r19,9
+ 947 07fe B595      	1:	asr r27
+ 948 0800 A795      		ror r26
+ 949 0802 9795      		ror r25
+ 950 0804 8795      		ror r24
+ 951 0806 3A95      		dec r19
+ 952 0808 01F4      		brne 1b
+ 953 080a 8093 0000 		sts Data3D+7,r24
+ 954 080e 8091 0000 		lds r24,Mess_Integral_Gier
+ 955 0812 9091 0000 		lds r25,(Mess_Integral_Gier)+1
+ 956 0816 A091 0000 		lds r26,(Mess_Integral_Gier)+2
+ 957 081a B091 0000 		lds r27,(Mess_Integral_Gier)+3
+ 958 081e 29E0      		ldi r18,9
+ 959 0820 B595      	1:	asr r27
+ 960 0822 A795      		ror r26
+ 961 0824 9795      		ror r25
+ 962 0826 8795      		ror r24
+ 963 0828 2A95      		dec r18
+ 964 082a 01F4      		brne 1b
+ 965 082c 8093 0000 		sts Data3D+8,r24
+ 966 0830 8DB7      		in r24,__SP_L__
+ 967 0832 9EB7      		in r25,__SP_H__
+ 968 0834 0797      		sbiw r24,7
+ 969 0836 8DBF      		out __SP_L__,r24
+ 970 0838 EDB7      		in r30,__SP_L__
+ 971 083a FEB7      		in r31,__SP_H__
+ 972 083c 3196      		adiw r30,1
+ 973 083e 83E4      		ldi r24,lo8(67)
+ 974 0840 ADB7      		in r26,__SP_L__
+ 975 0842 BEB7      		in r27,__SP_H__
+ 976 0844 1196      		adiw r26,1
+ 977 0846 8C93      		st X,r24
+ 978 0848 81E0      		ldi r24,lo8(1)
+ 979 084a 8183      		std Z+1,r24
+ 980 084c 8283      		std Z+2,r24
+ 981 084e 80E0      		ldi r24,lo8(Data3D)
+ 982 0850 90E0      		ldi r25,hi8(Data3D)
+ 983 0852 9483      		std Z+4,r25
+ 984 0854 8383      		std Z+3,r24
+ 985 0856 8EE0      		ldi r24,lo8(14)
+ 986 0858 90E0      		ldi r25,hi8(14)
+ 987 085a 9683      		std Z+6,r25
+ 988 085c 8583      		std Z+5,r24
+ 989 085e 0E94 0000 		call SendOutData
+ 990 0862 2DB7      		in r18,__SP_L__
+ 991 0864 3EB7      		in r19,__SP_H__
+ 992 0866 295F      		subi r18,lo8(-(7))
+ 993 0868 3F4F      		sbci r19,hi8(-(7))
+ 994 086a 2DBF      		out __SP_L__,r18
+ 995 086c 8091 0000 		lds r24,Intervall3D
+ 996 0870 9091 0000 		lds r25,(Intervall3D)+1
+ 997 0874 0E94 0000 		call SetDelay
+ 998 0878 9093 0000 		sts (Timer3D)+1,r25
+ 999 087c 8093 0000 		sts Timer3D,r24
+ 1000               	.L55:
+ 1001 0880 6091 0000 		lds r22,DebugTextAnforderung
+ 1002 0884 6F3F      		cpi r22,lo8(-1)
+ 1003 0886 01F0      		breq .L56
+ 1004 0888 70E0      		ldi r23,lo8(0)
+ 1005 088a A4E0      		ldi r26,4
+ 1006 088c 660F      	1:	lsl r22
+ 1007 088e 771F      		rol r23
+ 1008 0890 AA95      		dec r26
+ 1009 0892 01F4      		brne 1b
+ 1010 0894 6050      		subi r22,lo8(-(ANALOG_TEXT))
+ 1011 0896 7040      		sbci r23,hi8(-(ANALOG_TEXT))
+ 1012 0898 8E01      		movw r16,r28
+ 1013 089a 0F5F      		subi r16,lo8(-(1))
+ 1014 089c 1F4F      		sbci r17,hi8(-(1))
+ 1015 089e C801      		movw r24,r16
+ 1016 08a0 40E1      		ldi r20,lo8(16)
+ 1017 08a2 50E0      		ldi r21,hi8(16)
+ 1018 08a4 0E94 0000 		call memcpy_P
+ 1019 08a8 8DB7      		in r24,__SP_L__
+ 1020 08aa 9EB7      		in r25,__SP_H__
+ 1021 08ac 0B97      		sbiw r24,11
+ 1022 08ae 8DBF      		out __SP_L__,r24
+ 1023 08b0 EDB7      		in r30,__SP_L__
+ 1024 08b2 FEB7      		in r31,__SP_H__
+ 1025 08b4 3196      		adiw r30,1
+ 1026 08b6 81E4      		ldi r24,lo8(65)
+ 1027 08b8 ADB7      		in r26,__SP_L__
+ 1028 08ba BEB7      		in r27,__SP_H__
+ 1029 08bc 1196      		adiw r26,1
+ 1030 08be 8C93      		st X,r24
+ 1031 08c0 81E0      		ldi r24,lo8(1)
+ 1032 08c2 8183      		std Z+1,r24
+ 1033 08c4 82E0      		ldi r24,lo8(2)
+ 1034 08c6 8283      		std Z+2,r24
+ 1035 08c8 80E0      		ldi r24,lo8(DebugTextAnforderung)
+ 1036 08ca 90E0      		ldi r25,hi8(DebugTextAnforderung)
+ 1037 08cc 9483      		std Z+4,r25
+ 1038 08ce 8383      		std Z+3,r24
+ 1039 08d0 81E0      		ldi r24,lo8(1)
+ 1040 08d2 90E0      		ldi r25,hi8(1)
+ 1041 08d4 9683      		std Z+6,r25
+ 1042 08d6 8583      		std Z+5,r24
+ 1043 08d8 1087      		std Z+8,r17
+ 1044 08da 0783      		std Z+7,r16
+ 1045 08dc 80E1      		ldi r24,lo8(16)
+ 1046 08de 90E0      		ldi r25,hi8(16)
+ 1047 08e0 9287      		std Z+10,r25
+ 1048 08e2 8187      		std Z+9,r24
+ 1049 08e4 0E94 0000 		call SendOutData
+ 1050 08e8 8FEF      		ldi r24,lo8(-1)
+ 1051 08ea 8093 0000 		sts DebugTextAnforderung,r24
+ 1052 08ee 2DB7      		in r18,__SP_L__
+ 1053 08f0 3EB7      		in r19,__SP_H__
+ 1054 08f2 255F      		subi r18,lo8(-(11))
+ 1055 08f4 3F4F      		sbci r19,hi8(-(11))
+ 1056 08f6 2DBF      		out __SP_L__,r18
+ 1057               	.L56:
+ 1058 08f8 8091 0000 		lds r24,ConfirmFrame
+ 1059 08fc 8823      		tst r24
+ 1060 08fe 01F0      		breq .L57
+ 1061 0900 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1062 0904 8823      		tst r24
+ 1063 0906 01F0      		breq .L57
+ 1064 0908 8DB7      		in r24,__SP_L__
+ 1065 090a 9EB7      		in r25,__SP_H__
+ 1066 090c 0797      		sbiw r24,7
+ 1067 090e 8DBF      		out __SP_L__,r24
+ 1068 0910 EDB7      		in r30,__SP_L__
+ 1069 0912 FEB7      		in r31,__SP_H__
+ 1070 0914 3196      		adiw r30,1
+ 1071 0916 82E4      		ldi r24,lo8(66)
+ 1072 0918 ADB7      		in r26,__SP_L__
+ 1073 091a BEB7      		in r27,__SP_H__
+ 1074 091c 1196      		adiw r26,1
+ 1075 091e 8C93      		st X,r24
+ 1076 0920 81E0      		ldi r24,lo8(1)
+ 1077 0922 8183      		std Z+1,r24
+ 1078 0924 8283      		std Z+2,r24
+ 1079 0926 80E0      		ldi r24,lo8(ConfirmFrame)
+ 1080 0928 90E0      		ldi r25,hi8(ConfirmFrame)
+ 1081 092a 9483      		std Z+4,r25
+ 1082 092c 8383      		std Z+3,r24
+ 1083 092e 81E0      		ldi r24,lo8(1)
+ 1084 0930 90E0      		ldi r25,hi8(1)
+ 1085 0932 9683      		std Z+6,r25
+ 1086 0934 8583      		std Z+5,r24
+ 1087 0936 0E94 0000 		call SendOutData
+ 1088 093a 1092 0000 		sts ConfirmFrame,__zero_reg__
+ 1089 093e 2DB7      		in r18,__SP_L__
+ 1090 0940 3EB7      		in r19,__SP_H__
+ 1091 0942 295F      		subi r18,lo8(-(7))
+ 1092 0944 3F4F      		sbci r19,hi8(-(7))
+ 1093 0946 2DBF      		out __SP_L__,r18
+ 1094               	.L57:
+ 1095 0948 8091 0000 		lds r24,GetPPMChannelAnforderung
+ 1096 094c 8823      		tst r24
+ 1097 094e 01F0      		breq .L58
+ 1098 0950 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1099 0954 8823      		tst r24
+ 1100 0956 01F0      		breq .L58
+ 1101 0958 8DB7      		in r24,__SP_L__
+ 1102 095a 9EB7      		in r25,__SP_H__
+ 1103 095c 0797      		sbiw r24,7
+ 1104 095e 8DBF      		out __SP_L__,r24
+ 1105 0960 EDB7      		in r30,__SP_L__
+ 1106 0962 FEB7      		in r31,__SP_H__
+ 1107 0964 3196      		adiw r30,1
+ 1108 0966 80E5      		ldi r24,lo8(80)
+ 1109 0968 ADB7      		in r26,__SP_L__
+ 1110 096a BEB7      		in r27,__SP_H__
+ 1111 096c 1196      		adiw r26,1
+ 1112 096e 8C93      		st X,r24
+ 1113 0970 81E0      		ldi r24,lo8(1)
+ 1114 0972 8183      		std Z+1,r24
+ 1115 0974 8283      		std Z+2,r24
+ 1116 0976 80E0      		ldi r24,lo8(PPM_in)
+ 1117 0978 90E0      		ldi r25,hi8(PPM_in)
+ 1118 097a 9483      		std Z+4,r25
+ 1119 097c 8383      		std Z+3,r24
+ 1120 097e 84E3      		ldi r24,lo8(52)
+ 1121 0980 90E0      		ldi r25,hi8(52)
+ 1122 0982 9683      		std Z+6,r25
+ 1123 0984 8583      		std Z+5,r24
+ 1124 0986 0E94 0000 		call SendOutData
+ 1125 098a 1092 0000 		sts GetPPMChannelAnforderung,__zero_reg__
+ 1126 098e 2DB7      		in r18,__SP_L__
+ 1127 0990 3EB7      		in r19,__SP_H__
+ 1128 0992 295F      		subi r18,lo8(-(7))
+ 1129 0994 3F4F      		sbci r19,hi8(-(7))
+ 1130 0996 2DBF      		out __SP_L__,r18
+ 1131               	.L58:
+ 1132               	/* epilogue start */
+ 1133 0998 6096      		adiw r28,16
+ 1134 099a E6E0      		ldi r30, lo8(6)
+ 1135 099c 0C94 0000 		jmp __epilogue_restores__ + ((18 - 6) * 2)
+ 1137               	.global	BearbeiteRxDaten
+ 1139               	BearbeiteRxDaten:
+ 1140 09a0 A2E0      		ldi r26,lo8(2)
+ 1141 09a2 B0E0      		ldi r27,hi8(2)
+ 1142 09a4 E0E0      		ldi r30,lo8(gs(1f))
+ 1143 09a6 F0E0      		ldi r31,hi8(gs(1f))
+ 1144 09a8 0C94 0000 		jmp __prologue_saves__+((18 - 2) * 2)
+ 1145               	1:
+ 1146               	/* prologue: function */
+ 1147               	/* frame size = 2 */
+ 1148 09ac 8091 0000 		lds r24,NeuerDatensatzEmpfangen
+ 1149 09b0 8823      		tst r24
+ 1150 09b2 01F4      		brne .+2
+ 1151 09b4 00C0      		rjmp .L136
+ 1152 09b6 0E94 0000 		call Decode64
+ 1153 09ba 8091 0000 		lds r24,RxdBuffer+1
+ 1154 09be 8236      		cpi r24,lo8(98)
+ 1155 09c0 01F0      		breq .+2
+ 1156 09c2 00C0      		rjmp .L61
+ 1157 09c4 8091 0000 		lds r24,RxdBuffer+2
+ 1158 09c8 8037      		cpi r24,lo8(112)
+ 1159 09ca 01F4      		brne .+2
+ 1160 09cc 00C0      		rjmp .L68
+ 1161 09ce 8137      		cpi r24,lo8(113)
+ 1162 09d0 00F4      		brsh .L75
+ 1163 09d2 8A36      		cpi r24,lo8(106)
+ 1164 09d4 01F4      		brne .+2
+ 1165 09d6 00C0      		rjmp .L65
+ 1166 09d8 8B36      		cpi r24,lo8(107)
+ 1167 09da 00F4      		brsh .L76
+ 1168 09dc 8B34      		cpi r24,lo8(75)
+ 1169 09de 01F0      		breq .L63
+ 1170 09e0 8636      		cpi r24,lo8(102)
+ 1171 09e2 01F0      		breq .+2
+ 1172 09e4 00C0      		rjmp .L61
+ 1173 09e6 00C0      		rjmp .L172
+ 1174               	.L76:
+ 1175 09e8 8D36      		cpi r24,lo8(109)
+ 1176 09ea 01F4      		brne .+2
+ 1177 09ec 00C0      		rjmp .L66
+ 1178 09ee 8E36      		cpi r24,lo8(110)
+ 1179 09f0 01F0      		breq .+2
+ 1180 09f2 00C0      		rjmp .L61
+ 1181 09f4 00C0      		rjmp .L143
+ 1182               	.L75:
+ 1183 09f6 8437      		cpi r24,lo8(116)
+ 1184 09f8 01F0      		breq .L71
+ 1185 09fa 8537      		cpi r24,lo8(117)
+ 1186 09fc 00F4      		brsh .L77
+ 1187 09fe 8137      		cpi r24,lo8(113)
+ 1188 0a00 01F4      		brne .+2
+ 1189 0a02 00C0      		rjmp .L69
+ 1190 0a04 8337      		cpi r24,lo8(115)
+ 1191 0a06 01F0      		breq .+2
+ 1192 0a08 00C0      		rjmp .L61
+ 1193 0a0a 00C0      		rjmp .L173
+ 1194               	.L77:
+ 1195 0a0c 8737      		cpi r24,lo8(119)
+ 1196 0a0e 01F4      		brne .+2
+ 1197 0a10 00C0      		rjmp .L73
+ 1198 0a12 8937      		cpi r24,lo8(121)
+ 1199 0a14 01F4      		brne .+2
+ 1200 0a16 00C0      		rjmp .L74
+ 1201 0a18 8537      		cpi r24,lo8(117)
+ 1202 0a1a 01F0      		breq .+2
+ 1203 0a1c 00C0      		rjmp .L61
+ 1204 0a1e 00C0      		rjmp .L174
+ 1205               	.L63:
+ 1206 0a20 E091 0000 		lds r30,pRxData
+ 1207 0a24 F091 0000 		lds r31,(pRxData)+1
+ 1208 0a28 8081      		ld r24,Z
+ 1209 0a2a 9181      		ldd r25,Z+1
+ 1210 0a2c 9093 0000 		sts (KompassValue)+1,r25
+ 1211 0a30 8093 0000 		sts KompassValue,r24
+ 1212 0a34 845E      		subi r24,lo8(-(540))
+ 1213 0a36 9D4F      		sbci r25,hi8(-(540))
+ 1214 0a38 2091 0000 		lds r18,KompassSollWert
+ 1215 0a3c 3091 0000 		lds r19,(KompassSollWert)+1
+ 1216 0a40 821B      		sub r24,r18
+ 1217 0a42 930B      		sbc r25,r19
+ 1218 0a44 68E6      		ldi r22,lo8(360)
+ 1219 0a46 71E0      		ldi r23,hi8(360)
+ 1220 0a48 0E94 0000 		call __divmodhi4
+ 1221 0a4c 845B      		subi r24,lo8(-(-180))
+ 1222 0a4e 9040      		sbci r25,hi8(-(-180))
+ 1223 0a50 9093 0000 		sts (KompassRichtung)+1,r25
+ 1224 0a54 8093 0000 		sts KompassRichtung,r24
+ 1225 0a58 00C0      		rjmp .L61
+ 1226               	.L71:
+ 1227 0a5a 8091 0000 		lds r24,AnzahlEmpfangsBytes
+ 1228 0a5e 8531      		cpi r24,lo8(21)
+ 1229 0a60 00F0      		brlo .L78
+ 1230 0a62 A0E0      		ldi r26,lo8(MotorTest)
+ 1231 0a64 B0E0      		ldi r27,hi8(MotorTest)
+ 1232 0a66 8091 0000 		lds r24,pRxData
+ 1233 0a6a 9091 0000 		lds r25,pRxData+1
+ 1234 0a6e 9C01      		movw r18,r24
+ 1235 0a70 F901      		movw r30,r18
+ 1236 0a72 80E1      		ldi r24,lo8(16)
+ 1237               	.L79:
+ 1238 0a74 0190      		ld r0,Z+
+ 1239 0a76 0D92      		st X+,r0
+ 1240 0a78 8150      		subi r24,lo8(-(-1))
+ 1241 0a7a 01F4      		brne .L79
+ 1242 0a7c 00C0      		rjmp .L80
+ 1243               	.L78:
+ 1244 0a7e E091 0000 		lds r30,pRxData
+ 1245 0a82 F091 0000 		lds r31,(pRxData)+1
+ 1246 0a86 8081      		ld r24,Z
+ 1247 0a88 9181      		ldd r25,Z+1
+ 1248 0a8a A281      		ldd r26,Z+2
+ 1249 0a8c B381      		ldd r27,Z+3
+ 1250 0a8e 8093 0000 		sts MotorTest,r24
+ 1251 0a92 9093 0000 		sts (MotorTest)+1,r25
+ 1252 0a96 A093 0000 		sts (MotorTest)+2,r26
+ 1253 0a9a B093 0000 		sts (MotorTest)+3,r27
+ 1254               	.L80:
+ 1255 0a9e 80EF      		ldi r24,lo8(-16)
+ 1256 0aa0 8093 0000 		sts PC_MotortestActive,r24
+ 1257 0aa4 00C0      		rjmp .L163
+ 1258               	.L143:
+ 1259 0aa6 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1260 0aaa 8823      		tst r24
+ 1261 0aac 01F0      		breq .L143
+ 1262 0aae 8DB7      		in r24,__SP_L__
+ 1263 0ab0 9EB7      		in r25,__SP_H__
+ 1264 0ab2 0797      		sbiw r24,7
+ 1265 0ab4 8DBF      		out __SP_L__,r24
+ 1266 0ab6 EDB7      		in r30,__SP_L__
+ 1267 0ab8 FEB7      		in r31,__SP_H__
+ 1268 0aba 3196      		adiw r30,1
+ 1269 0abc 8EE4      		ldi r24,lo8(78)
+ 1270 0abe ADB7      		in r26,__SP_L__
+ 1271 0ac0 BEB7      		in r27,__SP_H__
+ 1272 0ac2 1196      		adiw r26,1
+ 1273 0ac4 8C93      		st X,r24
+ 1274 0ac6 81E0      		ldi r24,lo8(1)
+ 1275 0ac8 8183      		std Z+1,r24
+ 1276 0aca 8283      		std Z+2,r24
+ 1277 0acc 80E0      		ldi r24,lo8(Mixer)
+ 1278 0ace 90E0      		ldi r25,hi8(Mixer)
+ 1279 0ad0 9483      		std Z+4,r25
+ 1280 0ad2 8383      		std Z+3,r24
+ 1281 0ad4 8DE4      		ldi r24,lo8(77)
+ 1282 0ad6 90E0      		ldi r25,hi8(77)
+ 1283 0ad8 00C0      		rjmp .L168
+ 1284               	.L66:
+ 1285 0ada E091 0000 		lds r30,pRxData
+ 1286 0ade F091 0000 		lds r31,(pRxData)+1
+ 1287 0ae2 8081      		ld r24,Z
+ 1288 0ae4 8130      		cpi r24,lo8(1)
+ 1289 0ae6 01F4      		brne .L81
+ 1290 0ae8 A0E0      		ldi r26,lo8(Mixer)
+ 1291 0aea B0E0      		ldi r27,hi8(Mixer)
+ 1292 0aec 8DE4      		ldi r24,lo8(77)
+ 1293               	.L82:
+ 1294 0aee 0190      		ld r0,Z+
+ 1295 0af0 0D92      		st X+,r0
+ 1296 0af2 8150      		subi r24,lo8(-(-1))
+ 1297 0af4 01F4      		brne .L82
+ 1298 0af6 0E94 0000 		call MixerTable_WriteToEEProm
+ 1299 0afa 81E0      		ldi r24,lo8(1)
+ 1300 0afc 8983      		std Y+1,r24
+ 1301 0afe 8091 0000 		lds r24,VersionInfo+6
+ 1302 0b02 8F7E      		andi r24,lo8(-17)
+ 1303 0b04 8093 0000 		sts VersionInfo+6,r24
+ 1304 0b08 00C0      		rjmp .L142
+ 1305               	.L81:
+ 1306 0b0a 1982      		std Y+1,__zero_reg__
+ 1307               	.L142:
+ 1308 0b0c 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1309 0b10 8823      		tst r24
+ 1310 0b12 01F0      		breq .L142
+ 1311 0b14 ADB7      		in r26,__SP_L__
+ 1312 0b16 BEB7      		in r27,__SP_H__
+ 1313 0b18 1797      		sbiw r26,7
+ 1314 0b1a ADBF      		out __SP_L__,r26
+ 1315 0b1c EDB7      		in r30,__SP_L__
+ 1316 0b1e FEB7      		in r31,__SP_H__
+ 1317 0b20 3196      		adiw r30,1
+ 1318 0b22 8DE4      		ldi r24,lo8(77)
+ 1319 0b24 1196      		adiw r26,1
+ 1320 0b26 8C93      		st X,r24
+ 1321 0b28 81E0      		ldi r24,lo8(1)
+ 1322 0b2a 8183      		std Z+1,r24
+ 1323 0b2c 8283      		std Z+2,r24
+ 1324 0b2e CE01      		movw r24,r28
+ 1325 0b30 0196      		adiw r24,1
+ 1326 0b32 9483      		std Z+4,r25
+ 1327 0b34 8383      		std Z+3,r24
+ 1328 0b36 81E0      		ldi r24,lo8(1)
+ 1329 0b38 90E0      		ldi r25,hi8(1)
+ 1330               	.L168:
+ 1331 0b3a 9683      		std Z+6,r25
+ 1332 0b3c 8583      		std Z+5,r24
+ 1333 0b3e 0E94 0000 		call SendOutData
+ 1334 0b42 8DB7      		in r24,__SP_L__
+ 1335 0b44 9EB7      		in r25,__SP_H__
+ 1336 0b46 0796      		adiw r24,7
+ 1337 0b48 00C0      		rjmp .L164
+ 1338               	.L68:
+ 1339 0b4a 81E0      		ldi r24,lo8(1)
+ 1340 0b4c 8093 0000 		sts GetPPMChannelAnforderung,r24
+ 1341               	.L163:
+ 1342 0b50 8FEF      		ldi r24,lo8(-1)
+ 1343 0b52 8093 0000 		sts PcZugriff,r24
+ 1344 0b56 00C0      		rjmp .L61
+ 1345               	.L69:
+ 1346 0b58 E091 0000 		lds r30,pRxData
+ 1347 0b5c F091 0000 		lds r31,(pRxData)+1
+ 1348 0b60 E081      		ld r30,Z
+ 1349 0b62 8E2F      		mov r24,r30
+ 1350 0b64 8A50      		subi r24,lo8(-(-10))
+ 1351 0b66 8A30      		cpi r24,lo8(10)
+ 1352 0b68 00F4      		brsh .L84
+ 1353 0b6a 8983      		std Y+1,r24
+ 1354 0b6c 8823      		tst r24
+ 1355 0b6e 01F4      		brne .L85
+ 1356 0b70 81E0      		ldi r24,lo8(1)
+ 1357 0b72 00C0      		rjmp .L159
+ 1358               	.L85:
+ 1359 0b74 8630      		cpi r24,lo8(6)
+ 1360 0b76 00F0      		brlo .L86
+ 1361 0b78 85E0      		ldi r24,lo8(5)
+ 1362               	.L159:
+ 1363 0b7a 8983      		std Y+1,r24
+ 1364               	.L86:
+ 1365 0b7c 8981      		ldd r24,Y+1
+ 1366 0b7e 61E0      		ldi r22,lo8(1)
+ 1367 0b80 00C0      		rjmp .L162
+ 1368               	.L84:
+ 1369 0b82 8E2F      		mov r24,r30
+ 1370 0b84 8451      		subi r24,lo8(-(-20))
+ 1371 0b86 8A30      		cpi r24,lo8(10)
+ 1372 0b88 00F4      		brsh .L88
+ 1373 0b8a 8983      		std Y+1,r24
+ 1374 0b8c 8823      		tst r24
+ 1375 0b8e 01F4      		brne .L89
+ 1376 0b90 81E0      		ldi r24,lo8(1)
+ 1377 0b92 00C0      		rjmp .L160
+ 1378               	.L89:
+ 1379 0b94 8630      		cpi r24,lo8(6)
+ 1380 0b96 00F0      		brlo .L90
+ 1381 0b98 85E0      		ldi r24,lo8(5)
+ 1382               	.L160:
+ 1383 0b9a 8983      		std Y+1,r24
+ 1384               	.L90:
+ 1385 0b9c 8981      		ldd r24,Y+1
+ 1386 0b9e 60E0      		ldi r22,lo8(0)
+ 1387               	.L162:
+ 1388 0ba0 0E94 0000 		call SetDefaultParameter
+ 1389 0ba4 00C0      		rjmp .L140
+ 1390               	.L88:
+ 1391 0ba6 E983      		std Y+1,r30
+ 1392 0ba8 EF3F      		cpi r30,lo8(-1)
+ 1393 0baa 01F4      		brne .L91
+ 1394 0bac 0E94 0000 		call GetActiveParamSet
+ 1395 0bb0 8983      		std Y+1,r24
+ 1396               	.L91:
+ 1397 0bb2 8981      		ldd r24,Y+1
+ 1398 0bb4 8823      		tst r24
+ 1399 0bb6 01F4      		brne .L92
+ 1400 0bb8 81E0      		ldi r24,lo8(1)
+ 1401 0bba 00C0      		rjmp .L161
+ 1402               	.L92:
+ 1403 0bbc 8630      		cpi r24,lo8(6)
+ 1404 0bbe 00F0      		brlo .L93
+ 1405 0bc0 85E0      		ldi r24,lo8(5)
+ 1406               	.L161:
+ 1407 0bc2 8983      		std Y+1,r24
+ 1408               	.L93:
+ 1409 0bc4 8981      		ldd r24,Y+1
+ 1410 0bc6 0E94 0000 		call ParamSet_ReadFromEEProm
+ 1411               	.L140:
+ 1412 0bca 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1413 0bce 8823      		tst r24
+ 1414 0bd0 01F0      		breq .L140
+ 1415 0bd2 ADB7      		in r26,__SP_L__
+ 1416 0bd4 BEB7      		in r27,__SP_H__
+ 1417 0bd6 1B97      		sbiw r26,11
+ 1418 0bd8 ADBF      		out __SP_L__,r26
+ 1419 0bda EDB7      		in r30,__SP_L__
+ 1420 0bdc FEB7      		in r31,__SP_H__
+ 1421 0bde 3196      		adiw r30,1
+ 1422 0be0 81E5      		ldi r24,lo8(81)
+ 1423 0be2 1196      		adiw r26,1
+ 1424 0be4 8C93      		st X,r24
+ 1425 0be6 81E0      		ldi r24,lo8(1)
+ 1426 0be8 8183      		std Z+1,r24
+ 1427 0bea 82E0      		ldi r24,lo8(2)
+ 1428 0bec 8283      		std Z+2,r24
+ 1429 0bee CE01      		movw r24,r28
+ 1430 0bf0 0196      		adiw r24,1
+ 1431 0bf2 9483      		std Z+4,r25
+ 1432 0bf4 8383      		std Z+3,r24
+ 1433 0bf6 81E0      		ldi r24,lo8(1)
+ 1434 0bf8 90E0      		ldi r25,hi8(1)
+ 1435 0bfa 9683      		std Z+6,r25
+ 1436 0bfc 8583      		std Z+5,r24
+ 1437 0bfe 80E0      		ldi r24,lo8(EE_Parameter)
+ 1438 0c00 90E0      		ldi r25,hi8(EE_Parameter)
+ 1439 0c02 9087      		std Z+8,r25
+ 1440 0c04 8783      		std Z+7,r24
+ 1441 0c06 83E7      		ldi r24,lo8(115)
+ 1442 0c08 90E0      		ldi r25,hi8(115)
+ 1443 0c0a 9287      		std Z+10,r25
+ 1444 0c0c 8187      		std Z+9,r24
+ 1445 0c0e 00C0      		rjmp .L169
+ 1446               	.L173:
+ 1447 0c10 E091 0000 		lds r30,pRxData
+ 1448 0c14 F091 0000 		lds r31,(pRxData)+1
+ 1449 0c18 8081      		ld r24,Z
+ 1450 0c1a 8150      		subi r24,lo8(-(-1))
+ 1451 0c1c 8530      		cpi r24,lo8(5)
+ 1452 0c1e 00F4      		brsh .L94
+ 1453 0c20 8181      		ldd r24,Z+1
+ 1454 0c22 8535      		cpi r24,lo8(85)
+ 1455 0c24 01F4      		brne .L94
+ 1456 0c26 8091 0000 		lds r24,MotorenEin
+ 1457 0c2a 8823      		tst r24
+ 1458 0c2c 01F4      		brne .L94
+ 1459 0c2e A0E0      		ldi r26,lo8(EE_Parameter)
+ 1460 0c30 B0E0      		ldi r27,hi8(EE_Parameter)
+ 1461 0c32 3196      		adiw r30,1
+ 1462 0c34 83E7      		ldi r24,lo8(115)
+ 1463               	.L95:
+ 1464 0c36 0190      		ld r0,Z+
+ 1465 0c38 0D92      		st X+,r0
+ 1466 0c3a 8150      		subi r24,lo8(-(-1))
+ 1467 0c3c 01F4      		brne .L95
+ 1468 0c3e E091 0000 		lds r30,pRxData
+ 1469 0c42 F091 0000 		lds r31,(pRxData)+1
+ 1470 0c46 8081      		ld r24,Z
+ 1471 0c48 0E94 0000 		call ParamSet_WriteToEEProm
+ 1472 0c4c 6091 0000 		lds r22,EE_Parameter+65
+ 1473 0c50 70E0      		ldi r23,lo8(0)
+ 1474 0c52 80E0      		ldi r24,lo8(0)
+ 1475 0c54 90E0      		ldi r25,hi8(0)
+ 1476 0c56 24EC      		ldi r18,lo8(2500)
+ 1477 0c58 39E0      		ldi r19,hi8(2500)
+ 1478 0c5a 40E0      		ldi r20,hlo8(2500)
+ 1479 0c5c 50E0      		ldi r21,hhi8(2500)
+ 1480 0c5e 0E94 0000 		call __mulsi3
+ 1481 0c62 6093 0000 		sts Umschlag180Nick,r22
+ 1482 0c66 7093 0000 		sts (Umschlag180Nick)+1,r23
+ 1483 0c6a 8093 0000 		sts (Umschlag180Nick)+2,r24
+ 1484 0c6e 9093 0000 		sts (Umschlag180Nick)+3,r25
+ 1485 0c72 6091 0000 		lds r22,EE_Parameter+66
+ 1486 0c76 70E0      		ldi r23,lo8(0)
+ 1487 0c78 80E0      		ldi r24,lo8(0)
+ 1488 0c7a 90E0      		ldi r25,hi8(0)
+ 1489 0c7c 0E94 0000 		call __mulsi3
+ 1490 0c80 6093 0000 		sts Umschlag180Roll,r22
+ 1491 0c84 7093 0000 		sts (Umschlag180Roll)+1,r23
+ 1492 0c88 8093 0000 		sts (Umschlag180Roll)+2,r24
+ 1493 0c8c 9093 0000 		sts (Umschlag180Roll)+3,r25
+ 1494 0c90 0E94 0000 		call GetActiveParamSet
+ 1495 0c94 8983      		std Y+1,r24
+ 1496 0c96 00C0      		rjmp .L141
+ 1497               	.L94:
+ 1498 0c98 1982      		std Y+1,__zero_reg__
+ 1499               	.L141:
+ 1500 0c9a 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1501 0c9e 8823      		tst r24
+ 1502 0ca0 01F0      		breq .L141
+ 1503 0ca2 ADB7      		in r26,__SP_L__
+ 1504 0ca4 BEB7      		in r27,__SP_H__
+ 1505 0ca6 1797      		sbiw r26,7
+ 1506 0ca8 ADBF      		out __SP_L__,r26
+ 1507 0caa EDB7      		in r30,__SP_L__
+ 1508 0cac FEB7      		in r31,__SP_H__
+ 1509 0cae 3196      		adiw r30,1
+ 1510 0cb0 83E5      		ldi r24,lo8(83)
+ 1511 0cb2 00C0      		rjmp .L171
+ 1512               	.L172:
+ 1513 0cb4 E091 0000 		lds r30,pRxData
+ 1514 0cb8 F091 0000 		lds r31,(pRxData)+1
+ 1515 0cbc E081      		ld r30,Z
+ 1516 0cbe 8E2F      		mov r24,r30
+ 1517 0cc0 8150      		subi r24,lo8(-(-1))
+ 1518 0cc2 8530      		cpi r24,lo8(5)
+ 1519 0cc4 00F4      		brsh .L98
+ 1520 0cc6 8E2F      		mov r24,r30
+ 1521 0cc8 0E94 0000 		call ParamSet_ReadFromEEProm
+ 1522               	.L98:
+ 1523 0ccc 0E94 0000 		call GetActiveParamSet
+ 1524 0cd0 8983      		std Y+1,r24
+ 1525               	.L99:
+ 1526 0cd2 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1527 0cd6 8823      		tst r24
+ 1528 0cd8 01F0      		breq .L99
+ 1529 0cda ADB7      		in r26,__SP_L__
+ 1530 0cdc BEB7      		in r27,__SP_H__
+ 1531 0cde 1797      		sbiw r26,7
+ 1532 0ce0 ADBF      		out __SP_L__,r26
+ 1533 0ce2 EDB7      		in r30,__SP_L__
+ 1534 0ce4 FEB7      		in r31,__SP_H__
+ 1535 0ce6 3196      		adiw r30,1
+ 1536 0ce8 86E4      		ldi r24,lo8(70)
+ 1537               	.L171:
+ 1538 0cea 1196      		adiw r26,1
+ 1539 0cec 8C93      		st X,r24
+ 1540 0cee 81E0      		ldi r24,lo8(1)
+ 1541 0cf0 8183      		std Z+1,r24
+ 1542 0cf2 8283      		std Z+2,r24
+ 1543 0cf4 CE01      		movw r24,r28
+ 1544 0cf6 0196      		adiw r24,1
+ 1545 0cf8 9483      		std Z+4,r25
+ 1546 0cfa 8383      		std Z+3,r24
+ 1547 0cfc 81E0      		ldi r24,lo8(1)
+ 1548 0cfe 90E0      		ldi r25,hi8(1)
+ 1549 0d00 9683      		std Z+6,r25
+ 1550 0d02 8583      		std Z+5,r24
+ 1551 0d04 0E94 0000 		call SendOutData
+ 1552 0d08 8DB7      		in r24,__SP_L__
+ 1553 0d0a 9EB7      		in r25,__SP_H__
+ 1554 0d0c 0796      		adiw r24,7
+ 1555 0d0e 8DBF      		out __SP_L__,r24
+ 1556 0d10 8091 0000 		lds r24,MotorenEin
+ 1557 0d14 8823      		tst r24
+ 1558 0d16 01F4      		brne .L100
+ 1559 0d18 8981      		ldd r24,Y+1
+ 1560 0d1a 6EE6      		ldi r22,lo8(110)
+ 1561 0d1c 70E0      		ldi r23,hi8(110)
+ 1562 0d1e 0E94 0000 		call Piep
+ 1563               	.L100:
+ 1564 0d22 80E0      		ldi r24,lo8(0)
+ 1565 0d24 0E94 0000 		call LipoDetection
+ 1566 0d28 8091 0000 		lds r24,EE_Parameter+39
+ 1567 0d2c 0E94 0000 		call LIBFC_ReceiverInit
+ 1568 0d30 00C0      		rjmp .L61
+ 1569               	.L74:
+ 1570 0d32 E091 0000 		lds r30,pRxData
+ 1571 0d36 F091 0000 		lds r31,(pRxData)+1
+ 1572 0d3a 8081      		ld r24,Z
+ 1573 0d3c 9927      		clr r25
+ 1574 0d3e 87FD      		sbrc r24,7
+ 1575 0d40 9095      		com r25
+ 1576 0d42 9093 0000 		sts (PPM_in+26)+1,r25
+ 1577 0d46 8093 0000 		sts PPM_in+26,r24
+ 1578 0d4a 8181      		ldd r24,Z+1
+ 1579 0d4c 9927      		clr r25
+ 1580 0d4e 87FD      		sbrc r24,7
+ 1581 0d50 9095      		com r25
+ 1582 0d52 9093 0000 		sts (PPM_in+28)+1,r25
+ 1583 0d56 8093 0000 		sts PPM_in+28,r24
+ 1584 0d5a 8281      		ldd r24,Z+2
+ 1585 0d5c 9927      		clr r25
+ 1586 0d5e 87FD      		sbrc r24,7
+ 1587 0d60 9095      		com r25
+ 1588 0d62 9093 0000 		sts (PPM_in+30)+1,r25
+ 1589 0d66 8093 0000 		sts PPM_in+30,r24
+ 1590 0d6a 8381      		ldd r24,Z+3
+ 1591 0d6c 9927      		clr r25
+ 1592 0d6e 87FD      		sbrc r24,7
+ 1593 0d70 9095      		com r25
+ 1594 0d72 9093 0000 		sts (PPM_in+32)+1,r25
+ 1595 0d76 8093 0000 		sts PPM_in+32,r24
+ 1596 0d7a 8481      		ldd r24,Z+4
+ 1597 0d7c 9927      		clr r25
+ 1598 0d7e 87FD      		sbrc r24,7
+ 1599 0d80 9095      		com r25
+ 1600 0d82 9093 0000 		sts (PPM_in+34)+1,r25
+ 1601 0d86 8093 0000 		sts PPM_in+34,r24
+ 1602 0d8a 8581      		ldd r24,Z+5
+ 1603 0d8c 9927      		clr r25
+ 1604 0d8e 87FD      		sbrc r24,7
+ 1605 0d90 9095      		com r25
+ 1606 0d92 9093 0000 		sts (PPM_in+36)+1,r25
+ 1607 0d96 8093 0000 		sts PPM_in+36,r24
+ 1608 0d9a 8681      		ldd r24,Z+6
+ 1609 0d9c 9927      		clr r25
+ 1610 0d9e 87FD      		sbrc r24,7
+ 1611 0da0 9095      		com r25
+ 1612 0da2 9093 0000 		sts (PPM_in+38)+1,r25
+ 1613 0da6 8093 0000 		sts PPM_in+38,r24
+ 1614 0daa 8781      		ldd r24,Z+7
+ 1615 0dac 9927      		clr r25
+ 1616 0dae 87FD      		sbrc r24,7
+ 1617 0db0 9095      		com r25
+ 1618 0db2 9093 0000 		sts (PPM_in+40)+1,r25
+ 1619 0db6 8093 0000 		sts PPM_in+40,r24
+ 1620 0dba 8085      		ldd r24,Z+8
+ 1621 0dbc 9927      		clr r25
+ 1622 0dbe 87FD      		sbrc r24,7
+ 1623 0dc0 9095      		com r25
+ 1624 0dc2 9093 0000 		sts (PPM_in+42)+1,r25
+ 1625 0dc6 8093 0000 		sts PPM_in+42,r24
+ 1626 0dca 8185      		ldd r24,Z+9
+ 1627 0dcc 9927      		clr r25
+ 1628 0dce 87FD      		sbrc r24,7
+ 1629 0dd0 9095      		com r25
+ 1630 0dd2 9093 0000 		sts (PPM_in+44)+1,r25
+ 1631 0dd6 8093 0000 		sts PPM_in+44,r24
+ 1632 0dda 8285      		ldd r24,Z+10
+ 1633 0ddc 9927      		clr r25
+ 1634 0dde 87FD      		sbrc r24,7
+ 1635 0de0 9095      		com r25
+ 1636 0de2 9093 0000 		sts (PPM_in+46)+1,r25
+ 1637 0de6 8093 0000 		sts PPM_in+46,r24
+ 1638 0dea 8385      		ldd r24,Z+11
+ 1639 0dec 9927      		clr r25
+ 1640 0dee 87FD      		sbrc r24,7
+ 1641 0df0 9095      		com r25
+ 1642 0df2 9093 0000 		sts (PPM_in+48)+1,r25
+ 1643 0df6 8093 0000 		sts PPM_in+48,r24
+ 1644 0dfa 00C0      		rjmp .L61
+ 1645               	.L174:
+ 1646 0dfc E091 0000 		lds r30,pRxData
+ 1647 0e00 F091 0000 		lds r31,(pRxData)+1
+ 1648 0e04 8081      		ld r24,Z
+ 1649 0e06 0E94 0000 		call I2C_ReadBLConfig
+ 1650 0e0a 8A83      		std Y+2,r24
+ 1651 0e0c 8823      		tst r24
+ 1652 0e0e 01F4      		brne .L101
+ 1653 0e10 81E0      		ldi r24,lo8(1)
+ 1654 0e12 8983      		std Y+1,r24
+ 1655 0e14 00C0      		rjmp .L139
+ 1656               	.L101:
+ 1657 0e16 1982      		std Y+1,__zero_reg__
+ 1658               	.L139:
+ 1659 0e18 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1660 0e1c 8823      		tst r24
+ 1661 0e1e 01F0      		breq .L139
+ 1662 0e20 ADB7      		in r26,__SP_L__
+ 1663 0e22 BEB7      		in r27,__SP_H__
+ 1664 0e24 5397      		sbiw r26,19
+ 1665 0e26 ADBF      		out __SP_L__,r26
+ 1666 0e28 EDB7      		in r30,__SP_L__
+ 1667 0e2a FEB7      		in r31,__SP_H__
+ 1668 0e2c 3196      		adiw r30,1
+ 1669 0e2e 85E5      		ldi r24,lo8(85)
+ 1670 0e30 1196      		adiw r26,1
+ 1671 0e32 8C93      		st X,r24
+ 1672 0e34 81E0      		ldi r24,lo8(1)
+ 1673 0e36 8183      		std Z+1,r24
+ 1674 0e38 84E0      		ldi r24,lo8(4)
+ 1675 0e3a 8283      		std Z+2,r24
+ 1676 0e3c CE01      		movw r24,r28
+ 1677 0e3e 0196      		adiw r24,1
+ 1678 0e40 9483      		std Z+4,r25
+ 1679 0e42 8383      		std Z+3,r24
+ 1680 0e44 21E0      		ldi r18,lo8(1)
+ 1681 0e46 30E0      		ldi r19,hi8(1)
+ 1682 0e48 3683      		std Z+6,r19
+ 1683 0e4a 2583      		std Z+5,r18
+ 1684 0e4c CE01      		movw r24,r28
+ 1685 0e4e 0296      		adiw r24,2
+ 1686 0e50 9087      		std Z+8,r25
+ 1687 0e52 8783      		std Z+7,r24
+ 1688 0e54 3287      		std Z+10,r19
+ 1689 0e56 2187      		std Z+9,r18
+ 1690 0e58 8091 0000 		lds r24,pRxData
+ 1691 0e5c 9091 0000 		lds r25,(pRxData)+1
+ 1692 0e60 9487      		std Z+12,r25
+ 1693 0e62 8387      		std Z+11,r24
+ 1694 0e64 3687      		std Z+14,r19
+ 1695 0e66 2587      		std Z+13,r18
+ 1696 0e68 80E0      		ldi r24,lo8(BLConfig)
+ 1697 0e6a 90E0      		ldi r25,hi8(BLConfig)
+ 1698 0e6c 908B      		std Z+16,r25
+ 1699 0e6e 8787      		std Z+15,r24
+ 1700 0e70 88E0      		ldi r24,lo8(8)
+ 1701 0e72 90E0      		ldi r25,hi8(8)
+ 1702 0e74 928B      		std Z+18,r25
+ 1703 0e76 818B      		std Z+17,r24
+ 1704 0e78 0E94 0000 		call SendOutData
+ 1705 0e7c 8DB7      		in r24,__SP_L__
+ 1706 0e7e 9EB7      		in r25,__SP_H__
+ 1707 0e80 4396      		adiw r24,19
+ 1708 0e82 00C0      		rjmp .L164
+ 1709               	.L73:
+ 1710 0e84 8091 0000 		lds r24,RxDataLen
+ 1711 0e88 8930      		cpi r24,lo8(9)
+ 1712 0e8a 00F4      		brsh .+2
+ 1713 0e8c 00C0      		rjmp .L61
+ 1714 0e8e E091 0000 		lds r30,pRxData
+ 1715 0e92 F091 0000 		lds r31,(pRxData)+1
+ 1716 0e96 A0E0      		ldi r26,lo8(BLConfig)
+ 1717 0e98 B0E0      		ldi r27,hi8(BLConfig)
+ 1718 0e9a 3196      		adiw r30,1
+ 1719 0e9c 88E0      		ldi r24,lo8(8)
+ 1720               	.L103:
+ 1721 0e9e 0190      		ld r0,Z+
+ 1722 0ea0 0D92      		st X+,r0
+ 1723 0ea2 8150      		subi r24,lo8(-(-1))
+ 1724 0ea4 01F4      		brne .L103
+ 1725 0ea6 E091 0000 		lds r30,pRxData
+ 1726 0eaa F091 0000 		lds r31,(pRxData)+1
+ 1727 0eae 8081      		ld r24,Z
+ 1728 0eb0 0E94 0000 		call I2C_WriteBLConfig
+ 1729 0eb4 8A83      		std Y+2,r24
+ 1730 0eb6 8823      		tst r24
+ 1731 0eb8 01F4      		brne .L104
+ 1732 0eba 81E0      		ldi r24,lo8(1)
+ 1733 0ebc 8983      		std Y+1,r24
+ 1734 0ebe 00C0      		rjmp .L138
+ 1735               	.L104:
+ 1736 0ec0 1982      		std Y+1,__zero_reg__
+ 1737               	.L138:
+ 1738 0ec2 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1739 0ec6 8823      		tst r24
+ 1740 0ec8 01F0      		breq .L138
+ 1741 0eca ADB7      		in r26,__SP_L__
+ 1742 0ecc BEB7      		in r27,__SP_H__
+ 1743 0ece 1B97      		sbiw r26,11
+ 1744 0ed0 ADBF      		out __SP_L__,r26
+ 1745 0ed2 EDB7      		in r30,__SP_L__
+ 1746 0ed4 FEB7      		in r31,__SP_H__
+ 1747 0ed6 3196      		adiw r30,1
+ 1748 0ed8 87E5      		ldi r24,lo8(87)
+ 1749 0eda 1196      		adiw r26,1
+ 1750 0edc 8C93      		st X,r24
+ 1751 0ede 81E0      		ldi r24,lo8(1)
+ 1752 0ee0 8183      		std Z+1,r24
+ 1753 0ee2 82E0      		ldi r24,lo8(2)
+ 1754 0ee4 8283      		std Z+2,r24
+ 1755 0ee6 CE01      		movw r24,r28
+ 1756 0ee8 0196      		adiw r24,1
+ 1757 0eea 9483      		std Z+4,r25
+ 1758 0eec 8383      		std Z+3,r24
+ 1759 0eee 21E0      		ldi r18,lo8(1)
+ 1760 0ef0 30E0      		ldi r19,hi8(1)
+ 1761 0ef2 3683      		std Z+6,r19
+ 1762 0ef4 2583      		std Z+5,r18
+ 1763 0ef6 CE01      		movw r24,r28
+ 1764 0ef8 0296      		adiw r24,2
+ 1765 0efa 9087      		std Z+8,r25
+ 1766 0efc 8783      		std Z+7,r24
+ 1767 0efe 3287      		std Z+10,r19
+ 1768 0f00 2187      		std Z+9,r18
+ 1769               	.L169:
+ 1770 0f02 0E94 0000 		call SendOutData
+ 1771 0f06 8DB7      		in r24,__SP_L__
+ 1772 0f08 9EB7      		in r25,__SP_H__
+ 1773 0f0a 0B96      		adiw r24,11
+ 1774               	.L164:
+ 1775 0f0c 8DBF      		out __SP_L__,r24
+ 1776 0f0e 00C0      		rjmp .L61
+ 1777               	.L65:
+ 1778 0f10 0E94 0000 		call LIBFC_GetCPUType
+ 1779 0f14 8983      		std Y+1,r24
+ 1780 0f16 8230      		cpi r24,lo8(2)
+ 1781 0f18 01F0      		breq .L106
+ 1782 0f1a 8430      		cpi r24,lo8(4)
+ 1783 0f1c 01F0      		breq .+2
+ 1784 0f1e 00C0      		rjmp .L61
+ 1785               	.L106:
+ 1786               	/* #APP */
+ 1787               	 ;  475 "uart.c" 1
+ 1788 0f20 F894      		cli
+ 1789               	 ;  0 "" 2
+ 1790               	/* #NOAPP */
+ 1791 0f22 8091 C100 		lds r24,193
+ 1792 0f26 8F73      		andi r24,lo8(63)
+ 1793 0f28 8093 C100 		sts 193,r24
+ 1794 0f2c 8091 C900 		lds r24,201
+ 1795 0f30 8F73      		andi r24,lo8(63)
+ 1796 0f32 8093 C900 		sts 201,r24
+ 1797 0f36 8091 C100 		lds r24,193
+ 1798 0f3a 877E      		andi r24,lo8(-25)
+ 1799 0f3c 8093 C100 		sts 193,r24
+ 1800 0f40 8091 C900 		lds r24,201
+ 1801 0f44 877E      		andi r24,lo8(-25)
+ 1802 0f46 8093 C900 		sts 201,r24
+ 1803 0f4a 00C0      		rjmp .L107
+ 1804               	.L108:
+ 1805 0f4c 8091 CE00 		lds r24,206
+ 1806               	.L107:
+ 1807 0f50 8091 C800 		lds r24,200
+ 1808 0f54 87FD      		sbrc r24,7
+ 1809 0f56 00C0      		rjmp .L108
+ 1810 0f58 00C0      		rjmp .L158
+ 1811               	.L110:
+ 1812 0f5a 8091 C600 		lds r24,198
+ 1813               	.L158:
+ 1814 0f5e 8091 C000 		lds r24,192
+ 1815 0f62 87FD      		sbrc r24,7
+ 1816 0f64 00C0      		rjmp .L110
+ 1817 0f66 E091 0000 		lds r30,pRxData
+ 1818 0f6a F091 0000 		lds r31,(pRxData)+1
+ 1819 0f6e 8081      		ld r24,Z
+ 1820 0f70 8823      		tst r24
+ 1821 0f72 01F4      		brne .L111
+ 1822 0f74 81E0      		ldi r24,lo8(1)
+ 1823 0f76 8093 0000 		sts JetiUpdateModeActive,r24
+ 1824 0f7a 1092 CD00 		sts 205,__zero_reg__
+ 1825 0f7e 80E4      		ldi r24,lo8(64)
+ 1826 0f80 8093 CC00 		sts 204,r24
+ 1827 0f84 8091 CD00 		lds r24,205
+ 1828 0f88 8093 C500 		sts 197,r24
+ 1829 0f8c 8091 CC00 		lds r24,204
+ 1830 0f90 8093 C400 		sts 196,r24
+ 1831 0f94 8091 CA00 		lds r24,202
+ 1832 0f98 8F7D      		andi r24,lo8(-33)
+ 1833 0f9a 8093 CA00 		sts 202,r24
+ 1834 0f9e 8091 CA00 		lds r24,202
+ 1835 0fa2 8F7E      		andi r24,lo8(-17)
+ 1836 0fa4 8093 CA00 		sts 202,r24
+ 1837 0fa8 8091 C900 		lds r24,201
+ 1838 0fac 8B7F      		andi r24,lo8(-5)
+ 1839 0fae 8093 C900 		sts 201,r24
+ 1840 0fb2 8091 CA00 		lds r24,202
+ 1841 0fb6 8460      		ori r24,lo8(4)
+ 1842 0fb8 8093 CA00 		sts 202,r24
+ 1843 0fbc 8091 CA00 		lds r24,202
+ 1844 0fc0 8260      		ori r24,lo8(2)
+ 1845 0fc2 8093 CA00 		sts 202,r24
+ 1846 0fc6 00C0      		rjmp .L112
+ 1847               	.L111:
+ 1848 0fc8 82E0      		ldi r24,lo8(2)
+ 1849 0fca 8093 0000 		sts JetiUpdateModeActive,r24
+ 1850               	.L112:
+ 1851 0fce 8091 CA00 		lds r24,202
+ 1852 0fd2 877F      		andi r24,lo8(-9)
+ 1853 0fd4 8093 CA00 		sts 202,r24
+ 1854 0fd8 8091 C200 		lds r24,194
+ 1855 0fdc 877F      		andi r24,lo8(-9)
+ 1856 0fde 8093 C200 		sts 194,r24
+ 1857 0fe2 8091 C900 		lds r24,201
+ 1858 0fe6 8E7F      		andi r24,lo8(-2)
+ 1859 0fe8 8093 C900 		sts 201,r24
+ 1860 0fec 8091 C100 		lds r24,193
+ 1861 0ff0 8861      		ori r24,lo8(24)
+ 1862 0ff2 8093 C100 		sts 193,r24
+ 1863 0ff6 8091 C900 		lds r24,201
+ 1864 0ffa 8861      		ori r24,lo8(24)
+ 1865 0ffc 8093 C900 		sts 201,r24
+ 1866 1000 8091 C100 		lds r24,193
+ 1867 1004 8068      		ori r24,lo8(-128)
+ 1868 1006 8093 C100 		sts 193,r24
+ 1869 100a 8091 C900 		lds r24,201
+ 1870 100e 8068      		ori r24,lo8(-128)
+ 1871 1010 8093 C900 		sts 201,r24
+ 1872 1014 1092 6E00 		sts 110,__zero_reg__
+ 1873 1018 1092 6F00 		sts 111,__zero_reg__
+ 1874 101c 1092 7000 		sts 112,__zero_reg__
+ 1875               	/* #APP */
+ 1876               	 ;  525 "uart.c" 1
+ 1877 1020 7894      		sei
+ 1878               	 ;  0 "" 2
+ 1879               	/* #NOAPP */
+ 1880               	.L61:
+ 1881 1022 8091 0000 		lds r24,RxdBuffer+2
+ 1882 1026 8436      		cpi r24,lo8(100)
+ 1883 1028 01F4      		brne .+2
+ 1884 102a 00C0      		rjmp .L118
+ 1885 102c 8536      		cpi r24,lo8(101)
+ 1886 102e 00F4      		brsh .L124
+ 1887 1030 8136      		cpi r24,lo8(97)
+ 1888 1032 01F4      		brne .+2
+ 1889 1034 00C0      		rjmp .L115
+ 1890 1036 8236      		cpi r24,lo8(98)
+ 1891 1038 00F4      		brsh .L125
+ 1892 103a 8B34      		cpi r24,lo8(75)
+ 1893 103c 01F0      		breq .+2
+ 1894 103e 00C0      		rjmp .L113
+ 1895 1040 00C0      		rjmp .L175
+ 1896               	.L125:
+ 1897 1042 8236      		cpi r24,lo8(98)
+ 1898 1044 01F4      		brne .+2
+ 1899 1046 00C0      		rjmp .L116
+ 1900 1048 8336      		cpi r24,lo8(99)
+ 1901 104a 01F0      		breq .+2
+ 1902 104c 00C0      		rjmp .L113
+ 1903 104e 00C0      		rjmp .L176
+ 1904               	.L124:
+ 1905 1050 8C36      		cpi r24,lo8(108)
+ 1906 1052 01F4      		brne .+2
+ 1907 1054 00C0      		rjmp .L121
+ 1908 1056 8D36      		cpi r24,lo8(109)
+ 1909 1058 00F4      		brsh .L126
+ 1910 105a 8736      		cpi r24,lo8(103)
+ 1911 105c 01F4      		brne .+2
+ 1912 105e 00C0      		rjmp .L119
+ 1913 1060 8836      		cpi r24,lo8(104)
+ 1914 1062 01F0      		breq .+2
+ 1915 1064 00C0      		rjmp .L113
+ 1916 1066 00C0      		rjmp .L177
+ 1917               	.L126:
+ 1918 1068 8437      		cpi r24,lo8(116)
+ 1919 106a 01F0      		breq .L122
+ 1920 106c 8637      		cpi r24,lo8(118)
+ 1921 106e 01F0      		breq .+2
+ 1922 1070 00C0      		rjmp .L113
+ 1923 1072 00C0      		rjmp .L178
+ 1924               	.L122:
+ 1925 1074 8091 0000 		lds r24,AnzahlEmpfangsBytes
+ 1926 1078 8031      		cpi r24,lo8(16)
+ 1927 107a 00F0      		brlo .L127
+ 1928 107c A0E0      		ldi r26,lo8(MotorTest)
+ 1929 107e B0E0      		ldi r27,hi8(MotorTest)
+ 1930 1080 8091 0000 		lds r24,pRxData
+ 1931 1084 9091 0000 		lds r25,pRxData+1
+ 1932 1088 9C01      		movw r18,r24
+ 1933 108a F901      		movw r30,r18
+ 1934 108c 80E1      		ldi r24,lo8(16)
+ 1935               	.L128:
+ 1936 108e 0190      		ld r0,Z+
+ 1937 1090 0D92      		st X+,r0
+ 1938 1092 8150      		subi r24,lo8(-(-1))
+ 1939 1094 01F4      		brne .L128
+ 1940 1096 00C0      		rjmp .L137
+ 1941               	.L127:
+ 1942 1098 E091 0000 		lds r30,pRxData
+ 1943 109c F091 0000 		lds r31,(pRxData)+1
+ 1944 10a0 8081      		ld r24,Z
+ 1945 10a2 9181      		ldd r25,Z+1
+ 1946 10a4 A281      		ldd r26,Z+2
+ 1947 10a6 B381      		ldd r27,Z+3
+ 1948 10a8 8093 0000 		sts MotorTest,r24
+ 1949 10ac 9093 0000 		sts (MotorTest)+1,r25
+ 1950 10b0 A093 0000 		sts (MotorTest)+2,r26
+ 1951 10b4 B093 0000 		sts (MotorTest)+3,r27
+ 1952               	.L137:
+ 1953 10b8 8091 0000 		lds r24,UebertragungAbgeschlossen
+ 1954 10bc 8823      		tst r24
+ 1955 10be 01F0      		breq .L137
+ 1956 10c0 00D0      		rcall .
+ 1957 10c2 0F92      		push __tmp_reg__
+ 1958 10c4 EDB7      		in r30,__SP_L__
+ 1959 10c6 FEB7      		in r31,__SP_H__
+ 1960 10c8 3196      		adiw r30,1
+ 1961 10ca 84E5      		ldi r24,lo8(84)
+ 1962 10cc ADB7      		in r26,__SP_L__
+ 1963 10ce BEB7      		in r27,__SP_H__
+ 1964 10d0 1196      		adiw r26,1
+ 1965 10d2 8C93      		st X,r24
+ 1966 10d4 8091 0000 		lds r24,MeineSlaveAdresse
+ 1967 10d8 8183      		std Z+1,r24
+ 1968 10da 1282      		std Z+2,__zero_reg__
+ 1969 10dc 0E94 0000 		call SendOutData
+ 1970 10e0 8AEF      		ldi r24,lo8(-6)
+ 1971 10e2 8093 0000 		sts PC_MotortestActive,r24
+ 1972 10e6 8FEF      		ldi r24,lo8(-1)
+ 1973 10e8 8093 0000 		sts PcZugriff,r24
+ 1974 10ec 0F90      		pop __tmp_reg__
+ 1975 10ee 0F90      		pop __tmp_reg__
+ 1976 10f0 0F90      		pop __tmp_reg__
+ 1977 10f2 00C0      		rjmp .L165
+ 1978               	.L175:
+ 1979 10f4 E091 0000 		lds r30,pRxData
+ 1980 10f8 F091 0000 		lds r31,(pRxData)+1
+ 1981 10fc 8081      		ld r24,Z
+ 1982 10fe 9181      		ldd r25,Z+1
+ 1983 1100 9093 0000 		sts (KompassValue)+1,r25
+ 1984 1104 8093 0000 		sts KompassValue,r24
+ 1985 1108 845E      		subi r24,lo8(-(540))
+ 1986 110a 9D4F      		sbci r25,hi8(-(540))
+ 1987 110c 2091 0000 		lds r18,KompassSollWert
+ 1988 1110 3091 0000 		lds r19,(KompassSollWert)+1
+ 1989 1114 821B      		sub r24,r18
+ 1990 1116 930B      		sbc r25,r19
+ 1991 1118 68E6      		ldi r22,lo8(360)
+ 1992 111a 71E0      		ldi r23,hi8(360)
+ 1993 111c 0E94 0000 		call __divmodhi4
+ 1994 1120 845B      		subi r24,lo8(-(-180))
+ 1995 1122 9040      		sbci r25,hi8(-(-180))
+ 1996 1124 9093 0000 		sts (KompassRichtung)+1,r25
+ 1997 1128 8093 0000 		sts KompassRichtung,r24
+ 1998 112c 00C0      		rjmp .L113
+ 1999               	.L115:
+ 2000 112e E091 0000 		lds r30,pRxData
+ 2001 1132 F091 0000 		lds r31,(pRxData)+1
+ 2002 1136 8081      		ld r24,Z
+ 2003 1138 8093 0000 		sts DebugTextAnforderung,r24
+ 2004 113c 8032      		cpi r24,lo8(32)
+ 2005 113e 00F0      		brlo .L166
+ 2006 1140 8FE1      		ldi r24,lo8(31)
+ 2007 1142 8093 0000 		sts DebugTextAnforderung,r24
+ 2008 1146 00C0      		rjmp .L166
+ 2009               	.L116:
+ 2010 1148 A0E0      		ldi r26,lo8(ExternControl)
+ 2011 114a B0E0      		ldi r27,hi8(ExternControl)
+ 2012 114c 8091 0000 		lds r24,pRxData
+ 2013 1150 9091 0000 		lds r25,pRxData+1
+ 2014 1154 9C01      		movw r18,r24
+ 2015 1156 F901      		movw r30,r18
+ 2016 1158 8BE0      		ldi r24,lo8(11)
+ 2017               	.L131:
+ 2018 115a 0190      		ld r0,Z+
+ 2019 115c 0D92      		st X+,r0
+ 2020 115e 8150      		subi r24,lo8(-(-1))
+ 2021 1160 01F4      		brne .L131
+ 2022 1162 8091 0000 		lds r24,ExternControl+9
+ 2023 1166 8093 0000 		sts ConfirmFrame,r24
+ 2024               	.L166:
+ 2025 116a 8FEF      		ldi r24,lo8(-1)
+ 2026 116c 8093 0000 		sts PcZugriff,r24
+ 2027 1170 00C0      		rjmp .L113
+ 2028               	.L176:
+ 2029 1172 8091 0000 		lds r24,Intervall3D
+ 2030 1176 9091 0000 		lds r25,(Intervall3D)+1
+ 2031 117a 892B      		or r24,r25
+ 2032 117c 01F4      		brne .L132
+ 2033 117e E091 0000 		lds r30,pRxData
+ 2034 1182 F091 0000 		lds r31,(pRxData)+1
+ 2035 1186 E081      		ld r30,Z
+ 2036 1188 EE23      		tst r30
+ 2037 118a 01F0      		breq .L132
+ 2038 118c 8AE0      		ldi r24,lo8(10)
+ 2039 118e E89F      		mul r30,r24
+ 2040 1190 C001      		movw r24,r0
+ 2041 1192 1124      		clr r1
+ 2042 1194 0E94 0000 		call SetDelay
+ 2043 1198 9093 0000 		sts (Timer3D)+1,r25
+ 2044 119c 8093 0000 		sts Timer3D,r24
+ 2045               	.L132:
+ 2046 11a0 E091 0000 		lds r30,pRxData
+ 2047 11a4 F091 0000 		lds r31,(pRxData)+1
+ 2048 11a8 8081      		ld r24,Z
+ 2049 11aa 2AE0      		ldi r18,lo8(10)
+ 2050 11ac 829F      		mul r24,r18
+ 2051 11ae C001      		movw r24,r0
+ 2052 11b0 1124      		clr r1
+ 2053 11b2 9093 0000 		sts (Intervall3D)+1,r25
+ 2054 11b6 8093 0000 		sts Intervall3D,r24
+ 2055               	.L165:
+ 2056 11ba 80EA      		ldi r24,lo8(4000)
+ 2057 11bc 9FE0      		ldi r25,hi8(4000)
+ 2058 11be 0E94 0000 		call SetDelay
+ 2059 11c2 9093 0000 		sts (AboTimeOut)+1,r25
+ 2060 11c6 8093 0000 		sts AboTimeOut,r24
+ 2061 11ca 00C0      		rjmp .L113
+ 2062               	.L118:
+ 2063 11cc 8FEF      		ldi r24,lo8(-1)
+ 2064 11ce 8093 0000 		sts PcZugriff,r24
+ 2065 11d2 E091 0000 		lds r30,pRxData
+ 2066 11d6 F091 0000 		lds r31,(pRxData)+1
+ 2067 11da 8081      		ld r24,Z
+ 2068 11dc 2AE0      		ldi r18,lo8(10)
+ 2069 11de 829F      		mul r24,r18
+ 2070 11e0 C001      		movw r24,r0
+ 2071 11e2 1124      		clr r1
+ 2072 11e4 9093 0000 		sts (DebugDataIntervall)+1,r25
+ 2073 11e8 8093 0000 		sts DebugDataIntervall,r24
+ 2074 11ec 892B      		or r24,r25
+ 2075 11ee 01F0      		breq .L165
+ 2076 11f0 81E0      		ldi r24,lo8(1)
+ 2077 11f2 8093 0000 		sts DebugDataAnforderung,r24
+ 2078 11f6 00C0      		rjmp .L165
+ 2079               	.L177:
+ 2080 11f8 8FEF      		ldi r24,lo8(-1)
+ 2081 11fa 8093 0000 		sts PcZugriff,r24
+ 2082 11fe E091 0000 		lds r30,pRxData
+ 2083 1202 F091 0000 		lds r31,(pRxData)+1
+ 2084 1206 9081      		ld r25,Z
+ 2085 1208 97FD      		sbrc r25,7
+ 2086 120a 00C0      		rjmp .L134
+ 2087 120c 82E0      		ldi r24,lo8(2)
+ 2088 120e 8093 0000 		sts DisplayLine,r24
+ 2089 1212 1092 0000 		sts (Display_Interval)+1,__zero_reg__
+ 2090 1216 1092 0000 		sts Display_Interval,__zero_reg__
+ 2091 121a 00C0      		rjmp .L135
+ 2092               	.L134:
+ 2093 121c 9095      		com r25
+ 2094 121e 8091 0000 		lds r24,RemoteKeys
+ 2095 1222 892B      		or r24,r25
+ 2096 1224 8093 0000 		sts RemoteKeys,r24
+ 2097 1228 8181      		ldd r24,Z+1
+ 2098 122a 2AE0      		ldi r18,lo8(10)
+ 2099 122c 829F      		mul r24,r18
+ 2100 122e C001      		movw r24,r0
+ 2101 1230 1124      		clr r1
+ 2102 1232 9093 0000 		sts (Display_Interval)+1,r25
+ 2103 1236 8093 0000 		sts Display_Interval,r24
+ 2104 123a 84E0      		ldi r24,lo8(4)
+ 2105 123c 8093 0000 		sts DisplayLine,r24
+ 2106 1240 80EA      		ldi r24,lo8(4000)
+ 2107 1242 9FE0      		ldi r25,hi8(4000)
+ 2108 1244 0E94 0000 		call SetDelay
+ 2109 1248 9093 0000 		sts (AboTimeOut)+1,r25
+ 2110 124c 8093 0000 		sts AboTimeOut,r24
+ 2111               	.L135:
+ 2112 1250 81E0      		ldi r24,lo8(1)
+ 2113 1252 8093 0000 		sts DebugDisplayAnforderung,r24
+ 2114 1256 00C0      		rjmp .L113
+ 2115               	.L121:
+ 2116 1258 8FEF      		ldi r24,lo8(-1)
+ 2117 125a 8093 0000 		sts PcZugriff,r24
+ 2118 125e E091 0000 		lds r30,pRxData
+ 2119 1262 F091 0000 		lds r31,(pRxData)+1
+ 2120 1266 8081      		ld r24,Z
+ 2121 1268 8093 0000 		sts MenuePunkt,r24
+ 2122 126c 81E0      		ldi r24,lo8(1)
+ 2123 126e 8093 0000 		sts DebugDisplayAnforderung1,r24
+ 2124 1272 00C0      		rjmp .L113
+ 2125               	.L178:
+ 2126 1274 81E0      		ldi r24,lo8(1)
+ 2127 1276 8093 0000 		sts GetVersionAnforderung,r24
+ 2128 127a 00C0      		rjmp .L113
+ 2129               	.L119:
+ 2130 127c 81E0      		ldi r24,lo8(1)
+ 2131 127e 8093 0000 		sts GetExternalControl,r24
+ 2132               	.L113:
+ 2133 1282 1092 0000 		sts NeuerDatensatzEmpfangen,__zero_reg__
+ 2134 1286 1092 0000 		sts (pRxData)+1,__zero_reg__
+ 2135 128a 1092 0000 		sts pRxData,__zero_reg__
+ 2136 128e 1092 0000 		sts RxDataLen,__zero_reg__
+ 2137               	.L136:
+ 2138               	/* epilogue start */
+ 2139 1292 2296      		adiw r28,2
+ 2140 1294 E2E0      		ldi r30, lo8(2)
+ 2141 1296 0C94 0000 		jmp __epilogue_restores__ + ((18 - 2) * 2)
+ 2143               	.global	__vector_20
+ 2145               	__vector_20:
+ 2146 129a 1F92      		push __zero_reg__
+ 2147 129c 0F92      		push r0
+ 2148 129e 0FB6      		in r0,__SREG__
+ 2149 12a0 0F92      		push r0
+ 2150 12a2 1124      		clr __zero_reg__
+ 2151 12a4 2F93      		push r18
+ 2152 12a6 3F93      		push r19
+ 2153 12a8 4F93      		push r20
+ 2154 12aa 5F93      		push r21
+ 2155 12ac 6F93      		push r22
+ 2156 12ae 7F93      		push r23
+ 2157 12b0 8F93      		push r24
+ 2158 12b2 9F93      		push r25
+ 2159 12b4 AF93      		push r26
+ 2160 12b6 BF93      		push r27
+ 2161 12b8 CF93      		push r28
+ 2162 12ba DF93      		push r29
+ 2163 12bc EF93      		push r30
+ 2164 12be FF93      		push r31
+ 2165               	/* prologue: Signal */
+ 2166               	/* frame size = 0 */
+ 2167 12c0 8091 0000 		lds r24,JetiUpdateModeActive
+ 2168 12c4 8130      		cpi r24,lo8(1)
+ 2169 12c6 01F4      		brne .L180
+ 2170 12c8 8091 C600 		lds r24,198
+ 2171 12cc 8093 CE00 		sts 206,r24
+ 2172 12d0 00C0      		rjmp .L194
+ 2173               	.L180:
+ 2174 12d2 8091 0000 		lds r24,JetiUpdateModeActive
+ 2175 12d6 8230      		cpi r24,lo8(2)
+ 2176 12d8 01F4      		brne .L182
+ 2177 12da 8091 C600 		lds r24,198
+ 2178 12de 8093 0000 		sts RxdBuffer,r24
+ 2179 12e2 00C0      		rjmp .L194
+ 2180               	.L182:
+ 2181 12e4 8091 C600 		lds r24,198
+ 2182 12e8 8093 0000 		sts SioTmp,r24
+ 2183 12ec 4091 0000 		lds r20,buf_ptr.2284
+ 2184 12f0 4A3A      		cpi r20,lo8(-86)
+ 2185 12f2 00F0      		brlo .L183
+ 2186 12f4 1092 0000 		sts UartState.2285,__zero_reg__
+ 2187               	.L183:
+ 2188 12f8 8091 0000 		lds r24,SioTmp
+ 2189 12fc 8D30      		cpi r24,lo8(13)
+ 2190 12fe 01F0      		breq .+2
+ 2191 1300 00C0      		rjmp .L184
+ 2192 1302 8091 0000 		lds r24,UartState.2285
+ 2193 1306 8230      		cpi r24,lo8(2)
+ 2194 1308 01F0      		breq .+2
+ 2195 130a 00C0      		rjmp .L184
+ 2196 130c 1092 0000 		sts UartState.2285,__zero_reg__
+ 2197 1310 A42F      		mov r26,r20
+ 2198 1312 B0E0      		ldi r27,lo8(0)
+ 2199 1314 FD01      		movw r30,r26
+ 2200 1316 E050      		subi r30,lo8(-(RxdBuffer-2))
+ 2201 1318 F040      		sbci r31,hi8(-(RxdBuffer-2))
+ 2202 131a 3081      		ld r19,Z
+ 2203 131c ED01      		movw r28,r26
+ 2204 131e C050      		subi r28,lo8(-(RxdBuffer-1))
+ 2205 1320 D040      		sbci r29,hi8(-(RxdBuffer-1))
+ 2206 1322 2881      		ld r18,Y
+ 2207 1324 8091 0000 		lds r24,crc.2281
+ 2208 1328 9091 0000 		lds r25,(crc.2281)+1
+ 2209 132c 831B      		sub r24,r19
+ 2210 132e 9109      		sbc r25,__zero_reg__
+ 2211 1330 821B      		sub r24,r18
+ 2212 1332 9109      		sbc r25,__zero_reg__
+ 2213 1334 9F70      		andi r25,hi8(4095)
+ 2214 1336 9093 0000 		sts (crc.2281)+1,r25
+ 2215 133a 8093 0000 		sts crc.2281,r24
+ 2216 133e 9C01      		movw r18,r24
+ 2217 1340 76E0      		ldi r23,6
+ 2218 1342 3695      	1:	lsr r19
+ 2219 1344 2795      		ror r18
+ 2220 1346 7A95      		dec r23
+ 2221 1348 01F4      		brne 1b
+ 2222 134a 235C      		subi r18,lo8(-(61))
+ 2223 134c 2093 0000 		sts crc1.2282,r18
+ 2224 1350 982F      		mov r25,r24
+ 2225 1352 9F73      		andi r25,lo8(63)
+ 2226 1354 935C      		subi r25,lo8(-(61))
+ 2227 1356 9093 0000 		sts crc2.2283,r25
+ 2228 135a 8081      		ld r24,Z
+ 2229 135c 2817      		cp r18,r24
+ 2230 135e 01F4      		brne .L185
+ 2231 1360 8881      		ld r24,Y
+ 2232 1362 9817      		cp r25,r24
+ 2233 1364 01F4      		brne .L185
+ 2234 1366 91E0      		ldi r25,lo8(1)
+ 2235 1368 00C0      		rjmp .L186
+ 2236               	.L185:
+ 2237 136a 8091 0000 		lds r24,CntCrcError
+ 2238 136e 8F5F      		subi r24,lo8(-(1))
+ 2239 1370 8093 0000 		sts CntCrcError,r24
+ 2240 1374 90E0      		ldi r25,lo8(0)
+ 2241               	.L186:
+ 2242 1376 8091 0000 		lds r24,NeuerDatensatzEmpfangen
+ 2243 137a 8823      		tst r24
+ 2244 137c 01F0      		breq .+2
+ 2245 137e 00C0      		rjmp .L194
+ 2246 1380 9923      		tst r25
+ 2247 1382 01F4      		brne .+2
+ 2248 1384 00C0      		rjmp .L194
+ 2249 1386 81E0      		ldi r24,lo8(1)
+ 2250 1388 8093 0000 		sts NeuerDatensatzEmpfangen,r24
+ 2251 138c 4F5F      		subi r20,lo8(-(1))
+ 2252 138e 4093 0000 		sts AnzahlEmpfangsBytes,r20
+ 2253 1392 A050      		subi r26,lo8(-(RxdBuffer))
+ 2254 1394 B040      		sbci r27,hi8(-(RxdBuffer))
+ 2255 1396 8DE0      		ldi r24,lo8(13)
+ 2256 1398 8C93      		st X,r24
+ 2257 139a 8091 0000 		lds r24,RxdBuffer+2
+ 2258 139e 8235      		cpi r24,lo8(82)
+ 2259 13a0 01F0      		breq .+2
+ 2260 13a2 00C0      		rjmp .L194
+ 2261 13a4 0E94 0000 		call LcdClear
+ 2262 13a8 2CE0      		ldi r18,lo8(12)
+ 2263 13aa 88E1      		ldi r24,lo8(24)
+ 2264 13ac 90E0      		ldi r25,hi8(24)
+ 2265               	/* #APP */
+ 2266               	 ;  174 "uart.c" 1
+ 2267 13ae 0FB6      		in __tmp_reg__,__SREG__
+ 2268 13b0 F894      		cli
+ 2269 13b2 A895      		wdr
+ 2270 13b4 8093 6000 		sts 96,r24
+ 2271 13b8 0FBE      		out __SREG__,__tmp_reg__
+ 2272 13ba 2093 6000 		sts 96,r18
+ 2273               		
+ 2274               	 ;  0 "" 2
+ 2275               	/* #NOAPP */
+ 2276 13be 1092 0000 		sts ServoActive,__zero_reg__
+ 2277 13c2 00C0      		rjmp .L194
+ 2278               	.L184:
+ 2279 13c4 8091 0000 		lds r24,UartState.2285
+ 2280 13c8 8130      		cpi r24,lo8(1)
+ 2281 13ca 01F0      		breq .L189
+ 2282 13cc 8130      		cpi r24,lo8(1)
+ 2283 13ce 00F0      		brlo .L188
+ 2284 13d0 8230      		cpi r24,lo8(2)
+ 2285 13d2 01F0      		breq .+2
+ 2286 13d4 00C0      		rjmp .L195
+ 2287 13d6 00C0      		rjmp .L197
+ 2288               	.L188:
+ 2289 13d8 8091 0000 		lds r24,SioTmp
+ 2290 13dc 8332      		cpi r24,lo8(35)
+ 2291 13de 01F4      		brne .L191
+ 2292 13e0 8091 0000 		lds r24,NeuerDatensatzEmpfangen
+ 2293 13e4 8823      		tst r24
+ 2294 13e6 01F4      		brne .L191
+ 2295 13e8 81E0      		ldi r24,lo8(1)
+ 2296 13ea 8093 0000 		sts UartState.2285,r24
+ 2297               	.L191:
+ 2298 13ee 8091 0000 		lds r24,SioTmp
+ 2299 13f2 8093 0000 		sts RxdBuffer,r24
+ 2300 13f6 81E0      		ldi r24,lo8(1)
+ 2301 13f8 8093 0000 		sts buf_ptr.2284,r24
+ 2302 13fc 8091 0000 		lds r24,SioTmp
+ 2303 1400 8093 0000 		sts crc.2281,r24
+ 2304 1404 1092 0000 		sts crc.2281+1,__zero_reg__
+ 2305 1408 00C0      		rjmp .L194
+ 2306               	.L189:
+ 2307 140a 82E0      		ldi r24,lo8(2)
+ 2308 140c 8093 0000 		sts UartState.2285,r24
+ 2309 1410 E42F      		mov r30,r20
+ 2310 1412 F0E0      		ldi r31,lo8(0)
+ 2311 1414 8091 0000 		lds r24,SioTmp
+ 2312 1418 E050      		subi r30,lo8(-(RxdBuffer))
+ 2313 141a F040      		sbci r31,hi8(-(RxdBuffer))
+ 2314 141c 8083      		st Z,r24
+ 2315 141e 00C0      		rjmp .L196
+ 2316               	.L197:
+ 2317 1420 E42F      		mov r30,r20
+ 2318 1422 F0E0      		ldi r31,lo8(0)
+ 2319 1424 8091 0000 		lds r24,SioTmp
+ 2320 1428 E050      		subi r30,lo8(-(RxdBuffer))
+ 2321 142a F040      		sbci r31,hi8(-(RxdBuffer))
+ 2322 142c 8083      		st Z,r24
+ 2323 142e 4A3A      		cpi r20,lo8(-86)
+ 2324 1430 00F4      		brsh .L192
+ 2325               	.L196:
+ 2326 1432 4F5F      		subi r20,lo8(-(1))
+ 2327 1434 4093 0000 		sts buf_ptr.2284,r20
+ 2328 1438 00C0      		rjmp .L193
+ 2329               	.L192:
+ 2330 143a 1092 0000 		sts UartState.2285,__zero_reg__
+ 2331               	.L193:
+ 2332 143e 2091 0000 		lds r18,SioTmp
+ 2333 1442 8091 0000 		lds r24,crc.2281
+ 2334 1446 9091 0000 		lds r25,(crc.2281)+1
+ 2335 144a 820F      		add r24,r18
+ 2336 144c 911D      		adc r25,__zero_reg__
+ 2337 144e 9093 0000 		sts (crc.2281)+1,r25
+ 2338 1452 8093 0000 		sts crc.2281,r24
+ 2339 1456 00C0      		rjmp .L194
+ 2340               	.L195:
+ 2341 1458 1092 0000 		sts UartState.2285,__zero_reg__
+ 2342               	.L194:
+ 2343               	/* epilogue start */
+ 2344 145c FF91      		pop r31
+ 2345 145e EF91      		pop r30
+ 2346 1460 DF91      		pop r29
+ 2347 1462 CF91      		pop r28
+ 2348 1464 BF91      		pop r27
+ 2349 1466 AF91      		pop r26
+ 2350 1468 9F91      		pop r25
+ 2351 146a 8F91      		pop r24
+ 2352 146c 7F91      		pop r23
+ 2353 146e 6F91      		pop r22
+ 2354 1470 5F91      		pop r21
+ 2355 1472 4F91      		pop r20
+ 2356 1474 3F91      		pop r19
+ 2357 1476 2F91      		pop r18
+ 2358 1478 0F90      		pop r0
+ 2359 147a 0FBE      		out __SREG__,r0
+ 2360 147c 0F90      		pop r0
+ 2361 147e 1F90      		pop __zero_reg__
+ 2362 1480 1895      		reti
+ 2364               	.global	GetExternalControl
+ 2365               	.global	GetExternalControl
+ 2366               		.section .bss
+ 2369               	GetExternalControl:
+ 2370 0000 00        		.skip 1,0
+ 2371               	.global	DebugDisplayAnforderung1
+ 2372               	.global	DebugDisplayAnforderung1
+ 2375               	DebugDisplayAnforderung1:
+ 2376 0001 00        		.skip 1,0
+ 2377               	.global	DebugDisplayAnforderung
+ 2378               	.global	DebugDisplayAnforderung
+ 2381               	DebugDisplayAnforderung:
+ 2382 0002 00        		.skip 1,0
+ 2383               	.global	DebugDataAnforderung
+ 2384               	.global	DebugDataAnforderung
+ 2387               	DebugDataAnforderung:
+ 2388 0003 00        		.skip 1,0
+ 2389               	.global	GetVersionAnforderung
+ 2390               	.global	GetVersionAnforderung
+ 2393               	GetVersionAnforderung:
+ 2394 0004 00        		.skip 1,0
+ 2395               	.global	GetPPMChannelAnforderung
+ 2396               	.global	GetPPMChannelAnforderung
+ 2399               	GetPPMChannelAnforderung:
+ 2400 0005 00        		.skip 1,0
+ 2401               	.global	DisplayLine
+ 2402               	.global	DisplayLine
+ 2405               	DisplayLine:
+ 2406 0006 00        		.skip 1,0
+ 2407               	.global	SioTmp
+ 2408               	.global	SioTmp
+ 2411               	SioTmp:
+ 2412 0007 00        		.skip 1,0
+ 2413               	.global	NeuerDatensatzEmpfangen
+ 2414               	.global	NeuerDatensatzEmpfangen
+ 2417               	NeuerDatensatzEmpfangen:
+ 2418 0008 00        		.skip 1,0
+ 2419               	.global	NeueKoordinateEmpfangen
+ 2420               	.global	NeueKoordinateEmpfangen
+ 2423               	NeueKoordinateEmpfangen:
+ 2424 0009 00        		.skip 1,0
+ 2425               	.global	UebertragungAbgeschlossen
+ 2426               		.data
+ 2429               	UebertragungAbgeschlossen:
+ 2430 0000 01        		.byte	1
+ 2431               	.global	CntCrcError
+ 2432               	.global	CntCrcError
+ 2433               		.section .bss
+ 2436               	CntCrcError:
+ 2437 000a 00        		.skip 1,0
+ 2438               	.global	AnzahlEmpfangsBytes
+ 2439               	.global	AnzahlEmpfangsBytes
+ 2442               	AnzahlEmpfangsBytes:
+ 2443 000b 00        		.skip 1,0
+ 2444               	.global	pRxData
+ 2445               	.global	pRxData
+ 2448               	pRxData:
+ 2449 000c 0000      		.skip 2,0
+ 2450               	.global	RxDataLen
+ 2451               	.global	RxDataLen
+ 2454               	RxDataLen:
+ 2455 000e 00        		.skip 1,0
+ 2456               	.global	PC_DebugTimeout
+ 2457               	.global	PC_DebugTimeout
+ 2460               	PC_DebugTimeout:
+ 2461 000f 00        		.skip 1,0
+ 2462               	.global	PC_MotortestActive
+ 2463               	.global	PC_MotortestActive
+ 2466               	PC_MotortestActive:
+ 2467 0010 00        		.skip 1,0
+ 2468               	.global	DebugTextAnforderung
+ 2469               		.data
+ 2472               	DebugTextAnforderung:
+ 2473 0001 FF        		.byte	-1
+ 2474               	.global	PcZugriff
+ 2477               	PcZugriff:
+ 2478 0002 64        		.byte	100
+ 2479               	.global	MeineSlaveAdresse
+ 2482               	MeineSlaveAdresse:
+ 2483 0003 01        		.byte	1
+ 2484               	.global	DebugDataIntervall
+ 2485               	.global	DebugDataIntervall
+ 2486               		.section .bss
+ 2489               	DebugDataIntervall:
+ 2490 0011 0000      		.skip 2,0
+ 2491               	.global	Intervall3D
+ 2492               	.global	Intervall3D
+ 2495               	Intervall3D:
+ 2496 0013 0000      		.skip 2,0
+ 2497               	.global	Display_Interval
+ 2498               	.global	Display_Interval
+ 2501               	Display_Interval:
+ 2502 0015 0000      		.skip 2,0
+ 2503               	.global	AboTimeOut
+ 2504               	.global	AboTimeOut
+ 2507               	AboTimeOut:
+ 2508 0017 0000      		.skip 2,0
+ 2509               	.global	JetiUpdateModeActive
+ 2510               	.global	JetiUpdateModeActive
+ 2513               	JetiUpdateModeActive:
+ 2514 0019 00        		.skip 1,0
+ 2515               	.global	ANALOG_TEXT
+ 2516               		.section	.progmem.data,"a",@progbits
+ 2519               	ANALOG_TEXT:
+ 2520 0000 416E 676C 		.ascii	"AngleNick       "
+ 2520      654E 6963 
+ 2520      6B20 2020 
+ 2520      2020 2020 
+ 2521 0010 416E 676C 		.ascii	"AngleRoll       "
+ 2521      6552 6F6C 
+ 2521      6C20 2020 
+ 2521      2020 2020 
+ 2522 0020 4163 634E 		.ascii	"AccNick         "
+ 2522      6963 6B20 
+ 2522      2020 2020 
+ 2522      2020 2020 
+ 2523 0030 4163 6352 		.ascii	"AccRoll         "
+ 2523      6F6C 6C20 
+ 2523      2020 2020 
+ 2523      2020 2020 
+ 2524 0040 5961 7747 		.ascii	"YawGyro         "
+ 2524      7972 6F20 
+ 2524      2020 2020 
+ 2524      2020 2020 
+ 2525 0050 4865 6967 		.ascii	"Height Value    "
+ 2525      6874 2056 
+ 2525      616C 7565 
+ 2525      2020 2020 
+ 2526 0060 4163 635A 		.ascii	"AccZ            "
+ 2526      2020 2020 
+ 2526      2020 2020 
+ 2526      2020 2020 
+ 2527 0070 4761 7320 		.ascii	"Gas             "
+ 2527      2020 2020 
+ 2527      2020 2020 
+ 2527      2020 2020 
+ 2528 0080 436F 6D70 		.ascii	"Compass Value   "
+ 2528      6173 7320 
+ 2528      5661 6C75 
+ 2528      6520 2020 
+ 2529 0090 566F 6C74 		.ascii	"Voltage [0.1V]  "
+ 2529      6167 6520 
+ 2529      5B30 2E31 
+ 2529      565D 2020 
+ 2530 00a0 5265 6365 		.ascii	"Receiver Level  "
+ 2530      6976 6572 
+ 2530      204C 6576 
+ 2530      656C 2020 
+ 2531 00b0 4779 726F 		.ascii	"Gyro Compass    "
+ 2531      2043 6F6D 
+ 2531      7061 7373 
+ 2531      2020 2020 
+ 2532 00c0 4D6F 746F 		.ascii	"Motor 1         "
+ 2532      7220 3120 
+ 2532      2020 2020 
+ 2532      2020 2020 
+ 2533 00d0 4D6F 746F 		.ascii	"Motor 2         "
+ 2533      7220 3220 
+ 2533      2020 2020 
+ 2533      2020 2020 
+ 2534 00e0 4D6F 746F 		.ascii	"Motor 3         "
+ 2534      7220 3320 
+ 2534      2020 2020 
+ 2534      2020 2020 
+ 2535 00f0 4D6F 746F 		.ascii	"Motor 4         "
+ 2535      7220 3420 
+ 2535      2020 2020 
+ 2535      2020 2020 
+ 2536 0100 3136 2020 		.ascii	"16              "
+ 2536      2020 2020 
+ 2536      2020 2020 
+ 2536      2020 2020 
+ 2537 0110 3137 2020 		.ascii	"17              "
+ 2537      2020 2020 
+ 2537      2020 2020 
+ 2537      2020 2020 
+ 2538 0120 3138 2020 		.ascii	"18              "
+ 2538      2020 2020 
+ 2538      2020 2020 
+ 2538      2020 2020 
+ 2539 0130 3139 2020 		.ascii	"19              "
+ 2539      2020 2020 
+ 2539      2020 2020 
+ 2539      2020 2020 
+ 2540 0140 5365 7276 		.ascii	"Servo           "
+ 2540      6F20 2020 
+ 2540      2020 2020 
+ 2540      2020 2020 
+ 2541 0150 486F 7665 		.ascii	"Hovergas        "
+ 2541      7267 6173 
+ 2541      2020 2020 
+ 2541      2020 2020 
+ 2542 0160 4375 7272 		.ascii	"Current [0.1A]  "
+ 2542      656E 7420 
+ 2542      5B30 2E31 
+ 2542      415D 2020 
+ 2543 0170 4361 7061 		.ascii	"Capacity [mAh]  "
+ 2543      6369 7479 
+ 2543      205B 6D41 
+ 2543      685D 2020 
+ 2544 0180 4869 6768 		.ascii	"Hight Setpoint  "
+ 2544      7420 5365 
+ 2544      7470 6F69 
+ 2544      6E74 2020 
+ 2545 0190 3235 2020 		.ascii	"25              "
+ 2545      2020 2020 
+ 2545      2020 2020 
+ 2545      2020 2020 
+ 2546 01a0 3236 2020 		.ascii	"26              "
+ 2546      2020 2020 
+ 2546      2020 2020 
+ 2546      2020 2020 
+ 2547 01b0 436F 6D70 		.ascii	"Compass Setpoint"
+ 2547      6173 7320 
+ 2547      5365 7470 
+ 2547      6F69 6E74 
+ 2548 01c0 4932 432D 		.ascii	"I2C-Error       "
+ 2548      4572 726F 
+ 2548      7220 2020 
+ 2548      2020 2020 
+ 2549 01d0 424C 204C 		.ascii	"BL Limit        "
+ 2549      696D 6974 
+ 2549      2020 2020 
+ 2549      2020 2020 
+ 2550 01e0 4750 535F 		.ascii	"GPS_Nick        "
+ 2550      4E69 636B 
+ 2550      2020 2020 
+ 2550      2020 2020 
+ 2551 01f0 4750 535F 		.ascii	"GPS_Roll        "
+ 2551      526F 6C6C 
+ 2551      2020 2020 
+ 2551      2020 2020 
+ 2552               		.lcomm UartState.2285,1
+ 2553               		.lcomm buf_ptr.2284,1
+ 2554               		.lcomm crc2.2283,1
+ 2555               		.lcomm crc1.2282,1
+ 2556               		.lcomm crc.2281,2
+ 2557               		.lcomm ptr.2268,2
+ 2558               		.comm RxdBuffer,170,1
+ 2559               		.comm Debug_Timer,2,1
+ 2560               		.comm Kompass_Timer,2,1
+ 2561               		.comm MotorTest,16,1
+ 2562               		.comm DebugOut,66,1
+ 2563               		.comm WinkelOut,8,1
+ 2564               		.comm Data3D,14,1
+ 2565               		.comm ExternControl,11,1
+ 2566               		.comm VersionInfo,10,1
+ 2567               		.comm TxdBuffer,170,1
+ 2568               		.comm ConfirmFrame,1,1
+ 2569               		.comm Display_Timer,2,1
+ 2570               		.comm Timer3D,2,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 uart.c
+     /tmp/cc5vGmDA.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cc5vGmDA.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cc5vGmDA.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cc5vGmDA.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cc5vGmDA.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc5vGmDA.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc5vGmDA.s:13     .text:0000000000000000 __vector_22
+     /tmp/cc5vGmDA.s:2429   .data:0000000000000000 UebertragungAbgeschlossen
+     /tmp/cc5vGmDA.s:2556   .bss:0000000000000020 ptr.2268
+                            *COM*:00000000000000aa TxdBuffer
+     /tmp/cc5vGmDA.s:67     .text:000000000000006c AddCRC
+     /tmp/cc5vGmDA.s:120    .text:00000000000000ca Decode64
+     /tmp/cc5vGmDA.s:2442   .bss:000000000000000b AnzahlEmpfangsBytes
+                            *COM*:00000000000000aa RxdBuffer
+     /tmp/cc5vGmDA.s:2448   .bss:000000000000000c pRxData
+     /tmp/cc5vGmDA.s:2454   .bss:000000000000000e RxDataLen
+     /tmp/cc5vGmDA.s:220    .text:0000000000000180 uart_putchar
+     /tmp/cc5vGmDA.s:234    .text:0000000000000190 UART_Init
+     /tmp/cc5vGmDA.s:2489   .bss:0000000000000011 DebugDataIntervall
+                            *COM*:0000000000000002 Debug_Timer
+                            *COM*:0000000000000002 Kompass_Timer
+                            *COM*:000000000000000a VersionInfo
+     /tmp/cc5vGmDA.s:280    .text:0000000000000202 SendOutData
+     /tmp/cc5vGmDA.s:472    .text:0000000000000366 DatenUebertragung
+     /tmp/cc5vGmDA.s:2507   .bss:0000000000000017 AboTimeOut
+     /tmp/cc5vGmDA.s:2501   .bss:0000000000000015 Display_Interval
+     /tmp/cc5vGmDA.s:2495   .bss:0000000000000013 Intervall3D
+                            *COM*:0000000000000002 Display_Timer
+     /tmp/cc5vGmDA.s:2381   .bss:0000000000000002 DebugDisplayAnforderung
+     /tmp/cc5vGmDA.s:2405   .bss:0000000000000006 DisplayLine
+     /tmp/cc5vGmDA.s:2375   .bss:0000000000000001 DebugDisplayAnforderung1
+     /tmp/cc5vGmDA.s:2393   .bss:0000000000000004 GetVersionAnforderung
+     /tmp/cc5vGmDA.s:2369   .bss:0000000000000000 GetExternalControl
+     /tmp/cc5vGmDA.s:2482   .data:0000000000000003 MeineSlaveAdresse
+                            *COM*:000000000000000b ExternControl
+                            *COM*:0000000000000008 WinkelOut
+     /tmp/cc5vGmDA.s:2387   .bss:0000000000000003 DebugDataAnforderung
+                            *COM*:0000000000000042 DebugOut
+                            *COM*:0000000000000002 Timer3D
+                            *COM*:000000000000000e Data3D
+     /tmp/cc5vGmDA.s:2472   .data:0000000000000001 DebugTextAnforderung
+     /tmp/cc5vGmDA.s:2519   .progmem.data:0000000000000000 ANALOG_TEXT
+                            *COM*:0000000000000001 ConfirmFrame
+     /tmp/cc5vGmDA.s:2399   .bss:0000000000000005 GetPPMChannelAnforderung
+     /tmp/cc5vGmDA.s:1139   .text:00000000000009a0 BearbeiteRxDaten
+     /tmp/cc5vGmDA.s:2417   .bss:0000000000000008 NeuerDatensatzEmpfangen
+                            *COM*:0000000000000010 MotorTest
+     /tmp/cc5vGmDA.s:2466   .bss:0000000000000010 PC_MotortestActive
+     /tmp/cc5vGmDA.s:2477   .data:0000000000000002 PcZugriff
+     /tmp/cc5vGmDA.s:2513   .bss:0000000000000019 JetiUpdateModeActive
+     /tmp/cc5vGmDA.s:2145   .text:000000000000129a __vector_20
+     /tmp/cc5vGmDA.s:2411   .bss:0000000000000007 SioTmp
+     /tmp/cc5vGmDA.s:2552   .bss:000000000000001b buf_ptr.2284
+                             .bss:000000000000001a UartState.2285
+     /tmp/cc5vGmDA.s:2555   .bss:000000000000001e crc.2281
+     /tmp/cc5vGmDA.s:2554   .bss:000000000000001d crc1.2282
+     /tmp/cc5vGmDA.s:2553   .bss:000000000000001c crc2.2283
+     /tmp/cc5vGmDA.s:2436   .bss:000000000000000a CntCrcError
+     /tmp/cc5vGmDA.s:2423   .bss:0000000000000009 NeueKoordinateEmpfangen
+     /tmp/cc5vGmDA.s:2460   .bss:000000000000000f PC_DebugTimeout
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+SetDelay
+__prologue_saves__
+__epilogue_restores__
+CheckDelay
+DisplayBuff
+Menu
+MenuePunkt
+MaxMenue
+EE_Parameter
+IntegralNick
+__divmodsi4
+IntegralRoll
+Parameter_UserParam1
+Parameter_UserParam2
+CopyDebugValues
+ErsatzKompass
+__mulsi3
+GIER_GRAD_FAKTOR
+SummeNick
+SummeRoll
+Mess_Integral_Gier
+memcpy_P
+PPM_in
+KompassValue
+KompassSollWert
+__divmodhi4
+KompassRichtung
+Mixer
+MixerTable_WriteToEEProm
+SetDefaultParameter
+GetActiveParamSet
+ParamSet_ReadFromEEProm
+MotorenEin
+ParamSet_WriteToEEProm
+Umschlag180Nick
+Umschlag180Roll
+Piep
+LipoDetection
+LIBFC_ReceiverInit
+I2C_ReadBLConfig
+BLConfig
+I2C_WriteBLConfig
+LIBFC_GetCPUType
+RemoteKeys
+LcdClear
+ServoActive

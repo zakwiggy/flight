@@ -1,0 +1,1168 @@
+   1               		.file	"twimaster.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	I2C_Init
+  13               	I2C_Init:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 2FB7      		in r18,__SREG__
+  17               	/* #APP */
+  18               	 ;  100 "twimaster.c" 1
+  19 0002 F894      		cli
+  20               	 ;  0 "" 2
+  21               	/* #NOAPP */
+  22 0004 3998      		cbi 39-32,1
+  23 0006 389A      		sbi 39-32,0
+  24 0008 98B1      		in r25,40-32
+  25 000a 9360      		ori r25,lo8(3)
+  26 000c 98B9      		out 40-32,r25
+  27 000e 9091 B900 		lds r25,185
+  28 0012 9C7F      		andi r25,lo8(-4)
+  29 0014 9093 B900 		sts 185,r25
+  30 0018 9AE2      		ldi r25,lo8(42)
+  31 001a 9093 B800 		sts 184,r25
+  32 001e 1092 0000 		sts twi_state,__zero_reg__
+  33 0022 1092 0000 		sts motor_write,__zero_reg__
+  34 0026 1092 0000 		sts motor_read,__zero_reg__
+  35 002a 8823      		tst r24
+  36 002c 01F0      		breq .L2
+  37 002e E0E0      		ldi r30,lo8(Motor)
+  38 0030 F0E0      		ldi r31,hi8(Motor)
+  39               	.L3:
+  40 0032 1082      		st Z,__zero_reg__
+  41 0034 1182      		std Z+1,__zero_reg__
+  42 0036 1282      		std Z+2,__zero_reg__
+  43 0038 1382      		std Z+3,__zero_reg__
+  44 003a 1482      		std Z+4,__zero_reg__
+  45 003c 1582      		std Z+5,__zero_reg__
+  46 003e 1682      		std Z+6,__zero_reg__
+  47 0040 1782      		std Z+7,__zero_reg__
+  48 0042 3896      		adiw r30,8
+  49 0044 80E0      		ldi r24,hi8(Motor+96)
+  50 0046 E030      		cpi r30,lo8(Motor+96)
+  51 0048 F807      		cpc r31,r24
+  52 004a 01F4      		brne .L3
+  53               	.L2:
+  54               	/* #APP */
+  55               	 ;  131 "twimaster.c" 1
+  56 004c 7894      		sei
+  57               	 ;  0 "" 2
+  58               	/* #NOAPP */
+  59 004e 2FBF      		out __SREG__,r18
+  60               	/* epilogue start */
+  61 0050 0895      		ret
+  63               	.global	I2C_Reset
+  65               	I2C_Reset:
+  66 0052 EF92      		push r14
+  67 0054 FF92      		push r15
+  68 0056 0F93      		push r16
+  69 0058 1F93      		push r17
+  70               	/* prologue: function */
+  71               	/* frame size = 0 */
+  72 005a 1092 0000 		sts twi_state,__zero_reg__
+  73 005e 0CEB      		ldi r16,lo8(188)
+  74 0060 10E0      		ldi r17,hi8(188)
+  75 0062 84E9      		ldi r24,lo8(-108)
+  76 0064 F801      		movw r30,r16
+  77 0066 8083      		st Z,r24
+  78 0068 80E8      		ldi r24,lo8(-128)
+  79 006a 8083      		st Z,r24
+  80 006c 1092 BD00 		sts 189,__zero_reg__
+  81 0070 1092 BA00 		sts 186,__zero_reg__
+  82 0074 8BEB      		ldi r24,lo8(187)
+  83 0076 E82E      		mov r14,r24
+  84 0078 F12C      		mov r15,__zero_reg__
+  85 007a F701      		movw r30,r14
+  86 007c 1082      		st Z,__zero_reg__
+  87 007e 1092 B900 		sts 185,__zero_reg__
+  88 0082 1092 B800 		sts 184,__zero_reg__
+  89 0086 1092 0000 		sts I2C_TransferActive,__zero_reg__
+  90 008a 80E0      		ldi r24,lo8(0)
+  91 008c 0E94 0000 		call I2C_Init
+  92 0090 F701      		movw r30,r14
+  93 0092 1082      		st Z,__zero_reg__
+  94 0094 85E8      		ldi r24,lo8(-123)
+  95 0096 F801      		movw r30,r16
+  96 0098 8083      		st Z,r24
+  97 009a 8091 0000 		lds r24,BLFlags
+  98 009e 8260      		ori r24,lo8(2)
+  99 00a0 8093 0000 		sts BLFlags,r24
+ 100               	/* epilogue start */
+ 101 00a4 1F91      		pop r17
+ 102 00a6 0F91      		pop r16
+ 103 00a8 FF90      		pop r15
+ 104 00aa EF90      		pop r14
+ 105 00ac 0895      		ret
+ 107               	.global	__vector_26
+ 109               	__vector_26:
+ 110 00ae 1F92      		push __zero_reg__
+ 111 00b0 0F92      		push r0
+ 112 00b2 0FB6      		in r0,__SREG__
+ 113 00b4 0F92      		push r0
+ 114 00b6 1124      		clr __zero_reg__
+ 115 00b8 2F93      		push r18
+ 116 00ba 3F93      		push r19
+ 117 00bc 4F93      		push r20
+ 118 00be 8F93      		push r24
+ 119 00c0 9F93      		push r25
+ 120 00c2 AF93      		push r26
+ 121 00c4 BF93      		push r27
+ 122 00c6 EF93      		push r30
+ 123 00c8 FF93      		push r31
+ 124               	/* prologue: Signal */
+ 125               	/* frame size = 0 */
+ 126 00ca 8091 0000 		lds r24,twi_state
+ 127 00ce 8F5F      		subi r24,lo8(-(1))
+ 128 00d0 8093 0000 		sts twi_state,r24
+ 129 00d4 8150      		subi r24,lo8(-(-1))
+ 130 00d6 E82F      		mov r30,r24
+ 131 00d8 F0E0      		ldi r31,lo8(0)
+ 132 00da E731      		cpi r30,23
+ 133 00dc F105      		cpc r31,__zero_reg__
+ 134 00de 00F0      		brlo .+2
+ 135 00e0 00C0      		rjmp .L9
+ 136 00e2 E050      		subi r30,lo8(-(gs(.L22)))
+ 137 00e4 F040      		sbci r31,hi8(-(gs(.L22)))
+ 138 00e6 0C94 0000 		jmp __tablejump2__
+ 139               		.data
+ 140               		.section .progmem.gcc_sw_table, "a", @progbits
+ 141               		.p2align 1
+ 142               	.L22:
+ 143               		.data
+ 144               		.section .progmem.gcc_sw_table, "a", @progbits
+ 145               		.p2align 1
+ 146 0000 0000      		.word gs(.L10)
+ 147 0002 0000      		.word gs(.L11)
+ 148 0004 0000      		.word gs(.L12)
+ 149 0006 0000      		.word gs(.L13)
+ 150 0008 0000      		.word gs(.L14)
+ 151 000a 0000      		.word gs(.L15)
+ 152 000c 0000      		.word gs(.L16)
+ 153 000e 0000      		.word gs(.L9)
+ 154 0010 0000      		.word gs(.L9)
+ 155 0012 0000      		.word gs(.L9)
+ 156 0014 0000      		.word gs(.L9)
+ 157 0016 0000      		.word gs(.L9)
+ 158 0018 0000      		.word gs(.L9)
+ 159 001a 0000      		.word gs(.L9)
+ 160 001c 0000      		.word gs(.L9)
+ 161 001e 0000      		.word gs(.L9)
+ 162 0020 0000      		.word gs(.L9)
+ 163 0022 0000      		.word gs(.L9)
+ 164 0024 0000      		.word gs(.L17)
+ 165 0026 0000      		.word gs(.L18)
+ 166 0028 0000      		.word gs(.L19)
+ 167 002a 0000      		.word gs(.L20)
+ 168 002c 0000      		.word gs(.L21)
+ 169               		.text
+ 170               	.L10:
+ 171 00ea 81E0      		ldi r24,lo8(1)
+ 172 00ec 8093 0000 		sts I2C_TransferActive,r24
+ 173 00f0 00C0      		rjmp .L23
+ 174               	.L25:
+ 175 00f2 8091 0000 		lds r24,motor_write
+ 176 00f6 8F5F      		subi r24,lo8(-(1))
+ 177 00f8 8093 0000 		sts motor_write,r24
+ 178               	.L23:
+ 179 00fc E091 0000 		lds r30,motor_write
+ 180 0100 F0E0      		ldi r31,lo8(0)
+ 181 0102 EE0F      		lsl r30
+ 182 0104 FF1F      		rol r31
+ 183 0106 EE0F      		lsl r30
+ 184 0108 FF1F      		rol r31
+ 185 010a E050      		subi r30,lo8(-(Mixer))
+ 186 010c F040      		sbci r31,hi8(-(Mixer))
+ 187 010e 8585      		ldd r24,Z+13
+ 188 0110 1816      		cp __zero_reg__,r24
+ 189 0112 04F0      		brlt .L24
+ 190 0114 8091 0000 		lds r24,motor_write
+ 191 0118 8C30      		cpi r24,lo8(12)
+ 192 011a 00F0      		brlo .L25
+ 193               	.L24:
+ 194 011c 8091 0000 		lds r24,motor_write
+ 195 0120 8C30      		cpi r24,lo8(12)
+ 196 0122 00F0      		brlo .L26
+ 197 0124 1092 0000 		sts (BLConfig_WriteMask)+1,__zero_reg__
+ 198 0128 1092 0000 		sts BLConfig_WriteMask,__zero_reg__
+ 199 012c 1092 0000 		sts motor_write,__zero_reg__
+ 200 0130 85E0      		ldi r24,lo8(5)
+ 201 0132 8093 0000 		sts twi_state,r24
+ 202 0136 8091 0000 		lds r24,motor_read
+ 203 013a 880F      		lsl r24
+ 204 013c 8D5A      		subi r24,lo8(-(83))
+ 205 013e 00C0      		rjmp .L64
+ 206               	.L26:
+ 207 0140 8091 0000 		lds r24,motor_write
+ 208 0144 880F      		lsl r24
+ 209 0146 8E5A      		subi r24,lo8(-(82))
+ 210               	.L64:
+ 211 0148 8093 BB00 		sts 187,r24
+ 212 014c 85E8      		ldi r24,lo8(-123)
+ 213 014e 00C0      		rjmp .L60
+ 214               	.L11:
+ 215 0150 E091 0000 		lds r30,motor_write
+ 216 0154 F0E0      		ldi r31,lo8(0)
+ 217 0156 93E0      		ldi r25,3
+ 218 0158 EE0F      	1:	lsl r30
+ 219 015a FF1F      		rol r31
+ 220 015c 9A95      		dec r25
+ 221 015e 01F4      		brne 1b
+ 222 0160 E050      		subi r30,lo8(-(Motor))
+ 223 0162 F040      		sbci r31,hi8(-(Motor))
+ 224 0164 8181      		ldd r24,Z+1
+ 225 0166 8093 BB00 		sts 187,r24
+ 226 016a 85E8      		ldi r24,lo8(-123)
+ 227 016c 8093 BC00 		sts 188,r24
+ 228 0170 E091 0000 		lds r30,motor_write
+ 229 0174 F0E0      		ldi r31,lo8(0)
+ 230 0176 83E0      		ldi r24,3
+ 231 0178 EE0F      	1:	lsl r30
+ 232 017a FF1F      		rol r31
+ 233 017c 8A95      		dec r24
+ 234 017e 01F4      		brne 1b
+ 235 0180 E050      		subi r30,lo8(-(Motor))
+ 236 0182 F040      		sbci r31,hi8(-(Motor))
+ 237 0184 8081      		ld r24,Z
+ 238 0186 80FF      		sbrs r24,0
+ 239 0188 00C0      		rjmp .L32
+ 240               	.L28:
+ 241 018a E091 0000 		lds r30,motor_write
+ 242 018e F0E0      		ldi r31,lo8(0)
+ 243 0190 B3E0      		ldi r27,3
+ 244 0192 EE0F      	1:	lsl r30
+ 245 0194 FF1F      		rol r31
+ 246 0196 BA95      		dec r27
+ 247 0198 01F4      		brne 1b
+ 248 019a E050      		subi r30,lo8(-(Motor+2))
+ 249 019c F040      		sbci r31,hi8(-(Motor+2))
+ 250 019e 8081      		ld r24,Z
+ 251 01a0 8823      		tst r24
+ 252 01a2 01F0      		breq .L29
+ 253 01a4 8091 0000 		lds r24,RequiredMotors
+ 254 01a8 8730      		cpi r24,lo8(7)
+ 255 01aa 00F4      		brsh .+2
+ 256 01ac 00C0      		rjmp .L56
+ 257               	.L29:
+ 258 01ae 8091 0000 		lds r24,BLConfig_WriteMask
+ 259 01b2 9091 0000 		lds r25,(BLConfig_WriteMask)+1
+ 260 01b6 892B      		or r24,r25
+ 261 01b8 01F0      		breq .+2
+ 262 01ba 00C0      		rjmp .L56
+ 263 01bc 8091 0000 		lds r24,BLConfig_ReadMask
+ 264 01c0 9091 0000 		lds r25,(BLConfig_ReadMask)+1
+ 265 01c4 892B      		or r24,r25
+ 266 01c6 01F0      		breq .+2
+ 267 01c8 00C0      		rjmp .L56
+ 268 01ca 00C0      		rjmp .L32
+ 269               	.L12:
+ 270 01cc 4091 0000 		lds r20,motor_write
+ 271 01d0 2091 0000 		lds r18,BLConfig_ReadMask
+ 272 01d4 3091 0000 		lds r19,(BLConfig_ReadMask)+1
+ 273 01d8 81E0      		ldi r24,lo8(1)
+ 274 01da 90E0      		ldi r25,hi8(1)
+ 275 01dc 00C0      		rjmp 2f
+ 276 01de 880F      	1:	lsl r24
+ 277 01e0 991F      		rol r25
+ 278 01e2 4A95      	2:	dec r20
+ 279 01e4 02F4      		brpl 1b
+ 280 01e6 8223      		and r24,r18
+ 281 01e8 9323      		and r25,r19
+ 282 01ea 892B      		or r24,r25
+ 283 01ec 01F0      		breq .L30
+ 284 01ee E091 0000 		lds r30,motor_write
+ 285 01f2 F0E0      		ldi r31,lo8(0)
+ 286 01f4 A3E0      		ldi r26,3
+ 287 01f6 EE0F      	1:	lsl r30
+ 288 01f8 FF1F      		rol r31
+ 289 01fa AA95      		dec r26
+ 290 01fc 01F4      		brne 1b
+ 291 01fe E050      		subi r30,lo8(-(Motor+4))
+ 292 0200 F040      		sbci r31,hi8(-(Motor+4))
+ 293 0202 80E1      		ldi r24,lo8(16)
+ 294 0204 8083      		st Z,r24
+ 295 0206 00C0      		rjmp .L31
+ 296               	.L30:
+ 297 0208 E091 0000 		lds r30,motor_write
+ 298 020c F0E0      		ldi r31,lo8(0)
+ 299 020e 43E0      		ldi r20,3
+ 300 0210 EE0F      	1:	lsl r30
+ 301 0212 FF1F      		rol r31
+ 302 0214 4A95      		dec r20
+ 303 0216 01F4      		brne 1b
+ 304 0218 E050      		subi r30,lo8(-(Motor+4))
+ 305 021a F040      		sbci r31,hi8(-(Motor+4))
+ 306 021c 1082      		st Z,__zero_reg__
+ 307               	.L31:
+ 308 021e E091 0000 		lds r30,motor_write
+ 309 0222 A091 0000 		lds r26,motor_write
+ 310 0226 F0E0      		ldi r31,lo8(0)
+ 311 0228 33E0      		ldi r19,3
+ 312 022a EE0F      	1:	lsl r30
+ 313 022c FF1F      		rol r31
+ 314 022e 3A95      		dec r19
+ 315 0230 01F4      		brne 1b
+ 316 0232 E050      		subi r30,lo8(-(Motor+4))
+ 317 0234 F040      		sbci r31,hi8(-(Motor+4))
+ 318 0236 9081      		ld r25,Z
+ 319 0238 990F      		lsl r25
+ 320 023a 990F      		lsl r25
+ 321 023c 990F      		lsl r25
+ 322 023e B0E0      		ldi r27,lo8(0)
+ 323 0240 23E0      		ldi r18,3
+ 324 0242 AA0F      	1:	lsl r26
+ 325 0244 BB1F      		rol r27
+ 326 0246 2A95      		dec r18
+ 327 0248 01F4      		brne 1b
+ 328 024a A050      		subi r26,lo8(-(Motor+2))
+ 329 024c B040      		sbci r27,hi8(-(Motor+2))
+ 330 024e 8C91      		ld r24,X
+ 331 0250 8770      		andi r24,lo8(7)
+ 332 0252 982B      		or r25,r24
+ 333 0254 9093 BB00 		sts 187,r25
+ 334 0258 85E8      		ldi r24,lo8(-123)
+ 335 025a 8093 BC00 		sts 188,r24
+ 336 025e 4091 0000 		lds r20,motor_write
+ 337 0262 2091 0000 		lds r18,BLConfig_WriteMask
+ 338 0266 3091 0000 		lds r19,(BLConfig_WriteMask)+1
+ 339 026a 81E0      		ldi r24,lo8(1)
+ 340 026c 90E0      		ldi r25,hi8(1)
+ 341 026e 00C0      		rjmp 2f
+ 342 0270 880F      	1:	lsl r24
+ 343 0272 991F      		rol r25
+ 344 0274 4A95      	2:	dec r20
+ 345 0276 02F4      		brpl 1b
+ 346 0278 8223      		and r24,r18
+ 347 027a 9323      		and r25,r19
+ 348 027c 892B      		or r24,r25
+ 349 027e 01F0      		breq .L32
+ 350 0280 80E0      		ldi r24,lo8(BLConfig)
+ 351 0282 90E0      		ldi r25,hi8(BLConfig)
+ 352 0284 9093 0000 		sts (pBuff.1686)+1,r25
+ 353 0288 8093 0000 		sts pBuff.1686,r24
+ 354 028c 88E0      		ldi r24,lo8(8)
+ 355 028e 8093 0000 		sts BuffLen.1687,r24
+ 356 0292 00C0      		rjmp .L56
+ 357               	.L32:
+ 358 0294 84E0      		ldi r24,lo8(4)
+ 359 0296 00C0      		rjmp .L62
+ 360               	.L13:
+ 361 0298 E091 0000 		lds r30,pBuff.1686
+ 362 029c F091 0000 		lds r31,(pBuff.1686)+1
+ 363 02a0 8191      		ld r24,Z+
+ 364 02a2 8093 BB00 		sts 187,r24
+ 365 02a6 85E8      		ldi r24,lo8(-123)
+ 366 02a8 8093 BC00 		sts 188,r24
+ 367 02ac F093 0000 		sts (pBuff.1686)+1,r31
+ 368 02b0 E093 0000 		sts pBuff.1686,r30
+ 369 02b4 8091 0000 		lds r24,BuffLen.1687
+ 370 02b8 8150      		subi r24,lo8(-(-1))
+ 371 02ba 8093 0000 		sts BuffLen.1687,r24
+ 372 02be 8823      		tst r24
+ 373 02c0 01F4      		brne .+2
+ 374 02c2 00C0      		rjmp .L56
+ 375 02c4 83E0      		ldi r24,lo8(3)
+ 376 02c6 00C0      		rjmp .L62
+ 377               	.L14:
+ 378 02c8 8091 B900 		lds r24,185
+ 379 02cc 8033      		cpi r24,lo8(48)
+ 380 02ce 01F4      		brne .L33
+ 381 02d0 8091 0000 		lds r24,missing_motor.1684
+ 382 02d4 8823      		tst r24
+ 383 02d6 01F4      		brne .L34
+ 384 02d8 8091 0000 		lds r24,motor_write
+ 385 02dc 8F5F      		subi r24,lo8(-(1))
+ 386 02de 8093 0000 		sts missing_motor.1684,r24
+ 387               	.L34:
+ 388 02e2 E091 0000 		lds r30,motor_write
+ 389 02e6 F0E0      		ldi r31,lo8(0)
+ 390 02e8 93E0      		ldi r25,3
+ 391 02ea EE0F      	1:	lsl r30
+ 392 02ec FF1F      		rol r31
+ 393 02ee 9A95      		dec r25
+ 394 02f0 01F4      		brne 1b
+ 395 02f2 E050      		subi r30,lo8(-(Motor))
+ 396 02f4 F040      		sbci r31,hi8(-(Motor))
+ 397 02f6 8381      		ldd r24,Z+3
+ 398 02f8 8F77      		andi r24,lo8(127)
+ 399 02fa 8F37      		cpi r24,lo8(127)
+ 400 02fc 01F0      		breq .L33
+ 401 02fe E091 0000 		lds r30,motor_write
+ 402 0302 F0E0      		ldi r31,lo8(0)
+ 403 0304 83E0      		ldi r24,3
+ 404 0306 EE0F      	1:	lsl r30
+ 405 0308 FF1F      		rol r31
+ 406 030a 8A95      		dec r24
+ 407 030c 01F4      		brne 1b
+ 408 030e E050      		subi r30,lo8(-(Motor))
+ 409 0310 F040      		sbci r31,hi8(-(Motor))
+ 410 0312 8381      		ldd r24,Z+3
+ 411 0314 8F5F      		subi r24,lo8(-(1))
+ 412 0316 8383      		std Z+3,r24
+ 413               	.L33:
+ 414 0318 1092 0000 		sts twi_state,__zero_reg__
+ 415 031c 84E9      		ldi r24,lo8(-108)
+ 416 031e 8093 BC00 		sts 188,r24
+ 417 0322 8AE0      		ldi r24,lo8(10)
+ 418 0324 90E0      		ldi r25,hi8(10)
+ 419 0326 9093 0000 		sts (I2CTimeout)+1,r25
+ 420 032a 8093 0000 		sts I2CTimeout,r24
+ 421 032e 8091 0000 		lds r24,motor_write
+ 422 0332 8F5F      		subi r24,lo8(-(1))
+ 423 0334 8093 0000 		sts motor_write,r24
+ 424 0338 1092 0000 		sts twi_state,__zero_reg__
+ 425 033c 00C0      		rjmp .L65
+ 426               	.L15:
+ 427 033e 8091 B900 		lds r24,185
+ 428 0342 8034      		cpi r24,lo8(64)
+ 429 0344 01F0      		breq .L35
+ 430 0346 E091 0000 		lds r30,motor_read
+ 431 034a F0E0      		ldi r31,lo8(0)
+ 432 034c B3E0      		ldi r27,3
+ 433 034e EE0F      	1:	lsl r30
+ 434 0350 FF1F      		rol r31
+ 435 0352 BA95      		dec r27
+ 436 0354 01F4      		brne 1b
+ 437 0356 E050      		subi r30,lo8(-(Motor))
+ 438 0358 F040      		sbci r31,hi8(-(Motor))
+ 439 035a 8381      		ldd r24,Z+3
+ 440 035c 8F77      		andi r24,lo8(127)
+ 441 035e 8383      		std Z+3,r24
+ 442 0360 8091 0000 		lds r24,motor_read
+ 443 0364 8F5F      		subi r24,lo8(-(1))
+ 444 0366 8093 0000 		sts motor_read,r24
+ 445 036a 8091 0000 		lds r24,motor_read
+ 446 036e 8C30      		cpi r24,lo8(12)
+ 447 0370 00F0      		brlo .L36
+ 448 0372 1092 0000 		sts motor_read,__zero_reg__
+ 449 0376 1092 0000 		sts (BLConfig_ReadMask)+1,__zero_reg__
+ 450 037a 1092 0000 		sts BLConfig_ReadMask,__zero_reg__
+ 451 037e 8091 0000 		lds r24,motor_read_temperature.1685
+ 452 0382 8F5F      		subi r24,lo8(-(1))
+ 453 0384 8093 0000 		sts motor_read_temperature.1685,r24
+ 454 0388 8C30      		cpi r24,lo8(12)
+ 455 038a 00F0      		brlo .L36
+ 456 038c 1092 0000 		sts motor_read_temperature.1685,__zero_reg__
+ 457 0390 8091 0000 		lds r24,BLFlags
+ 458 0394 8D7F      		andi r24,lo8(-3)
+ 459 0396 8093 0000 		sts BLFlags,r24
+ 460               	.L36:
+ 461 039a 8091 0000 		lds r24,BLFlags
+ 462 039e 8160      		ori r24,lo8(1)
+ 463 03a0 8093 0000 		sts BLFlags,r24
+ 464 03a4 1092 0000 		sts twi_state,__zero_reg__
+ 465 03a8 84E9      		ldi r24,lo8(-108)
+ 466 03aa 8093 BC00 		sts 188,r24
+ 467 03ae 1092 0000 		sts I2C_TransferActive,__zero_reg__
+ 468 03b2 00C0      		rjmp .L37
+ 469               	.L35:
+ 470 03b4 E091 0000 		lds r30,motor_read
+ 471 03b8 F0E0      		ldi r31,lo8(0)
+ 472 03ba A3E0      		ldi r26,3
+ 473 03bc EE0F      	1:	lsl r30
+ 474 03be FF1F      		rol r31
+ 475 03c0 AA95      		dec r26
+ 476 03c2 01F4      		brne 1b
+ 477 03c4 E050      		subi r30,lo8(-(Motor))
+ 478 03c6 F040      		sbci r31,hi8(-(Motor))
+ 479 03c8 8381      		ldd r24,Z+3
+ 480 03ca 8068      		ori r24,lo8(-128)
+ 481 03cc 8383      		std Z+3,r24
+ 482 03ce E091 0000 		lds r30,motor_read
+ 483 03d2 F0E0      		ldi r31,lo8(0)
+ 484 03d4 43E0      		ldi r20,3
+ 485 03d6 EE0F      	1:	lsl r30
+ 486 03d8 FF1F      		rol r31
+ 487 03da 4A95      		dec r20
+ 488 03dc 01F4      		brne 1b
+ 489 03de E050      		subi r30,lo8(-(Motor))
+ 490 03e0 F040      		sbci r31,hi8(-(Motor))
+ 491 03e2 8081      		ld r24,Z
+ 492 03e4 80FF      		sbrs r24,0
+ 493 03e6 00C0      		rjmp .L38
+ 494 03e8 E091 0000 		lds r30,motor_read
+ 495 03ec F0E0      		ldi r31,lo8(0)
+ 496 03ee 33E0      		ldi r19,3
+ 497 03f0 EE0F      	1:	lsl r30
+ 498 03f2 FF1F      		rol r31
+ 499 03f4 3A95      		dec r19
+ 500 03f6 01F4      		brne 1b
+ 501 03f8 E050      		subi r30,lo8(-(Motor+4))
+ 502 03fa F040      		sbci r31,hi8(-(Motor+4))
+ 503 03fc E081      		ld r30,Z
+ 504 03fe EE23      		tst r30
+ 505 0400 01F0      		breq .L40
+ 506 0402 E031      		cpi r30,lo8(16)
+ 507 0404 01F4      		brne .L39
+ 508 0406 80E0      		ldi r24,lo8(BLConfig)
+ 509 0408 90E0      		ldi r25,hi8(BLConfig)
+ 510 040a 9093 0000 		sts (pBuff.1686)+1,r25
+ 511 040e 8093 0000 		sts pBuff.1686,r24
+ 512 0412 88E0      		ldi r24,lo8(8)
+ 513 0414 00C0      		rjmp .L57
+ 514               	.L40:
+ 515 0416 8091 0000 		lds r24,motor_read
+ 516 041a 90E0      		ldi r25,lo8(0)
+ 517 041c 23E0      		ldi r18,3
+ 518 041e 880F      	1:	lsl r24
+ 519 0420 991F      		rol r25
+ 520 0422 2A95      		dec r18
+ 521 0424 01F4      		brne 1b
+ 522 0426 8050      		subi r24,lo8(-(Motor+5))
+ 523 0428 9040      		sbci r25,hi8(-(Motor+5))
+ 524 042a 9093 0000 		sts (pBuff.1686)+1,r25
+ 525 042e 8093 0000 		sts pBuff.1686,r24
+ 526 0432 9091 0000 		lds r25,motor_read
+ 527 0436 8091 0000 		lds r24,motor_read_temperature.1685
+ 528 043a 9817      		cp r25,r24
+ 529 043c 01F4      		brne .L44
+ 530 043e 83E0      		ldi r24,lo8(3)
+ 531 0440 00C0      		rjmp .L57
+ 532               	.L38:
+ 533 0442 8091 0000 		lds r24,motor_read
+ 534 0446 90E0      		ldi r25,lo8(0)
+ 535 0448 B3E0      		ldi r27,3
+ 536 044a 880F      	1:	lsl r24
+ 537 044c 991F      		rol r25
+ 538 044e BA95      		dec r27
+ 539 0450 01F4      		brne 1b
+ 540 0452 8050      		subi r24,lo8(-(Motor+5))
+ 541 0454 9040      		sbci r25,hi8(-(Motor+5))
+ 542 0456 9093 0000 		sts (pBuff.1686)+1,r25
+ 543 045a 8093 0000 		sts pBuff.1686,r24
+ 544 045e 8091 0000 		lds r24,BLFlags
+ 545 0462 81FD      		sbrc r24,1
+ 546 0464 00C0      		rjmp .L43
+ 547 0466 9091 0000 		lds r25,motor_read
+ 548 046a 8091 0000 		lds r24,motor_read_temperature.1685
+ 549 046e 9817      		cp r25,r24
+ 550 0470 01F4      		brne .L44
+ 551               	.L43:
+ 552 0472 82E0      		ldi r24,lo8(2)
+ 553 0474 00C0      		rjmp .L57
+ 554               	.L44:
+ 555 0476 81E0      		ldi r24,lo8(1)
+ 556               	.L57:
+ 557 0478 8093 0000 		sts BuffLen.1687,r24
+ 558               	.L39:
+ 559 047c 8091 0000 		lds r24,BuffLen.1687
+ 560 0480 8130      		cpi r24,lo8(1)
+ 561 0482 01F4      		brne .L45
+ 562 0484 85E8      		ldi r24,lo8(-123)
+ 563 0486 00C0      		rjmp .L58
+ 564               	.L45:
+ 565 0488 85EC      		ldi r24,lo8(-59)
+ 566               	.L58:
+ 567 048a 8093 BC00 		sts 188,r24
+ 568               	.L37:
+ 569 048e 8091 0000 		lds r24,missing_motor.1684
+ 570 0492 8093 0000 		sts MissingMotor,r24
+ 571 0496 1092 0000 		sts missing_motor.1684,__zero_reg__
+ 572 049a 00C0      		rjmp .L56
+ 573               	.L16:
+ 574 049c 8091 BB00 		lds r24,187
+ 575 04a0 E091 0000 		lds r30,pBuff.1686
+ 576 04a4 F091 0000 		lds r31,(pBuff.1686)+1
+ 577 04a8 8193      		st Z+,r24
+ 578 04aa F093 0000 		sts (pBuff.1686)+1,r31
+ 579 04ae E093 0000 		sts pBuff.1686,r30
+ 580 04b2 8091 0000 		lds r24,BuffLen.1687
+ 581 04b6 8150      		subi r24,lo8(-(-1))
+ 582 04b8 8093 0000 		sts BuffLen.1687,r24
+ 583 04bc 8230      		cpi r24,lo8(2)
+ 584 04be 00F0      		brlo .L46
+ 585 04c0 85EC      		ldi r24,lo8(-59)
+ 586 04c2 00C0      		rjmp .L59
+ 587               	.L46:
+ 588 04c4 8130      		cpi r24,lo8(1)
+ 589 04c6 01F4      		brne .L48
+ 590 04c8 85E8      		ldi r24,lo8(-123)
+ 591               	.L59:
+ 592 04ca 8093 BC00 		sts 188,r24
+ 593 04ce 86E0      		ldi r24,lo8(6)
+ 594 04d0 00C0      		rjmp .L62
+ 595               	.L48:
+ 596 04d2 8091 0000 		lds r24,BLFlags
+ 597 04d6 81FF      		sbrs r24,1
+ 598 04d8 00C0      		rjmp .L49
+ 599 04da 8091 0000 		lds r24,FC_StatusFlags
+ 600 04de 80FD      		sbrc r24,0
+ 601 04e0 00C0      		rjmp .L50
+ 602 04e2 E091 0000 		lds r30,motor_read
+ 603 04e6 F0E0      		ldi r31,lo8(0)
+ 604 04e8 A3E0      		ldi r26,3
+ 605 04ea EE0F      	1:	lsl r30
+ 606 04ec FF1F      		rol r31
+ 607 04ee AA95      		dec r26
+ 608 04f0 01F4      		brne 1b
+ 609 04f2 E050      		subi r30,lo8(-(Motor))
+ 610 04f4 F040      		sbci r31,hi8(-(Motor))
+ 611 04f6 8681      		ldd r24,Z+6
+ 612 04f8 8A3F      		cpi r24,lo8(-6)
+ 613 04fa 01F4      		brne .L50
+ 614 04fc E091 0000 		lds r30,motor_read
+ 615 0500 F0E0      		ldi r31,lo8(0)
+ 616 0502 43E0      		ldi r20,3
+ 617 0504 EE0F      	1:	lsl r30
+ 618 0506 FF1F      		rol r31
+ 619 0508 4A95      		dec r20
+ 620 050a 01F4      		brne 1b
+ 621 050c E050      		subi r30,lo8(-(Motor))
+ 622 050e F040      		sbci r31,hi8(-(Motor))
+ 623 0510 8081      		ld r24,Z
+ 624 0512 8160      		ori r24,lo8(1)
+ 625 0514 8083      		st Z,r24
+ 626 0516 00C0      		rjmp .L49
+ 627               	.L50:
+ 628 0518 E091 0000 		lds r30,motor_read
+ 629 051c F0E0      		ldi r31,lo8(0)
+ 630 051e 33E0      		ldi r19,3
+ 631 0520 EE0F      	1:	lsl r30
+ 632 0522 FF1F      		rol r31
+ 633 0524 3A95      		dec r19
+ 634 0526 01F4      		brne 1b
+ 635 0528 E050      		subi r30,lo8(-(Motor))
+ 636 052a F040      		sbci r31,hi8(-(Motor))
+ 637 052c 1082      		st Z,__zero_reg__
+ 638               	.L49:
+ 639 052e 8091 0000 		lds r24,motor_read
+ 640 0532 8F5F      		subi r24,lo8(-(1))
+ 641 0534 8093 0000 		sts motor_read,r24
+ 642 0538 8091 0000 		lds r24,motor_read
+ 643 053c 8C30      		cpi r24,lo8(12)
+ 644 053e 00F0      		brlo .L51
+ 645 0540 1092 0000 		sts motor_read,__zero_reg__
+ 646 0544 1092 0000 		sts (BLConfig_ReadMask)+1,__zero_reg__
+ 647 0548 1092 0000 		sts BLConfig_ReadMask,__zero_reg__
+ 648 054c 8091 0000 		lds r24,motor_read_temperature.1685
+ 649 0550 8F5F      		subi r24,lo8(-(1))
+ 650 0552 8093 0000 		sts motor_read_temperature.1685,r24
+ 651 0556 8C30      		cpi r24,lo8(12)
+ 652 0558 00F0      		brlo .L51
+ 653 055a 1092 0000 		sts motor_read_temperature.1685,__zero_reg__
+ 654 055e 8091 0000 		lds r24,BLFlags
+ 655 0562 8D7F      		andi r24,lo8(-3)
+ 656 0564 8093 0000 		sts BLFlags,r24
+ 657               	.L51:
+ 658 0568 1092 0000 		sts twi_state,__zero_reg__
+ 659 056c 84E9      		ldi r24,lo8(-108)
+ 660 056e 8093 BC00 		sts 188,r24
+ 661 0572 8091 0000 		lds r24,BLFlags
+ 662 0576 8160      		ori r24,lo8(1)
+ 663 0578 8093 0000 		sts BLFlags,r24
+ 664 057c 00C0      		rjmp .L63
+ 665               	.L62:
+ 666 057e 8093 0000 		sts twi_state,r24
+ 667 0582 00C0      		rjmp .L56
+ 668               	.L17:
+ 669 0584 88E9      		ldi r24,lo8(-104)
+ 670 0586 00C0      		rjmp .L64
+ 671               	.L18:
+ 672 0588 8091 0000 		lds r24,dac_channel
+ 673 058c 90E0      		ldi r25,lo8(0)
+ 674 058e 0896      		adiw r24,8
+ 675 0590 880F      		lsl r24
+ 676 0592 991F      		rol r25
+ 677 0594 00C0      		rjmp .L64
+ 678               	.L19:
+ 679 0596 8091 0000 		lds r24,dac_channel
+ 680 059a 8130      		cpi r24,lo8(1)
+ 681 059c 01F0      		breq .L53
+ 682 059e 8130      		cpi r24,lo8(1)
+ 683 05a0 00F0      		brlo .L52
+ 684 05a2 8230      		cpi r24,lo8(2)
+ 685 05a4 01F0      		breq .+2
+ 686 05a6 00C0      		rjmp .L56
+ 687 05a8 00C0      		rjmp .L66
+ 688               	.L52:
+ 689 05aa 8091 0000 		lds r24,AnalogOffsetNick
+ 690 05ae 00C0      		rjmp .L64
+ 691               	.L53:
+ 692 05b0 8091 0000 		lds r24,AnalogOffsetRoll
+ 693 05b4 00C0      		rjmp .L64
+ 694               	.L66:
+ 695 05b6 8091 0000 		lds r24,AnalogOffsetGier
+ 696 05ba 00C0      		rjmp .L64
+ 697               	.L20:
+ 698 05bc 80E8      		ldi r24,lo8(-128)
+ 699 05be 00C0      		rjmp .L64
+ 700               	.L21:
+ 701 05c0 1092 0000 		sts twi_state,__zero_reg__
+ 702 05c4 84E9      		ldi r24,lo8(-108)
+ 703 05c6 8093 BC00 		sts 188,r24
+ 704 05ca 1092 0000 		sts I2C_TransferActive,__zero_reg__
+ 705 05ce 8AE0      		ldi r24,lo8(10)
+ 706 05d0 90E0      		ldi r25,hi8(10)
+ 707 05d2 9093 0000 		sts (I2CTimeout)+1,r25
+ 708 05d6 8093 0000 		sts I2CTimeout,r24
+ 709 05da 8091 0000 		lds r24,dac_channel
+ 710 05de 8230      		cpi r24,lo8(2)
+ 711 05e0 00F4      		brsh .L55
+ 712 05e2 8091 0000 		lds r24,dac_channel
+ 713 05e6 8F5F      		subi r24,lo8(-(1))
+ 714 05e8 8093 0000 		sts dac_channel,r24
+ 715 05ec 82E1      		ldi r24,lo8(18)
+ 716 05ee 8093 0000 		sts twi_state,r24
+ 717               	.L65:
+ 718 05f2 8091 0000 		lds r24,BLFlags
+ 719 05f6 8E7F      		andi r24,lo8(-2)
+ 720 05f8 8093 0000 		sts BLFlags,r24
+ 721 05fc 85EA      		ldi r24,lo8(-91)
+ 722               	.L60:
+ 723 05fe 8093 BC00 		sts 188,r24
+ 724 0602 00C0      		rjmp .L56
+ 725               	.L55:
+ 726 0604 1092 0000 		sts dac_channel,__zero_reg__
+ 727 0608 8091 0000 		lds r24,BLFlags
+ 728 060c 8160      		ori r24,lo8(1)
+ 729 060e 8093 0000 		sts BLFlags,r24
+ 730 0612 00C0      		rjmp .L56
+ 731               	.L9:
+ 732 0614 1092 0000 		sts twi_state,__zero_reg__
+ 733 0618 84E9      		ldi r24,lo8(-108)
+ 734 061a 8093 BC00 		sts 188,r24
+ 735 061e 8091 0000 		lds r24,BLFlags
+ 736 0622 8160      		ori r24,lo8(1)
+ 737 0624 8093 0000 		sts BLFlags,r24
+ 738 0628 8AE0      		ldi r24,lo8(10)
+ 739 062a 90E0      		ldi r25,hi8(10)
+ 740 062c 9093 0000 		sts (I2CTimeout)+1,r25
+ 741 0630 8093 0000 		sts I2CTimeout,r24
+ 742 0634 1092 0000 		sts motor_write,__zero_reg__
+ 743 0638 1092 0000 		sts motor_read,__zero_reg__
+ 744               	.L63:
+ 745 063c 1092 0000 		sts I2C_TransferActive,__zero_reg__
+ 746               	.L56:
+ 747               	/* epilogue start */
+ 748 0640 FF91      		pop r31
+ 749 0642 EF91      		pop r30
+ 750 0644 BF91      		pop r27
+ 751 0646 AF91      		pop r26
+ 752 0648 9F91      		pop r25
+ 753 064a 8F91      		pop r24
+ 754 064c 4F91      		pop r20
+ 755 064e 3F91      		pop r19
+ 756 0650 2F91      		pop r18
+ 757 0652 0F90      		pop r0
+ 758 0654 0FBE      		out __SREG__,r0
+ 759 0656 0F90      		pop r0
+ 760 0658 1F90      		pop __zero_reg__
+ 761 065a 1895      		reti
+ 763               	.global	I2C_ReadBLConfig
+ 765               	I2C_ReadBLConfig:
+ 766 065c FF92      		push r15
+ 767 065e 0F93      		push r16
+ 768 0660 1F93      		push r17
+ 769 0662 CF93      		push r28
+ 770 0664 DF93      		push r29
+ 771               	/* prologue: function */
+ 772               	/* frame size = 0 */
+ 773 0666 982F      		mov r25,r24
+ 774 0668 8091 0000 		lds r24,MotorenEin
+ 775 066c 8823      		tst r24
+ 776 066e 01F0      		breq .+2
+ 777 0670 00C0      		rjmp .L68
+ 778 0672 8091 0000 		lds r24,PC_MotortestActive
+ 779 0676 8823      		tst r24
+ 780 0678 01F0      		breq .+2
+ 781 067a 00C0      		rjmp .L68
+ 782 067c 9D30      		cpi r25,lo8(13)
+ 783 067e 00F0      		brlo .+2
+ 784 0680 00C0      		rjmp .L69
+ 785 0682 9923      		tst r25
+ 786 0684 01F4      		brne .L70
+ 787 0686 86E0      		ldi r24,lo8(6)
+ 788 0688 00C0      		rjmp .L71
+ 789               	.L70:
+ 790 068a C92F      		mov r28,r25
+ 791 068c D0E0      		ldi r29,lo8(0)
+ 792 068e 2197      		sbiw r28,1
+ 793 0690 FE01      		movw r30,r28
+ 794 0692 43E0      		ldi r20,3
+ 795 0694 EE0F      	1:	lsl r30
+ 796 0696 FF1F      		rol r31
+ 797 0698 4A95      		dec r20
+ 798 069a 01F4      		brne 1b
+ 799 069c E050      		subi r30,lo8(-(Motor))
+ 800 069e F040      		sbci r31,hi8(-(Motor))
+ 801 06a0 8381      		ldd r24,Z+3
+ 802 06a2 87FF      		sbrs r24,7
+ 803 06a4 00C0      		rjmp .L69
+ 804 06a6 8081      		ld r24,Z
+ 805 06a8 80FD      		sbrc r24,0
+ 806 06aa 00C0      		rjmp .L72
+ 807 06ac 83E0      		ldi r24,lo8(3)
+ 808 06ae 00C0      		rjmp .L71
+ 809               	.L72:
+ 810 06b0 80ED      		ldi r24,lo8(2000)
+ 811 06b2 97E0      		ldi r25,hi8(2000)
+ 812 06b4 0E94 0000 		call SetDelay
+ 813 06b8 8C01      		movw r16,r24
+ 814               	.L74:
+ 815 06ba 8091 0000 		lds r24,BLFlags
+ 816 06be 80FD      		sbrc r24,0
+ 817 06c0 00C0      		rjmp .L73
+ 818 06c2 C801      		movw r24,r16
+ 819 06c4 0E94 0000 		call CheckDelay
+ 820 06c8 8823      		tst r24
+ 821 06ca 01F0      		breq .L74
+ 822               	.L73:
+ 823 06cc 81E0      		ldi r24,lo8(1)
+ 824 06ce 90E0      		ldi r25,hi8(1)
+ 825 06d0 00C0      		rjmp 2f
+ 826 06d2 880F      	1:	lsl r24
+ 827 06d4 991F      		rol r25
+ 828 06d6 CA95      	2:	dec r28
+ 829 06d8 02F4      		brpl 1b
+ 830 06da 9093 0000 		sts (BLConfig_ReadMask)+1,r25
+ 831 06de 8093 0000 		sts BLConfig_ReadMask,r24
+ 832 06e2 E0E0      		ldi r30,lo8(Motor+1)
+ 833 06e4 F0E0      		ldi r31,hi8(Motor+1)
+ 834 06e6 40E0      		ldi r20,lo8(0)
+ 835 06e8 50E0      		ldi r21,hi8(0)
+ 836 06ea 61E0      		ldi r22,lo8(1)
+ 837 06ec 70E0      		ldi r23,hi8(1)
+ 838               	.L76:
+ 839 06ee 2091 0000 		lds r18,BLConfig_ReadMask
+ 840 06f2 3091 0000 		lds r19,(BLConfig_ReadMask)+1
+ 841 06f6 CB01      		movw r24,r22
+ 842 06f8 042E      		mov r0,r20
+ 843 06fa 00C0      		rjmp 2f
+ 844 06fc 880F      	1:	lsl r24
+ 845 06fe 991F      		rol r25
+ 846 0700 0A94      	2:	dec r0
+ 847 0702 02F4      		brpl 1b
+ 848 0704 8223      		and r24,r18
+ 849 0706 9323      		and r25,r19
+ 850 0708 892B      		or r24,r25
+ 851 070a 01F0      		breq .L75
+ 852 070c 1082      		st Z,__zero_reg__
+ 853 070e 1182      		std Z+1,__zero_reg__
+ 854               	.L75:
+ 855 0710 4F5F      		subi r20,lo8(-(1))
+ 856 0712 5F4F      		sbci r21,hi8(-(1))
+ 857 0714 3896      		adiw r30,8
+ 858 0716 4C30      		cpi r20,12
+ 859 0718 5105      		cpc r21,__zero_reg__
+ 860 071a 01F4      		brne .L76
+ 861 071c 1092 0000 		sts motor_read,__zero_reg__
+ 862 0720 1092 0000 		sts BLConfig,__zero_reg__
+ 863 0724 1092 0000 		sts BLConfig+7,__zero_reg__
+ 864 0728 35EA      		ldi r19,lo8(-91)
+ 865 072a F32E      		mov r15,r19
+ 866               	.L80:
+ 867 072c 1092 0000 		sts twi_state,__zero_reg__
+ 868 0730 8091 0000 		lds r24,BLFlags
+ 869 0734 8E7F      		andi r24,lo8(-2)
+ 870 0736 8093 0000 		sts BLFlags,r24
+ 871 073a F092 BC00 		sts 188,r15
+ 872               	.L78:
+ 873 073e 8091 0000 		lds r24,BLFlags
+ 874 0742 80FD      		sbrc r24,0
+ 875 0744 00C0      		rjmp .L77
+ 876 0746 C801      		movw r24,r16
+ 877 0748 0E94 0000 		call CheckDelay
+ 878 074c 8823      		tst r24
+ 879 074e 01F0      		breq .L78
+ 880               	.L77:
+ 881 0750 8091 0000 		lds r24,BLConfig_ReadMask
+ 882 0754 9091 0000 		lds r25,(BLConfig_ReadMask)+1
+ 883 0758 892B      		or r24,r25
+ 884 075a 01F0      		breq .L79
+ 885 075c C801      		movw r24,r16
+ 886 075e 0E94 0000 		call CheckDelay
+ 887 0762 8823      		tst r24
+ 888 0764 01F0      		breq .L80
+ 889               	.L79:
+ 890 0766 8091 0000 		lds r24,BLConfig
+ 891 076a 8230      		cpi r24,lo8(2)
+ 892 076c 01F0      		breq .L81
+ 893 076e 84E0      		ldi r24,lo8(4)
+ 894 0770 00C0      		rjmp .L71
+ 895               	.L81:
+ 896 0772 80E0      		ldi r24,lo8(BLConfig)
+ 897 0774 90E0      		ldi r25,hi8(BLConfig)
+ 898 0776 67E0      		ldi r22,lo8(7)
+ 899 0778 70E0      		ldi r23,hi8(7)
+ 900 077a 0E94 0000 		call RAM_Checksum
+ 901 077e 9091 0000 		lds r25,BLConfig+7
+ 902 0782 8917      		cp r24,r25
+ 903 0784 01F4      		brne .L82
+ 904 0786 80E0      		ldi r24,lo8(0)
+ 905 0788 00C0      		rjmp .L71
+ 906               	.L82:
+ 907 078a 85E0      		ldi r24,lo8(5)
+ 908 078c 00C0      		rjmp .L71
+ 909               	.L68:
+ 910 078e 81E0      		ldi r24,lo8(1)
+ 911 0790 00C0      		rjmp .L71
+ 912               	.L69:
+ 913 0792 82E0      		ldi r24,lo8(2)
+ 914               	.L71:
+ 915               	/* epilogue start */
+ 916 0794 CDB7      		in r28,__SP_L__
+ 917 0796 DEB7      		in r29,__SP_H__
+ 918 0798 E5E0      		ldi r30, lo8(5)
+ 919 079a 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 921               	.global	I2C_WriteBLConfig
+ 923               	I2C_WriteBLConfig:
+ 924 079e 1F93      		push r17
+ 925 07a0 CF93      		push r28
+ 926 07a2 DF93      		push r29
+ 927               	/* prologue: function */
+ 928               	/* frame size = 0 */
+ 929 07a4 182F      		mov r17,r24
+ 930 07a6 8091 0000 		lds r24,MotorenEin
+ 931 07aa 8823      		tst r24
+ 932 07ac 01F0      		breq .+2
+ 933 07ae 00C0      		rjmp .L89
+ 934 07b0 8091 0000 		lds r24,PC_MotortestActive
+ 935 07b4 8823      		tst r24
+ 936 07b6 01F0      		breq .+2
+ 937 07b8 00C0      		rjmp .L89
+ 938 07ba 1D30      		cpi r17,lo8(13)
+ 939 07bc 00F0      		brlo .+2
+ 940 07be 00C0      		rjmp .L90
+ 941 07c0 1123      		tst r17
+ 942 07c2 01F0      		breq .L91
+ 943 07c4 E12F      		mov r30,r17
+ 944 07c6 F0E0      		ldi r31,lo8(0)
+ 945 07c8 53E0      		ldi r21,3
+ 946 07ca EE0F      	1:	lsl r30
+ 947 07cc FF1F      		rol r31
+ 948 07ce 5A95      		dec r21
+ 949 07d0 01F4      		brne 1b
+ 950 07d2 E050      		subi r30,lo8(-(Motor-8))
+ 951 07d4 F040      		sbci r31,hi8(-(Motor-8))
+ 952 07d6 8381      		ldd r24,Z+3
+ 953 07d8 87FF      		sbrs r24,7
+ 954 07da 00C0      		rjmp .L90
+ 955 07dc 8081      		ld r24,Z
+ 956 07de 80FD      		sbrc r24,0
+ 957 07e0 00C0      		rjmp .L91
+ 958 07e2 83E0      		ldi r24,lo8(3)
+ 959 07e4 00C0      		rjmp .L92
+ 960               	.L91:
+ 961 07e6 8091 0000 		lds r24,BLConfig
+ 962 07ea 8230      		cpi r24,lo8(2)
+ 963 07ec 01F0      		breq .L93
+ 964 07ee 84E0      		ldi r24,lo8(4)
+ 965 07f0 00C0      		rjmp .L92
+ 966               	.L93:
+ 967 07f2 80E0      		ldi r24,lo8(BLConfig)
+ 968 07f4 90E0      		ldi r25,hi8(BLConfig)
+ 969 07f6 67E0      		ldi r22,lo8(7)
+ 970 07f8 70E0      		ldi r23,hi8(7)
+ 971 07fa 0E94 0000 		call RAM_Checksum
+ 972 07fe 9091 0000 		lds r25,BLConfig+7
+ 973 0802 8917      		cp r24,r25
+ 974 0804 01F0      		breq .L94
+ 975 0806 85E0      		ldi r24,lo8(5)
+ 976 0808 00C0      		rjmp .L92
+ 977               	.L94:
+ 978 080a 80ED      		ldi r24,lo8(2000)
+ 979 080c 97E0      		ldi r25,hi8(2000)
+ 980 080e 0E94 0000 		call SetDelay
+ 981 0812 EC01      		movw r28,r24
+ 982               	.L96:
+ 983 0814 8091 0000 		lds r24,BLFlags
+ 984 0818 80FD      		sbrc r24,0
+ 985 081a 00C0      		rjmp .L95
+ 986 081c CE01      		movw r24,r28
+ 987 081e 0E94 0000 		call CheckDelay
+ 988 0822 8823      		tst r24
+ 989 0824 01F0      		breq .L96
+ 990               	.L95:
+ 991 0826 1123      		tst r17
+ 992 0828 01F4      		brne .L97
+ 993 082a 8FEF      		ldi r24,lo8(255)
+ 994 082c 90E0      		ldi r25,hi8(255)
+ 995               	.L110:
+ 996 082e 9093 0000 		sts (BLConfig_WriteMask)+1,r25
+ 997 0832 8093 0000 		sts BLConfig_WriteMask,r24
+ 998 0836 E0E0      		ldi r30,lo8(Motor+1)
+ 999 0838 F0E0      		ldi r31,hi8(Motor+1)
+ 1000 083a 40E0      		ldi r20,lo8(0)
+ 1001 083c 50E0      		ldi r21,hi8(0)
+ 1002 083e 61E0      		ldi r22,lo8(1)
+ 1003 0840 70E0      		ldi r23,hi8(1)
+ 1004 0842 00C0      		rjmp .L98
+ 1005               	.L97:
+ 1006 0844 212F      		mov r18,r17
+ 1007 0846 30E0      		ldi r19,lo8(0)
+ 1008 0848 2150      		subi r18,lo8(-(-1))
+ 1009 084a 3040      		sbci r19,hi8(-(-1))
+ 1010 084c 81E0      		ldi r24,lo8(1)
+ 1011 084e 90E0      		ldi r25,hi8(1)
+ 1012 0850 00C0      		rjmp 2f
+ 1013 0852 880F      	1:	lsl r24
+ 1014 0854 991F      		rol r25
+ 1015 0856 2A95      	2:	dec r18
+ 1016 0858 02F4      		brpl 1b
+ 1017 085a 00C0      		rjmp .L110
+ 1018               	.L98:
+ 1019 085c 2091 0000 		lds r18,BLConfig_WriteMask
+ 1020 0860 3091 0000 		lds r19,(BLConfig_WriteMask)+1
+ 1021 0864 CB01      		movw r24,r22
+ 1022 0866 042E      		mov r0,r20
+ 1023 0868 00C0      		rjmp 2f
+ 1024 086a 880F      	1:	lsl r24
+ 1025 086c 991F      		rol r25
+ 1026 086e 0A94      	2:	dec r0
+ 1027 0870 02F4      		brpl 1b
+ 1028 0872 8223      		and r24,r18
+ 1029 0874 9323      		and r25,r19
+ 1030 0876 892B      		or r24,r25
+ 1031 0878 01F0      		breq .L100
+ 1032 087a 1082      		st Z,__zero_reg__
+ 1033 087c 1182      		std Z+1,__zero_reg__
+ 1034               	.L100:
+ 1035 087e 4F5F      		subi r20,lo8(-(1))
+ 1036 0880 5F4F      		sbci r21,hi8(-(1))
+ 1037 0882 3896      		adiw r30,8
+ 1038 0884 4C30      		cpi r20,12
+ 1039 0886 5105      		cpc r21,__zero_reg__
+ 1040 0888 01F4      		brne .L98
+ 1041 088a 1092 0000 		sts motor_write,__zero_reg__
+ 1042 088e 15EA      		ldi r17,lo8(-91)
+ 1043               	.L104:
+ 1044 0890 1092 0000 		sts twi_state,__zero_reg__
+ 1045 0894 8091 0000 		lds r24,BLFlags
+ 1046 0898 8E7F      		andi r24,lo8(-2)
+ 1047 089a 8093 0000 		sts BLFlags,r24
+ 1048 089e 1093 BC00 		sts 188,r17
+ 1049               	.L102:
+ 1050 08a2 8091 0000 		lds r24,BLFlags
+ 1051 08a6 80FD      		sbrc r24,0
+ 1052 08a8 00C0      		rjmp .L101
+ 1053 08aa CE01      		movw r24,r28
+ 1054 08ac 0E94 0000 		call CheckDelay
+ 1055 08b0 8823      		tst r24
+ 1056 08b2 01F0      		breq .L102
+ 1057               	.L101:
+ 1058 08b4 8091 0000 		lds r24,BLConfig_WriteMask
+ 1059 08b8 9091 0000 		lds r25,(BLConfig_WriteMask)+1
+ 1060 08bc 892B      		or r24,r25
+ 1061 08be 01F0      		breq .L103
+ 1062 08c0 CE01      		movw r24,r28
+ 1063 08c2 0E94 0000 		call CheckDelay
+ 1064 08c6 8823      		tst r24
+ 1065 08c8 01F0      		breq .L104
+ 1066               	.L103:
+ 1067 08ca 8091 0000 		lds r24,BLConfig_WriteMask
+ 1068 08ce 9091 0000 		lds r25,(BLConfig_WriteMask)+1
+ 1069 08d2 892B      		or r24,r25
+ 1070 08d4 01F4      		brne .L90
+ 1071 08d6 80E0      		ldi r24,lo8(0)
+ 1072 08d8 00C0      		rjmp .L92
+ 1073               	.L89:
+ 1074 08da 81E0      		ldi r24,lo8(1)
+ 1075 08dc 00C0      		rjmp .L92
+ 1076               	.L90:
+ 1077 08de 82E0      		ldi r24,lo8(2)
+ 1078               	.L92:
+ 1079               	/* epilogue start */
+ 1080 08e0 DF91      		pop r29
+ 1081 08e2 CF91      		pop r28
+ 1082 08e4 1F91      		pop r17
+ 1083 08e6 0895      		ret
+ 1085               	.global	twi_state
+ 1086               	.global	twi_state
+ 1087               		.section .bss
+ 1090               	twi_state:
+ 1091 0000 00        		.skip 1,0
+ 1092               	.global	dac_channel
+ 1093               	.global	dac_channel
+ 1096               	dac_channel:
+ 1097 0001 00        		.skip 1,0
+ 1098               	.global	motor_write
+ 1099               	.global	motor_write
+ 1102               	motor_write:
+ 1103 0002 00        		.skip 1,0
+ 1104               	.global	motor_read
+ 1105               	.global	motor_read
+ 1108               	motor_read:
+ 1109 0003 00        		.skip 1,0
+ 1110               	.global	I2C_TransferActive
+ 1111               	.global	I2C_TransferActive
+ 1114               	I2C_TransferActive:
+ 1115 0004 00        		.skip 1,0
+ 1116               	.global	I2CTimeout
+ 1117               		.data
+ 1120               	I2CTimeout:
+ 1121 0000 6400      		.word	100
+ 1122               	.global	MissingMotor
+ 1123               	.global	MissingMotor
+ 1124               		.section .bss
+ 1127               	MissingMotor:
+ 1128 0005 00        		.skip 1,0
+ 1129               	.global	BLFlags
+ 1130               	.global	BLFlags
+ 1133               	BLFlags:
+ 1134 0006 00        		.skip 1,0
+ 1135               	.global	BLConfig_WriteMask
+ 1136               	.global	BLConfig_WriteMask
+ 1139               	BLConfig_WriteMask:
+ 1140 0007 0000      		.skip 2,0
+ 1141               	.global	BLConfig_ReadMask
+ 1142               	.global	BLConfig_ReadMask
+ 1145               	BLConfig_ReadMask:
+ 1146 0009 0000      		.skip 2,0
+ 1147               		.lcomm BuffLen.1687,1
+ 1148               		.lcomm pBuff.1686,2
+ 1149               		.lcomm motor_read_temperature.1685,1
+ 1150               		.lcomm missing_motor.1684,1
+ 1151               		.comm Motor,96,1
+ 1152               		.comm BLConfig,8,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 twimaster.c
+     /tmp/ccpDJ87f.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccpDJ87f.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccpDJ87f.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccpDJ87f.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccpDJ87f.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccpDJ87f.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccpDJ87f.s:13     .text:0000000000000000 I2C_Init
+     /tmp/ccpDJ87f.s:1090   .bss:0000000000000000 twi_state
+     /tmp/ccpDJ87f.s:1102   .bss:0000000000000002 motor_write
+     /tmp/ccpDJ87f.s:1108   .bss:0000000000000003 motor_read
+                            *COM*:0000000000000060 Motor
+     /tmp/ccpDJ87f.s:65     .text:0000000000000052 I2C_Reset
+     /tmp/ccpDJ87f.s:1114   .bss:0000000000000004 I2C_TransferActive
+     /tmp/ccpDJ87f.s:1133   .bss:0000000000000006 BLFlags
+     /tmp/ccpDJ87f.s:109    .text:00000000000000ae __vector_26
+     /tmp/ccpDJ87f.s:1139   .bss:0000000000000007 BLConfig_WriteMask
+     /tmp/ccpDJ87f.s:1145   .bss:0000000000000009 BLConfig_ReadMask
+                            *COM*:0000000000000008 BLConfig
+     /tmp/ccpDJ87f.s:1147   .bss:000000000000000c pBuff.1686
+                             .bss:000000000000000b BuffLen.1687
+     /tmp/ccpDJ87f.s:1149   .bss:000000000000000f missing_motor.1684
+     /tmp/ccpDJ87f.s:1120   .data:0000000000000000 I2CTimeout
+     /tmp/ccpDJ87f.s:1148   .bss:000000000000000e motor_read_temperature.1685
+     /tmp/ccpDJ87f.s:1127   .bss:0000000000000005 MissingMotor
+     /tmp/ccpDJ87f.s:1096   .bss:0000000000000001 dac_channel
+     /tmp/ccpDJ87f.s:765    .text:000000000000065c I2C_ReadBLConfig
+     /tmp/ccpDJ87f.s:923    .text:000000000000079e I2C_WriteBLConfig
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__tablejump2__
+Mixer
+RequiredMotors
+FC_StatusFlags
+AnalogOffsetNick
+AnalogOffsetRoll
+AnalogOffsetGier
+MotorenEin
+PC_MotortestActive
+SetDelay
+CheckDelay
+RAM_Checksum
+__epilogue_restores__

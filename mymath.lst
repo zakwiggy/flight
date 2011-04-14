@@ -1,0 +1,227 @@
+   1               		.file	"mymath.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	c_sin_8192
+  13               	c_sin_8192:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 97FD      		sbrc r25,7
+  17 0002 00C0      		rjmp .L2
+  18 0004 41E0      		ldi r20,lo8(1)
+  19 0006 00C0      		rjmp .L3
+  20               	.L2:
+  21 0008 9095      		com r25
+  22 000a 8195      		neg r24
+  23 000c 9F4F      		sbci r25,lo8(-1)
+  24 000e 4FEF      		ldi r20,lo8(-1)
+  25               	.L3:
+  26 0010 68E6      		ldi r22,lo8(360)
+  27 0012 71E0      		ldi r23,hi8(360)
+  28 0014 0E94 0000 		call __divmodhi4
+  29 0018 9C01      		movw r18,r24
+  30 001a 8B35      		cpi r24,91
+  31 001c 9105      		cpc r25,__zero_reg__
+  32 001e 04F0      		brlt .L9
+  33               	.L4:
+  34 0020 8B55      		subi r24,lo8(-(-91))
+  35 0022 9040      		sbci r25,hi8(-(-91))
+  36 0024 8A35      		cpi r24,90
+  37 0026 9105      		cpc r25,__zero_reg__
+  38 0028 00F4      		brsh .L6
+  39 002a 84EB      		ldi r24,lo8(180)
+  40 002c 90E0      		ldi r25,hi8(180)
+  41 002e BC01      		movw r22,r24
+  42 0030 621B      		sub r22,r18
+  43 0032 730B      		sbc r23,r19
+  44 0034 9B01      		movw r18,r22
+  45               	.L9:
+  46 0036 81E0      		ldi r24,lo8(1)
+  47 0038 00C0      		rjmp .L5
+  48               	.L6:
+  49 003a C901      		movw r24,r18
+  50 003c 855B      		subi r24,lo8(-(-181))
+  51 003e 9040      		sbci r25,hi8(-(-181))
+  52 0040 8A35      		cpi r24,90
+  53 0042 9105      		cpc r25,__zero_reg__
+  54 0044 00F4      		brsh .L7
+  55 0046 245B      		subi r18,lo8(-(-180))
+  56 0048 3040      		sbci r19,hi8(-(-180))
+  57 004a 00C0      		rjmp .L10
+  58               	.L7:
+  59 004c 88E6      		ldi r24,lo8(360)
+  60 004e 91E0      		ldi r25,hi8(360)
+  61 0050 BC01      		movw r22,r24
+  62 0052 621B      		sub r22,r18
+  63 0054 730B      		sbc r23,r19
+  64 0056 9B01      		movw r18,r22
+  65               	.L10:
+  66 0058 8FEF      		ldi r24,lo8(-1)
+  67               	.L5:
+  68 005a F901      		movw r30,r18
+  69 005c EE0F      		lsl r30
+  70 005e FF1F      		rol r31
+  71 0060 E050      		subi r30,lo8(-(pgm_sinlookup))
+  72 0062 F040      		sbci r31,hi8(-(pgm_sinlookup))
+  73               	/* #APP */
+  74               	 ;  32 "mymath.c" 1
+  75 0064 2591      		lpm r18, Z+
+  76 0066 3491      		lpm r19, Z
+  77               		
+  78               	 ;  0 "" 2
+  79               	/* #NOAPP */
+  80 0068 9927      		clr r25
+  81 006a 87FD      		sbrc r24,7
+  82 006c 9095      		com r25
+  83 006e B901      		movw r22,r18
+  84 0070 689F      		mul r22,r24
+  85 0072 9001      		movw r18,r0
+  86 0074 699F      		mul r22,r25
+  87 0076 300D      		add r19,r0
+  88 0078 789F      		mul r23,r24
+  89 007a 300D      		add r19,r0
+  90 007c 1124      		clr r1
+  91 007e 842F      		mov r24,r20
+  92 0080 9927      		clr r25
+  93 0082 87FD      		sbrc r24,7
+  94 0084 9095      		com r25
+  95 0086 A901      		movw r20,r18
+  96 0088 489F      		mul r20,r24
+  97 008a 9001      		movw r18,r0
+  98 008c 499F      		mul r20,r25
+  99 008e 300D      		add r19,r0
+ 100 0090 589F      		mul r21,r24
+ 101 0092 300D      		add r19,r0
+ 102 0094 1124      		clr r1
+ 103 0096 C901      		movw r24,r18
+ 104               	/* epilogue start */
+ 105 0098 0895      		ret
+ 107               	.global	c_cos_8192
+ 109               	c_cos_8192:
+ 110               	/* prologue: function */
+ 111               	/* frame size = 0 */
+ 112 009a 2AE5      		ldi r18,lo8(90)
+ 113 009c 30E0      		ldi r19,hi8(90)
+ 114 009e A901      		movw r20,r18
+ 115 00a0 481B      		sub r20,r24
+ 116 00a2 590B      		sbc r21,r25
+ 117 00a4 CA01      		movw r24,r20
+ 118 00a6 0E94 0000 		call c_sin_8192
+ 119               	/* epilogue start */
+ 120 00aa 0895      		ret
+ 122               	.global	pgm_sinlookup
+ 123               		.section	.progmem.data,"a",@progbits
+ 126               	pgm_sinlookup:
+ 127 0000 0000      		.word	0
+ 128 0002 8F00      		.word	143
+ 129 0004 1E01      		.word	286
+ 130 0006 AD01      		.word	429
+ 131 0008 3B02      		.word	571
+ 132 000a CA02      		.word	714
+ 133 000c 5803      		.word	856
+ 134 000e E603      		.word	998
+ 135 0010 7404      		.word	1140
+ 136 0012 0205      		.word	1282
+ 137 0014 8F05      		.word	1423
+ 138 0016 1B06      		.word	1563
+ 139 0018 A706      		.word	1703
+ 140 001a 3307      		.word	1843
+ 141 001c BE07      		.word	1982
+ 142 001e 4808      		.word	2120
+ 143 0020 D208      		.word	2258
+ 144 0022 5B09      		.word	2395
+ 145 0024 E309      		.word	2531
+ 146 0026 6B0A      		.word	2667
+ 147 0028 F20A      		.word	2802
+ 148 002a 780B      		.word	2936
+ 149 002c FD0B      		.word	3069
+ 150 002e 810C      		.word	3201
+ 151 0030 040D      		.word	3332
+ 152 0032 860D      		.word	3462
+ 153 0034 070E      		.word	3591
+ 154 0036 870E      		.word	3719
+ 155 0038 060F      		.word	3846
+ 156 003a 840F      		.word	3972
+ 157 003c 0010      		.word	4096
+ 158 003e 7B10      		.word	4219
+ 159 0040 F510      		.word	4341
+ 160 0042 6E11      		.word	4462
+ 161 0044 E511      		.word	4581
+ 162 0046 5B12      		.word	4699
+ 163 0048 CF12      		.word	4815
+ 164 004a 4213      		.word	4930
+ 165 004c B313      		.word	5043
+ 166 004e 2314      		.word	5155
+ 167 0050 9214      		.word	5266
+ 168 0052 FE14      		.word	5374
+ 169 0054 6A15      		.word	5482
+ 170 0056 D315      		.word	5587
+ 171 0058 3B16      		.word	5691
+ 172 005a A116      		.word	5793
+ 173 005c 0517      		.word	5893
+ 174 005e 6717      		.word	5991
+ 175 0060 C817      		.word	6088
+ 176 0062 2718      		.word	6183
+ 177 0064 8318      		.word	6275
+ 178 0066 DE18      		.word	6366
+ 179 0068 3719      		.word	6455
+ 180 006a 8E19      		.word	6542
+ 181 006c E319      		.word	6627
+ 182 006e 361A      		.word	6710
+ 183 0070 871A      		.word	6791
+ 184 0072 D61A      		.word	6870
+ 185 0074 231B      		.word	6947
+ 186 0076 6E1B      		.word	7022
+ 187 0078 B61B      		.word	7094
+ 188 007a FD1B      		.word	7165
+ 189 007c 411C      		.word	7233
+ 190 007e 831C      		.word	7299
+ 191 0080 C31C      		.word	7363
+ 192 0082 001D      		.word	7424
+ 193 0084 3C1D      		.word	7484
+ 194 0086 751D      		.word	7541
+ 195 0088 AB1D      		.word	7595
+ 196 008a E01D      		.word	7648
+ 197 008c 121E      		.word	7698
+ 198 008e 421E      		.word	7746
+ 199 0090 6F1E      		.word	7791
+ 200 0092 9A1E      		.word	7834
+ 201 0094 C31E      		.word	7875
+ 202 0096 E91E      		.word	7913
+ 203 0098 0D1F      		.word	7949
+ 204 009a 2E1F      		.word	7982
+ 205 009c 4D1F      		.word	8013
+ 206 009e 691F      		.word	8041
+ 207 00a0 841F      		.word	8068
+ 208 00a2 9B1F      		.word	8091
+ 209 00a4 B01F      		.word	8112
+ 210 00a6 C31F      		.word	8131
+ 211 00a8 D31F      		.word	8147
+ 212 00aa E11F      		.word	8161
+ 213 00ac EC1F      		.word	8172
+ 214 00ae F51F      		.word	8181
+ 215 00b0 FB1F      		.word	8187
+ 216 00b2 FF1F      		.word	8191
+ 217 00b4 0020      		.word	8192
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 mymath.c
+     /tmp/cct9fDD9.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cct9fDD9.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cct9fDD9.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cct9fDD9.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cct9fDD9.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cct9fDD9.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cct9fDD9.s:13     .text:0000000000000000 c_sin_8192
+     /tmp/cct9fDD9.s:126    .progmem.data:0000000000000000 pgm_sinlookup
+     /tmp/cct9fDD9.s:109    .text:000000000000009a c_cos_8192
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__divmodhi4

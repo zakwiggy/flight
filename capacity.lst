@@ -1,0 +1,225 @@
+   1               		.file	"capacity.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	Capacity_Update
+  13               	Capacity_Update:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 8091 0000 		lds r24,update_timer
+  17 0004 9091 0000 		lds r25,(update_timer)+1
+  18 0008 0E94 0000 		call CheckDelay
+  19 000c 8823      		tst r24
+  20 000e 01F4      		brne .+2
+  21 0010 00C0      		rjmp .L13
+  22 0012 8091 0000 		lds r24,update_timer
+  23 0016 9091 0000 		lds r25,(update_timer)+1
+  24 001a 0A96      		adiw r24,10
+  25 001c 9093 0000 		sts (update_timer)+1,r25
+  26 0020 8093 0000 		sts update_timer,r24
+  27 0024 E0E0      		ldi r30,lo8(Motor+1)
+  28 0026 F0E0      		ldi r31,hi8(Motor+1)
+  29 0028 60E0      		ldi r22,lo8(0)
+  30 002a 70E0      		ldi r23,hi8(0)
+  31 002c 40E0      		ldi r20,lo8(0)
+  32 002e 50E0      		ldi r21,hi8(0)
+  33 0030 90E0      		ldi r25,lo8(0)
+  34 0032 AFEF      		ldi r26,lo8(-1)
+  35               	.L6:
+  36 0034 8281      		ldd r24,Z+2
+  37 0036 87FF      		sbrs r24,7
+  38 0038 00C0      		rjmp .L3
+  39 003a 9F5F      		subi r25,lo8(-(1))
+  40 003c 8481      		ldd r24,Z+4
+  41 003e 680F      		add r22,r24
+  42 0040 711D      		adc r23,__zero_reg__
+  43 0042 8081      		ld r24,Z
+  44 0044 480F      		add r20,r24
+  45 0046 511D      		adc r21,__zero_reg__
+  46 0048 8581      		ldd r24,Z+5
+  47 004a 8A17      		cp r24,r26
+  48 004c 00F0      		brlo .L4
+  49               	.L3:
+  50 004e 8A2F      		mov r24,r26
+  51               	.L4:
+  52 0050 3896      		adiw r30,8
+  53 0052 20E0      		ldi r18,hi8(Motor+97)
+  54 0054 E030      		cpi r30,lo8(Motor+97)
+  55 0056 F207      		cpc r31,r18
+  56 0058 01F0      		breq .L5
+  57 005a A82F      		mov r26,r24
+  58 005c 00C0      		rjmp .L6
+  59               	.L5:
+  60 005e 8093 0000 		sts Capacity+6,r24
+  61 0062 452B      		or r20,r21
+  62 0064 01F4      		brne .L7
+  63 0066 8091 0000 		lds r24,SumCurrentOffset.2248
+  64 006a 9091 0000 		lds r25,(SumCurrentOffset.2248)+1
+  65 006e A091 0000 		lds r26,(SumCurrentOffset.2248)+2
+  66 0072 B091 0000 		lds r27,(SumCurrentOffset.2248)+3
+  67 0076 292F      		mov r18,r25
+  68 0078 3A2F      		mov r19,r26
+  69 007a 4B2F      		mov r20,r27
+  70 007c 5527      		clr r21
+  71 007e 3093 0000 		sts (CurrentOffset.2247)+1,r19
+  72 0082 2093 0000 		sts CurrentOffset.2247,r18
+  73 0086 40E0      		ldi r20,lo8(0)
+  74 0088 50E0      		ldi r21,hi8(0)
+  75 008a 821B      		sub r24,r18
+  76 008c 930B      		sbc r25,r19
+  77 008e A40B      		sbc r26,r20
+  78 0090 B50B      		sbc r27,r21
+  79 0092 9B01      		movw r18,r22
+  80 0094 40E0      		ldi r20,lo8(0)
+  81 0096 50E0      		ldi r21,hi8(0)
+  82 0098 820F      		add r24,r18
+  83 009a 931F      		adc r25,r19
+  84 009c A41F      		adc r26,r20
+  85 009e B51F      		adc r27,r21
+  86 00a0 8093 0000 		sts SumCurrentOffset.2248,r24
+  87 00a4 9093 0000 		sts (SumCurrentOffset.2248)+1,r25
+  88 00a8 A093 0000 		sts (SumCurrentOffset.2248)+2,r26
+  89 00ac B093 0000 		sts (SumCurrentOffset.2248)+3,r27
+  90 00b0 E5E0      		ldi r30,lo8(5)
+  91 00b2 F0E0      		ldi r31,hi8(5)
+  92 00b4 00C0      		rjmp .L8
+  93               	.L7:
+  94 00b6 4091 0000 		lds r20,CurrentOffset.2247
+  95 00ba 5091 0000 		lds r21,(CurrentOffset.2247)+1
+  96 00be 4617      		cp r20,r22
+  97 00c0 5707      		cpc r21,r23
+  98 00c2 00F0      		brlo .L9
+  99 00c4 20E0      		ldi r18,lo8(0)
+ 100 00c6 30E0      		ldi r19,hi8(0)
+ 101 00c8 00C0      		rjmp .L10
+ 102               	.L9:
+ 103 00ca 9B01      		movw r18,r22
+ 104 00cc 241B      		sub r18,r20
+ 105 00ce 350B      		sbc r19,r21
+ 106               	.L10:
+ 107 00d0 E92F      		mov r30,r25
+ 108 00d2 F0E0      		ldi r31,lo8(0)
+ 109 00d4 EE0F      		lsl r30
+ 110 00d6 FF1F      		rol r31
+ 111 00d8 3596      		adiw r30,5
+ 112 00da E20F      		add r30,r18
+ 113 00dc F31F      		adc r31,r19
+ 114               	.L8:
+ 115 00de F093 0000 		sts (Capacity)+1,r31
+ 116 00e2 E093 0000 		sts Capacity,r30
+ 117 00e6 EF3F      		cpi r30,255
+ 118 00e8 F105      		cpc r31,__zero_reg__
+ 119 00ea 00F4      		brsh .L11
+ 120 00ec 8091 0000 		lds r24,UBat
+ 121 00f0 9091 0000 		lds r25,(UBat)+1
+ 122 00f4 AC01      		movw r20,r24
+ 123 00f6 E49F      		mul r30,r20
+ 124 00f8 C001      		movw r24,r0
+ 125 00fa E59F      		mul r30,r21
+ 126 00fc 900D      		add r25,r0
+ 127 00fe F49F      		mul r31,r20
+ 128 0100 900D      		add r25,r0
+ 129 0102 1124      		clr r1
+ 130 0104 64E6      		ldi r22,lo8(100)
+ 131 0106 70E0      		ldi r23,hi8(100)
+ 132 0108 00C0      		rjmp .L14
+ 133               	.L11:
+ 134 010a 8091 0000 		lds r24,UBat
+ 135 010e 9091 0000 		lds r25,(UBat)+1
+ 136 0112 9F01      		movw r18,r30
+ 137 0114 3695      		lsr r19
+ 138 0116 2795      		ror r18
+ 139 0118 3695      		lsr r19
+ 140 011a 2795      		ror r18
+ 141 011c AC01      		movw r20,r24
+ 142 011e 249F      		mul r18,r20
+ 143 0120 C001      		movw r24,r0
+ 144 0122 259F      		mul r18,r21
+ 145 0124 900D      		add r25,r0
+ 146 0126 349F      		mul r19,r20
+ 147 0128 900D      		add r25,r0
+ 148 012a 1124      		clr r1
+ 149 012c 69E1      		ldi r22,lo8(25)
+ 150 012e 70E0      		ldi r23,hi8(25)
+ 151               	.L14:
+ 152 0130 0E94 0000 		call __udivmodhi4
+ 153 0134 7093 0000 		sts (Capacity+2)+1,r23
+ 154 0138 6093 0000 		sts Capacity+2,r22
+ 155 013c 2091 0000 		lds r18,SubCounter.2246
+ 156 0140 3091 0000 		lds r19,(SubCounter.2246)+1
+ 157 0144 2E0F      		add r18,r30
+ 158 0146 3F1F      		adc r19,r31
+ 159 0148 3093 0000 		sts (SubCounter.2246)+1,r19
+ 160 014c 2093 0000 		sts SubCounter.2246,r18
+ 161 0150 5EE0      		ldi r21,hi8(3601)
+ 162 0152 2131      		cpi r18,lo8(3601)
+ 163 0154 3507      		cpc r19,r21
+ 164 0156 00F0      		brlo .L13
+ 165 0158 8091 0000 		lds r24,Capacity+4
+ 166 015c 9091 0000 		lds r25,(Capacity+4)+1
+ 167 0160 0196      		adiw r24,1
+ 168 0162 9093 0000 		sts (Capacity+4)+1,r25
+ 169 0166 8093 0000 		sts Capacity+4,r24
+ 170 016a 2051      		subi r18,lo8(-(-3600))
+ 171 016c 3E40      		sbci r19,hi8(-(-3600))
+ 172 016e 3093 0000 		sts (SubCounter.2246)+1,r19
+ 173 0172 2093 0000 		sts SubCounter.2246,r18
+ 174               	.L13:
+ 175 0176 0895      		ret
+ 177               	.global	Capacity_Init
+ 179               	Capacity_Init:
+ 180               	/* prologue: function */
+ 181               	/* frame size = 0 */
+ 182 0178 1092 0000 		sts (Capacity)+1,__zero_reg__
+ 183 017c 1092 0000 		sts Capacity,__zero_reg__
+ 184 0180 1092 0000 		sts (Capacity+4)+1,__zero_reg__
+ 185 0184 1092 0000 		sts Capacity+4,__zero_reg__
+ 186 0188 1092 0000 		sts (Capacity+2)+1,__zero_reg__
+ 187 018c 1092 0000 		sts Capacity+2,__zero_reg__
+ 188 0190 1092 0000 		sts Capacity+6,__zero_reg__
+ 189 0194 8AE0      		ldi r24,lo8(10)
+ 190 0196 90E0      		ldi r25,hi8(10)
+ 191 0198 0E94 0000 		call SetDelay
+ 192 019c 9093 0000 		sts (update_timer)+1,r25
+ 193 01a0 8093 0000 		sts update_timer,r24
+ 194               	/* epilogue start */
+ 195 01a4 0895      		ret
+ 197               	.global	update_timer
+ 198               	.global	update_timer
+ 199               		.section .bss
+ 202               	update_timer:
+ 203 0000 0000      		.skip 2,0
+ 204               		.lcomm SumCurrentOffset.2248,4
+ 205               		.lcomm CurrentOffset.2247,2
+ 206               		.lcomm SubCounter.2246,2
+ 207               		.comm Capacity,7,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 capacity.c
+     /tmp/ccYq3X6j.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccYq3X6j.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccYq3X6j.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccYq3X6j.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccYq3X6j.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccYq3X6j.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccYq3X6j.s:13     .text:0000000000000000 Capacity_Update
+     /tmp/ccYq3X6j.s:202    .bss:0000000000000000 update_timer
+                            *COM*:0000000000000007 Capacity
+                             .bss:0000000000000002 SumCurrentOffset.2248
+     /tmp/ccYq3X6j.s:204    .bss:0000000000000006 CurrentOffset.2247
+     /tmp/ccYq3X6j.s:205    .bss:0000000000000008 SubCounter.2246
+     /tmp/ccYq3X6j.s:179    .text:0000000000000178 Capacity_Init
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+CheckDelay
+Motor
+UBat
+__udivmodhi4
+SetDelay

@@ -1,0 +1,964 @@
+   1               		.file	"jetimenu.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	JetiBox_Update
+  13               	JetiBox_Update:
+  14 0000 1F93      		push r17
+  15               	/* prologue: function */
+  16               	/* frame size = 0 */
+  17 0002 182F      		mov r17,r24
+  18 0004 9091 0000 		lds r25,item.2352
+  19 0008 9093 0000 		sts last_item.2353,r25
+  20 000c 8F32      		cpi r24,lo8(47)
+  21 000e 01F0      		breq .L4
+  22 0010 8033      		cpi r24,lo8(48)
+  23 0012 00F4      		brsh .L7
+  24 0014 8F31      		cpi r24,lo8(31)
+  25 0016 01F4      		brne .L2
+  26 0018 00C0      		rjmp .L13
+  27               	.L7:
+  28 001a 8F34      		cpi r24,lo8(79)
+  29 001c 01F0      		breq .L5
+  30 001e 8F38      		cpi r24,lo8(-113)
+  31 0020 01F4      		brne .L2
+  32 0022 9923      		tst r25
+  33 0024 01F4      		brne .L8
+  34 0026 81E0      		ldi r24,lo8(1)
+  35 0028 00C0      		rjmp .L9
+  36               	.L8:
+  37 002a E6E0      		ldi r30,lo8(6)
+  38 002c 9E9F      		mul r25,r30
+  39 002e F001      		movw r30,r0
+  40 0030 1124      		clr r1
+  41 0032 E050      		subi r30,lo8(-(JetiBox_Menu))
+  42 0034 F040      		sbci r31,hi8(-(JetiBox_Menu))
+  43               	/* #APP */
+  44               	 ;  138 "jetimenu.c" 1
+  45 0036 E491      		lpm r30, Z
+  46               		
+  47               	 ;  0 "" 2
+  48               	/* #NOAPP */
+  49 0038 00C0      		rjmp .L12
+  50               	.L13:
+  51 003a E6E0      		ldi r30,lo8(6)
+  52 003c 9E9F      		mul r25,r30
+  53 003e F001      		movw r30,r0
+  54 0040 1124      		clr r1
+  55 0042 E050      		subi r30,lo8(-(JetiBox_Menu+1))
+  56 0044 F040      		sbci r31,hi8(-(JetiBox_Menu+1))
+  57               	/* #APP */
+  58               	 ;  141 "jetimenu.c" 1
+  59 0046 E491      		lpm r30, Z
+  60               		
+  61               	 ;  0 "" 2
+  62               	/* #NOAPP */
+  63 0048 00C0      		rjmp .L12
+  64               	.L4:
+  65 004a E3E0      		ldi r30,lo8(3)
+  66 004c 9E9F      		mul r25,r30
+  67 004e F001      		movw r30,r0
+  68 0050 1124      		clr r1
+  69 0052 EE0F      		lsl r30
+  70 0054 FF1F      		rol r31
+  71 0056 E050      		subi r30,lo8(-(JetiBox_Menu+2))
+  72 0058 F040      		sbci r31,hi8(-(JetiBox_Menu+2))
+  73               	/* #APP */
+  74               	 ;  144 "jetimenu.c" 1
+  75 005a E491      		lpm r30, Z
+  76               		
+  77               	 ;  0 "" 2
+  78               	/* #NOAPP */
+  79 005c 00C0      		rjmp .L12
+  80               	.L5:
+  81 005e E6E0      		ldi r30,lo8(6)
+  82 0060 9E9F      		mul r25,r30
+  83 0062 F001      		movw r30,r0
+  84 0064 1124      		clr r1
+  85 0066 E050      		subi r30,lo8(-(JetiBox_Menu+3))
+  86 0068 F040      		sbci r31,hi8(-(JetiBox_Menu+3))
+  87               	/* #APP */
+  88               	 ;  147 "jetimenu.c" 1
+  89 006a E491      		lpm r30, Z
+  90               		
+  91               	 ;  0 "" 2
+  92               	/* #NOAPP */
+  93               	.L12:
+  94 006c E093 0000 		sts item.2352,r30
+  95               	.L2:
+  96 0070 8091 0000 		lds r24,item.2352
+  97 0074 8913      		cpse r24,r25
+  98 0076 10E0      		ldi r17,lo8(0)
+  99               	.L10:
+ 100 0078 0E94 0000 		call LIBFC_JetiBox_Clear
+ 101 007c 8091 0000 		lds r24,item.2352
+ 102 0080 96E0      		ldi r25,lo8(6)
+ 103 0082 899F      		mul r24,r25
+ 104 0084 C001      		movw r24,r0
+ 105 0086 1124      		clr r1
+ 106 0088 8050      		subi r24,lo8(-(JetiBox_Menu+4))
+ 107 008a 9040      		sbci r25,hi8(-(JetiBox_Menu+4))
+ 108 008c FC01      		movw r30,r24
+ 109               	/* #APP */
+ 110               	 ;  158 "jetimenu.c" 1
+ 111 008e 2591      		lpm r18, Z+
+ 112 0090 3491      		lpm r19, Z
+ 113               		
+ 114               	 ;  0 "" 2
+ 115               	/* #NOAPP */
+ 116 0092 812F      		mov r24,r17
+ 117 0094 F901      		movw r30,r18
+ 118 0096 0995      		icall
+ 119 0098 80E0      		ldi r24,lo8(0)
+ 120               	.L9:
+ 121               	/* epilogue start */
+ 122 009a 1F91      		pop r17
+ 123 009c 0895      		ret
+ 125               	.global	Menu_PosInfo
+ 127               	Menu_PosInfo:
+ 128 009e 1F93      		push r17
+ 129 00a0 CF93      		push r28
+ 130 00a2 DF93      		push r29
+ 131               	/* prologue: function */
+ 132               	/* frame size = 0 */
+ 133 00a4 8091 0000 		lds r24,NaviDataOkay
+ 134 00a8 8823      		tst r24
+ 135 00aa 01F4      		brne .+2
+ 136 00ac 00C0      		rjmp .L15
+ 137 00ae 80E0      		ldi r24,lo8(0)
+ 138 00b0 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 139 00b4 C0E0      		ldi r28,lo8(gs(LIBFC_JetiBox_Putchar))
+ 140 00b6 D0E0      		ldi r29,hi8(gs(LIBFC_JetiBox_Putchar))
+ 141 00b8 1C2F      		mov r17,r28
+ 142 00ba 8DB7      		in r24,__SP_L__
+ 143 00bc 9EB7      		in r25,__SP_H__
+ 144 00be 0797      		sbiw r24,7
+ 145 00c0 8DBF      		out __SP_L__,r24
+ 146 00c2 EDB7      		in r30,__SP_L__
+ 147 00c4 FEB7      		in r31,__SP_H__
+ 148 00c6 3196      		adiw r30,1
+ 149 00c8 ADB7      		in r26,__SP_L__
+ 150 00ca BEB7      		in r27,__SP_H__
+ 151 00cc 1196      		adiw r26,1
+ 152 00ce CC93      		st X,r28
+ 153 00d0 80E0      		ldi r24,lo8(__c.2307)
+ 154 00d2 90E0      		ldi r25,hi8(__c.2307)
+ 155 00d4 9283      		std Z+2,r25
+ 156 00d6 8183      		std Z+1,r24
+ 157 00d8 8091 0000 		lds r24,GPSInfo+3
+ 158 00dc 8383      		std Z+3,r24
+ 159 00de 1482      		std Z+4,__zero_reg__
+ 160 00e0 8091 0000 		lds r24,GPSInfo+1
+ 161 00e4 8583      		std Z+5,r24
+ 162 00e6 1682      		std Z+6,__zero_reg__
+ 163 00e8 0E94 0000 		call _printf_P
+ 164 00ec EDB7      		in r30,__SP_L__
+ 165 00ee FEB7      		in r31,__SP_H__
+ 166 00f0 3796      		adiw r30,7
+ 167 00f2 EDBF      		out __SP_L__,r30
+ 168 00f4 8091 0000 		lds r24,GPSInfo+2
+ 169 00f8 8330      		cpi r24,lo8(3)
+ 170 00fa 01F4      		brne .L22
+ 171 00fc 8CE0      		ldi r24,lo8(12)
+ 172 00fe 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 173 0102 00D0      		rcall .
+ 174 0104 0F92      		push __tmp_reg__
+ 175 0106 ADB7      		in r26,__SP_L__
+ 176 0108 BEB7      		in r27,__SP_H__
+ 177 010a 1196      		adiw r26,1
+ 178 010c CC93      		st X,r28
+ 179 010e 1197      		sbiw r26,1
+ 180 0110 80E0      		ldi r24,lo8(__c.2310)
+ 181 0112 90E0      		ldi r25,hi8(__c.2310)
+ 182 0114 1396      		adiw r26,2+1
+ 183 0116 9C93      		st X,r25
+ 184 0118 8E93      		st -X,r24
+ 185 011a 1297      		sbiw r26,2
+ 186 011c 00C0      		rjmp .L23
+ 187               	.L22:
+ 188 011e 8CE0      		ldi r24,lo8(12)
+ 189 0120 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 190 0124 00D0      		rcall .
+ 191 0126 0F92      		push __tmp_reg__
+ 192 0128 EDB7      		in r30,__SP_L__
+ 193 012a FEB7      		in r31,__SP_H__
+ 194 012c C183      		std Z+1,r28
+ 195 012e 80E0      		ldi r24,lo8(__c.2316)
+ 196 0130 90E0      		ldi r25,hi8(__c.2316)
+ 197 0132 9383      		std Z+3,r25
+ 198 0134 8283      		std Z+2,r24
+ 199               	.L23:
+ 200 0136 0E94 0000 		call _printf_P
+ 201 013a 0F90      		pop __tmp_reg__
+ 202 013c 0F90      		pop __tmp_reg__
+ 203 013e 0F90      		pop __tmp_reg__
+ 204 0140 8091 0000 		lds r24,GPSInfo
+ 205 0144 81FF      		sbrs r24,1
+ 206 0146 00C0      		rjmp .L19
+ 207 0148 8CE0      		ldi r24,lo8(12)
+ 208 014a 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 209 014e 00D0      		rcall .
+ 210 0150 0F92      		push __tmp_reg__
+ 211 0152 ADB7      		in r26,__SP_L__
+ 212 0154 BEB7      		in r27,__SP_H__
+ 213 0156 1196      		adiw r26,1
+ 214 0158 1C93      		st X,r17
+ 215 015a 1197      		sbiw r26,1
+ 216 015c 80E0      		ldi r24,lo8(__c.2318)
+ 217 015e 90E0      		ldi r25,hi8(__c.2318)
+ 218 0160 1396      		adiw r26,2+1
+ 219 0162 9C93      		st X,r25
+ 220 0164 8E93      		st -X,r24
+ 221 0166 1297      		sbiw r26,2
+ 222 0168 0E94 0000 		call _printf_P
+ 223 016c 0F90      		pop __tmp_reg__
+ 224 016e 0F90      		pop __tmp_reg__
+ 225 0170 0F90      		pop __tmp_reg__
+ 226               	.L19:
+ 227 0172 80E1      		ldi r24,lo8(16)
+ 228 0174 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 229 0178 EDB7      		in r30,__SP_L__
+ 230 017a FEB7      		in r31,__SP_H__
+ 231 017c 3997      		sbiw r30,9
+ 232 017e EDBF      		out __SP_L__,r30
+ 233 0180 3196      		adiw r30,1
+ 234 0182 ADB7      		in r26,__SP_L__
+ 235 0184 BEB7      		in r27,__SP_H__
+ 236 0186 1196      		adiw r26,1
+ 237 0188 1C93      		st X,r17
+ 238 018a 80E0      		ldi r24,lo8(__c.2320)
+ 239 018c 90E0      		ldi r25,hi8(__c.2320)
+ 240 018e 9283      		std Z+2,r25
+ 241 0190 8183      		std Z+1,r24
+ 242 0192 8091 0000 		lds r24,GPSInfo+4
+ 243 0196 9091 0000 		lds r25,(GPSInfo+4)+1
+ 244 019a 6AE0      		ldi r22,lo8(10)
+ 245 019c 70E0      		ldi r23,hi8(10)
+ 246 019e 0E94 0000 		call __udivmodhi4
+ 247 01a2 7483      		std Z+4,r23
+ 248 01a4 6383      		std Z+3,r22
+ 249 01a6 8091 0000 		lds r24,GPSInfo+6
+ 250 01aa 9091 0000 		lds r25,(GPSInfo+6)+1
+ 251 01ae 9683      		std Z+6,r25
+ 252 01b0 8583      		std Z+5,r24
+ 253 01b2 8FED      		ldi r24,lo8(223)
+ 254 01b4 90E0      		ldi r25,hi8(223)
+ 255 01b6 9087      		std Z+8,r25
+ 256 01b8 8783      		std Z+7,r24
+ 257 01ba 0E94 0000 		call _printf_P
+ 258 01be EDB7      		in r30,__SP_L__
+ 259 01c0 FEB7      		in r31,__SP_H__
+ 260 01c2 3996      		adiw r30,9
+ 261 01c4 EDBF      		out __SP_L__,r30
+ 262 01c6 00C0      		rjmp .L21
+ 263               	.L15:
+ 264 01c8 82E0      		ldi r24,lo8(2)
+ 265 01ca 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 266 01ce 00D0      		rcall .
+ 267 01d0 0F92      		push __tmp_reg__
+ 268 01d2 80E0      		ldi r24,lo8(gs(LIBFC_JetiBox_Putchar))
+ 269 01d4 90E0      		ldi r25,hi8(gs(LIBFC_JetiBox_Putchar))
+ 270 01d6 ADB7      		in r26,__SP_L__
+ 271 01d8 BEB7      		in r27,__SP_H__
+ 272 01da 1196      		adiw r26,1
+ 273 01dc 8C93      		st X,r24
+ 274 01de 1197      		sbiw r26,1
+ 275 01e0 80E0      		ldi r24,lo8(__c.2322)
+ 276 01e2 90E0      		ldi r25,hi8(__c.2322)
+ 277 01e4 1396      		adiw r26,2+1
+ 278 01e6 9C93      		st X,r25
+ 279 01e8 8E93      		st -X,r24
+ 280 01ea 1297      		sbiw r26,2
+ 281 01ec 0E94 0000 		call _printf_P
+ 282 01f0 0F90      		pop __tmp_reg__
+ 283 01f2 0F90      		pop __tmp_reg__
+ 284 01f4 0F90      		pop __tmp_reg__
+ 285               	.L21:
+ 286               	/* epilogue start */
+ 287 01f6 DF91      		pop r29
+ 288 01f8 CF91      		pop r28
+ 289 01fa 1F91      		pop r17
+ 290 01fc 0895      		ret
+ 292               	.global	Menu_Battery
+ 294               	Menu_Battery:
+ 295 01fe CF92      		push r12
+ 296 0200 DF92      		push r13
+ 297 0202 EF92      		push r14
+ 298 0204 FF92      		push r15
+ 299 0206 0F93      		push r16
+ 300 0208 1F93      		push r17
+ 301               	/* prologue: function */
+ 302               	/* frame size = 0 */
+ 303 020a 80E0      		ldi r24,lo8(0)
+ 304 020c 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 305 0210 90E0      		ldi r25,lo8(gs(LIBFC_JetiBox_Putchar))
+ 306 0212 C92E      		mov r12,r25
+ 307 0214 90E0      		ldi r25,hi8(gs(LIBFC_JetiBox_Putchar))
+ 308 0216 D92E      		mov r13,r25
+ 309 0218 8091 0000 		lds r24,UBat
+ 310 021c 9091 0000 		lds r25,(UBat)+1
+ 311 0220 0091 0000 		lds r16,UBat
+ 312 0224 1091 0000 		lds r17,(UBat)+1
+ 313 0228 E090 0000 		lds r14,Capacity
+ 314 022c F090 0000 		lds r15,(Capacity)+1
+ 315 0230 2DB7      		in r18,__SP_L__
+ 316 0232 3EB7      		in r19,__SP_H__
+ 317 0234 2B50      		subi r18,lo8(-(-11))
+ 318 0236 3040      		sbci r19,hi8(-(-11))
+ 319 0238 2DBF      		out __SP_L__,r18
+ 320 023a EDB7      		in r30,__SP_L__
+ 321 023c FEB7      		in r31,__SP_H__
+ 322 023e 3196      		adiw r30,1
+ 323 0240 ADB7      		in r26,__SP_L__
+ 324 0242 BEB7      		in r27,__SP_H__
+ 325 0244 1196      		adiw r26,1
+ 326 0246 CC92      		st X,r12
+ 327 0248 20E0      		ldi r18,lo8(__c.2289)
+ 328 024a 30E0      		ldi r19,hi8(__c.2289)
+ 329 024c 3283      		std Z+2,r19
+ 330 024e 2183      		std Z+1,r18
+ 331 0250 6AE0      		ldi r22,lo8(10)
+ 332 0252 70E0      		ldi r23,hi8(10)
+ 333 0254 0E94 0000 		call __divmodhi4
+ 334 0258 7483      		std Z+4,r23
+ 335 025a 6383      		std Z+3,r22
+ 336 025c C801      		movw r24,r16
+ 337 025e 6AE0      		ldi r22,lo8(10)
+ 338 0260 70E0      		ldi r23,hi8(10)
+ 339 0262 0E94 0000 		call __divmodhi4
+ 340 0266 9683      		std Z+6,r25
+ 341 0268 8583      		std Z+5,r24
+ 342 026a C701      		movw r24,r14
+ 343 026c 6AE0      		ldi r22,lo8(10)
+ 344 026e 70E0      		ldi r23,hi8(10)
+ 345 0270 0E94 0000 		call __udivmodhi4
+ 346 0274 7087      		std Z+8,r23
+ 347 0276 6783      		std Z+7,r22
+ 348 0278 C701      		movw r24,r14
+ 349 027a 6AE0      		ldi r22,lo8(10)
+ 350 027c 70E0      		ldi r23,hi8(10)
+ 351 027e 0E94 0000 		call __udivmodhi4
+ 352 0282 9287      		std Z+10,r25
+ 353 0284 8187      		std Z+9,r24
+ 354 0286 0E94 0000 		call _printf_P
+ 355 028a 2DB7      		in r18,__SP_L__
+ 356 028c 3EB7      		in r19,__SP_H__
+ 357 028e 255F      		subi r18,lo8(-(11))
+ 358 0290 3F4F      		sbci r19,hi8(-(11))
+ 359 0292 2DBF      		out __SP_L__,r18
+ 360 0294 80E1      		ldi r24,lo8(16)
+ 361 0296 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 362 029a 8DB7      		in r24,__SP_L__
+ 363 029c 9EB7      		in r25,__SP_H__
+ 364 029e 0797      		sbiw r24,7
+ 365 02a0 8DBF      		out __SP_L__,r24
+ 366 02a2 EDB7      		in r30,__SP_L__
+ 367 02a4 FEB7      		in r31,__SP_H__
+ 368 02a6 3196      		adiw r30,1
+ 369 02a8 ADB7      		in r26,__SP_L__
+ 370 02aa BEB7      		in r27,__SP_H__
+ 371 02ac 1196      		adiw r26,1
+ 372 02ae CC92      		st X,r12
+ 373 02b0 80E0      		ldi r24,lo8(__c.2291)
+ 374 02b2 90E0      		ldi r25,hi8(__c.2291)
+ 375 02b4 9283      		std Z+2,r25
+ 376 02b6 8183      		std Z+1,r24
+ 377 02b8 8091 0000 		lds r24,Capacity+2
+ 378 02bc 9091 0000 		lds r25,(Capacity+2)+1
+ 379 02c0 9483      		std Z+4,r25
+ 380 02c2 8383      		std Z+3,r24
+ 381 02c4 8091 0000 		lds r24,Capacity+4
+ 382 02c8 9091 0000 		lds r25,(Capacity+4)+1
+ 383 02cc 9683      		std Z+6,r25
+ 384 02ce 8583      		std Z+5,r24
+ 385 02d0 0E94 0000 		call _printf_P
+ 386 02d4 2DB7      		in r18,__SP_L__
+ 387 02d6 3EB7      		in r19,__SP_H__
+ 388 02d8 295F      		subi r18,lo8(-(7))
+ 389 02da 3F4F      		sbci r19,hi8(-(7))
+ 390 02dc 2DBF      		out __SP_L__,r18
+ 391               	/* epilogue start */
+ 392 02de 1F91      		pop r17
+ 393 02e0 0F91      		pop r16
+ 394 02e2 FF90      		pop r15
+ 395 02e4 EF90      		pop r14
+ 396 02e6 DF90      		pop r13
+ 397 02e8 CF90      		pop r12
+ 398 02ea 0895      		ret
+ 400               	.global	Menu_Temperature
+ 402               	Menu_Temperature:
+ 403 02ec CF93      		push r28
+ 404 02ee DF93      		push r29
+ 405               	/* prologue: function */
+ 406               	/* frame size = 0 */
+ 407 02f0 80E0      		ldi r24,lo8(0)
+ 408 02f2 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 409 02f6 C0E0      		ldi r28,lo8(gs(LIBFC_JetiBox_Putchar))
+ 410 02f8 D0E0      		ldi r29,hi8(gs(LIBFC_JetiBox_Putchar))
+ 411 02fa 2DB7      		in r18,__SP_L__
+ 412 02fc 3EB7      		in r19,__SP_H__
+ 413 02fe 2B50      		subi r18,lo8(-(-11))
+ 414 0300 3040      		sbci r19,hi8(-(-11))
+ 415 0302 2DBF      		out __SP_L__,r18
+ 416 0304 EDB7      		in r30,__SP_L__
+ 417 0306 FEB7      		in r31,__SP_H__
+ 418 0308 3196      		adiw r30,1
+ 419 030a ADB7      		in r26,__SP_L__
+ 420 030c BEB7      		in r27,__SP_H__
+ 421 030e 1196      		adiw r26,1
+ 422 0310 CC93      		st X,r28
+ 423 0312 80E0      		ldi r24,lo8(__c.2259)
+ 424 0314 90E0      		ldi r25,hi8(__c.2259)
+ 425 0316 9283      		std Z+2,r25
+ 426 0318 8183      		std Z+1,r24
+ 427 031a 8091 0000 		lds r24,Motor+7
+ 428 031e 9927      		clr r25
+ 429 0320 87FD      		sbrc r24,7
+ 430 0322 9095      		com r25
+ 431 0324 9483      		std Z+4,r25
+ 432 0326 8383      		std Z+3,r24
+ 433 0328 8091 0000 		lds r24,Motor+15
+ 434 032c 9927      		clr r25
+ 435 032e 87FD      		sbrc r24,7
+ 436 0330 9095      		com r25
+ 437 0332 9683      		std Z+6,r25
+ 438 0334 8583      		std Z+5,r24
+ 439 0336 8091 0000 		lds r24,Motor+23
+ 440 033a 9927      		clr r25
+ 441 033c 87FD      		sbrc r24,7
+ 442 033e 9095      		com r25
+ 443 0340 9087      		std Z+8,r25
+ 444 0342 8783      		std Z+7,r24
+ 445 0344 8091 0000 		lds r24,Motor+31
+ 446 0348 9927      		clr r25
+ 447 034a 87FD      		sbrc r24,7
+ 448 034c 9095      		com r25
+ 449 034e 9287      		std Z+10,r25
+ 450 0350 8187      		std Z+9,r24
+ 451 0352 0E94 0000 		call _printf_P
+ 452 0356 EDB7      		in r30,__SP_L__
+ 453 0358 FEB7      		in r31,__SP_H__
+ 454 035a 3B96      		adiw r30,11
+ 455 035c EDBF      		out __SP_L__,r30
+ 456 035e 80E1      		ldi r24,lo8(16)
+ 457 0360 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 458 0364 2DB7      		in r18,__SP_L__
+ 459 0366 3EB7      		in r19,__SP_H__
+ 460 0368 2B50      		subi r18,lo8(-(-11))
+ 461 036a 3040      		sbci r19,hi8(-(-11))
+ 462 036c 2DBF      		out __SP_L__,r18
+ 463 036e EDB7      		in r30,__SP_L__
+ 464 0370 FEB7      		in r31,__SP_H__
+ 465 0372 3196      		adiw r30,1
+ 466 0374 ADB7      		in r26,__SP_L__
+ 467 0376 BEB7      		in r27,__SP_H__
+ 468 0378 1196      		adiw r26,1
+ 469 037a CC93      		st X,r28
+ 470 037c 80E0      		ldi r24,lo8(__c.2261)
+ 471 037e 90E0      		ldi r25,hi8(__c.2261)
+ 472 0380 9283      		std Z+2,r25
+ 473 0382 8183      		std Z+1,r24
+ 474 0384 8091 0000 		lds r24,Motor+39
+ 475 0388 9927      		clr r25
+ 476 038a 87FD      		sbrc r24,7
+ 477 038c 9095      		com r25
+ 478 038e 9483      		std Z+4,r25
+ 479 0390 8383      		std Z+3,r24
+ 480 0392 8091 0000 		lds r24,Motor+47
+ 481 0396 9927      		clr r25
+ 482 0398 87FD      		sbrc r24,7
+ 483 039a 9095      		com r25
+ 484 039c 9683      		std Z+6,r25
+ 485 039e 8583      		std Z+5,r24
+ 486 03a0 8091 0000 		lds r24,Motor+55
+ 487 03a4 9927      		clr r25
+ 488 03a6 87FD      		sbrc r24,7
+ 489 03a8 9095      		com r25
+ 490 03aa 9087      		std Z+8,r25
+ 491 03ac 8783      		std Z+7,r24
+ 492 03ae 8091 0000 		lds r24,Motor+63
+ 493 03b2 9927      		clr r25
+ 494 03b4 87FD      		sbrc r24,7
+ 495 03b6 9095      		com r25
+ 496 03b8 9287      		std Z+10,r25
+ 497 03ba 8187      		std Z+9,r24
+ 498 03bc 0E94 0000 		call _printf_P
+ 499 03c0 8091 0000 		lds r24,RequiredMotors
+ 500 03c4 EDB7      		in r30,__SP_L__
+ 501 03c6 FEB7      		in r31,__SP_H__
+ 502 03c8 3B96      		adiw r30,11
+ 503 03ca EDBF      		out __SP_L__,r30
+ 504 03cc 8530      		cpi r24,lo8(5)
+ 505 03ce 00F4      		brsh .L27
+ 506 03d0 80E1      		ldi r24,lo8(16)
+ 507 03d2 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 508 03d6 00D0      		rcall .
+ 509 03d8 0F92      		push __tmp_reg__
+ 510 03da ADB7      		in r26,__SP_L__
+ 511 03dc BEB7      		in r27,__SP_H__
+ 512 03de 1196      		adiw r26,1
+ 513 03e0 CC93      		st X,r28
+ 514 03e2 1197      		sbiw r26,1
+ 515 03e4 80E0      		ldi r24,lo8(__c.2263)
+ 516 03e6 90E0      		ldi r25,hi8(__c.2263)
+ 517 03e8 1396      		adiw r26,2+1
+ 518 03ea 9C93      		st X,r25
+ 519 03ec 8E93      		st -X,r24
+ 520 03ee 1297      		sbiw r26,2
+ 521 03f0 0E94 0000 		call _printf_P
+ 522 03f4 0F90      		pop __tmp_reg__
+ 523 03f6 0F90      		pop __tmp_reg__
+ 524 03f8 0F90      		pop __tmp_reg__
+ 525 03fa 00C0      		rjmp .L29
+ 526               	.L27:
+ 527 03fc 8730      		cpi r24,lo8(7)
+ 528 03fe 00F4      		brsh .L29
+ 529 0400 88E1      		ldi r24,lo8(24)
+ 530 0402 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 531 0406 00D0      		rcall .
+ 532 0408 00D0      		rcall .
+ 533 040a 0F92      		push __tmp_reg__
+ 534 040c EDB7      		in r30,__SP_L__
+ 535 040e FEB7      		in r31,__SP_H__
+ 536 0410 3196      		adiw r30,1
+ 537 0412 ADB7      		in r26,__SP_L__
+ 538 0414 BEB7      		in r27,__SP_H__
+ 539 0416 1196      		adiw r26,1
+ 540 0418 CC93      		st X,r28
+ 541 041a 80E0      		ldi r24,lo8(__c.2265)
+ 542 041c 90E0      		ldi r25,hi8(__c.2265)
+ 543 041e 9283      		std Z+2,r25
+ 544 0420 8183      		std Z+1,r24
+ 545 0422 8FED      		ldi r24,lo8(223)
+ 546 0424 90E0      		ldi r25,hi8(223)
+ 547 0426 9483      		std Z+4,r25
+ 548 0428 8383      		std Z+3,r24
+ 549 042a 0E94 0000 		call _printf_P
+ 550 042e 0F90      		pop __tmp_reg__
+ 551 0430 0F90      		pop __tmp_reg__
+ 552 0432 0F90      		pop __tmp_reg__
+ 553 0434 0F90      		pop __tmp_reg__
+ 554 0436 0F90      		pop __tmp_reg__
+ 555               	.L29:
+ 556               	/* epilogue start */
+ 557 0438 DF91      		pop r29
+ 558 043a CF91      		pop r28
+ 559 043c 0895      		ret
+ 561               	.global	Menu_Status
+ 563               	Menu_Status:
+ 564 043e FF92      		push r15
+ 565 0440 0F93      		push r16
+ 566 0442 1F93      		push r17
+ 567 0444 CF93      		push r28
+ 568 0446 DF93      		push r29
+ 569               	/* prologue: function */
+ 570               	/* frame size = 0 */
+ 571 0448 80E0      		ldi r24,lo8(0)
+ 572 044a 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 573 044e C0E0      		ldi r28,lo8(gs(LIBFC_JetiBox_Putchar))
+ 574 0450 D0E0      		ldi r29,hi8(gs(LIBFC_JetiBox_Putchar))
+ 575 0452 FC2E      		mov r15,r28
+ 576 0454 8091 0000 		lds r24,UBat
+ 577 0458 9091 0000 		lds r25,(UBat)+1
+ 578 045c 0091 0000 		lds r16,UBat
+ 579 0460 1091 0000 		lds r17,(UBat)+1
+ 580 0464 2DB7      		in r18,__SP_L__
+ 581 0466 3EB7      		in r19,__SP_H__
+ 582 0468 2750      		subi r18,lo8(-(-7))
+ 583 046a 3040      		sbci r19,hi8(-(-7))
+ 584 046c 2DBF      		out __SP_L__,r18
+ 585 046e EDB7      		in r30,__SP_L__
+ 586 0470 FEB7      		in r31,__SP_H__
+ 587 0472 3196      		adiw r30,1
+ 588 0474 ADB7      		in r26,__SP_L__
+ 589 0476 BEB7      		in r27,__SP_H__
+ 590 0478 1196      		adiw r26,1
+ 591 047a CC93      		st X,r28
+ 592 047c 20E0      		ldi r18,lo8(__c.2216)
+ 593 047e 30E0      		ldi r19,hi8(__c.2216)
+ 594 0480 3283      		std Z+2,r19
+ 595 0482 2183      		std Z+1,r18
+ 596 0484 6AE0      		ldi r22,lo8(10)
+ 597 0486 70E0      		ldi r23,hi8(10)
+ 598 0488 0E94 0000 		call __divmodhi4
+ 599 048c 7483      		std Z+4,r23
+ 600 048e 6383      		std Z+3,r22
+ 601 0490 C801      		movw r24,r16
+ 602 0492 6AE0      		ldi r22,lo8(10)
+ 603 0494 70E0      		ldi r23,hi8(10)
+ 604 0496 0E94 0000 		call __divmodhi4
+ 605 049a 9683      		std Z+6,r25
+ 606 049c 8583      		std Z+5,r24
+ 607 049e 0E94 0000 		call _printf_P
+ 608 04a2 EDB7      		in r30,__SP_L__
+ 609 04a4 FEB7      		in r31,__SP_H__
+ 610 04a6 3796      		adiw r30,7
+ 611 04a8 EDBF      		out __SP_L__,r30
+ 612 04aa 8091 0000 		lds r24,NaviDataOkay
+ 613 04ae 8823      		tst r24
+ 614 04b0 01F4      		brne .+2
+ 615 04b2 00C0      		rjmp .L31
+ 616 04b4 86E0      		ldi r24,lo8(6)
+ 617 04b6 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 618 04ba 2DB7      		in r18,__SP_L__
+ 619 04bc 3EB7      		in r19,__SP_H__
+ 620 04be 2950      		subi r18,lo8(-(-9))
+ 621 04c0 3040      		sbci r19,hi8(-(-9))
+ 622 04c2 2DBF      		out __SP_L__,r18
+ 623 04c4 0DB7      		in r16,__SP_L__
+ 624 04c6 1EB7      		in r17,__SP_H__
+ 625 04c8 0F5F      		subi r16,lo8(-(1))
+ 626 04ca 1F4F      		sbci r17,hi8(-(1))
+ 627 04cc ADB7      		in r26,__SP_L__
+ 628 04ce BEB7      		in r27,__SP_H__
+ 629 04d0 1196      		adiw r26,1
+ 630 04d2 CC93      		st X,r28
+ 631 04d4 80E0      		ldi r24,lo8(__c.2218)
+ 632 04d6 90E0      		ldi r25,hi8(__c.2218)
+ 633 04d8 F801      		movw r30,r16
+ 634 04da 9283      		std Z+2,r25
+ 635 04dc 8183      		std Z+1,r24
+ 636 04de 6091 0000 		lds r22,ErsatzKompass
+ 637 04e2 7091 0000 		lds r23,(ErsatzKompass)+1
+ 638 04e6 8091 0000 		lds r24,(ErsatzKompass)+2
+ 639 04ea 9091 0000 		lds r25,(ErsatzKompass)+3
+ 640 04ee 2091 0000 		lds r18,GIER_GRAD_FAKTOR
+ 641 04f2 3091 0000 		lds r19,(GIER_GRAD_FAKTOR)+1
+ 642 04f6 4091 0000 		lds r20,(GIER_GRAD_FAKTOR)+2
+ 643 04fa 5091 0000 		lds r21,(GIER_GRAD_FAKTOR)+3
+ 644 04fe 0E94 0000 		call __divmodsi4
+ 645 0502 D801      		movw r26,r16
+ 646 0504 1496      		adiw r26,3+1
+ 647 0506 3C93      		st X,r19
+ 648 0508 2E93      		st -X,r18
+ 649 050a 1397      		sbiw r26,3
+ 650 050c 8FED      		ldi r24,lo8(223)
+ 651 050e 90E0      		ldi r25,hi8(223)
+ 652 0510 1696      		adiw r26,5+1
+ 653 0512 9C93      		st X,r25
+ 654 0514 8E93      		st -X,r24
+ 655 0516 1597      		sbiw r26,5
+ 656 0518 8091 0000 		lds r24,GPSInfo+4
+ 657 051c 9091 0000 		lds r25,(GPSInfo+4)+1
+ 658 0520 6AE0      		ldi r22,lo8(10)
+ 659 0522 70E0      		ldi r23,hi8(10)
+ 660 0524 0E94 0000 		call __udivmodhi4
+ 661 0528 F801      		movw r30,r16
+ 662 052a 7087      		std Z+8,r23
+ 663 052c 6783      		std Z+7,r22
+ 664 052e 0E94 0000 		call _printf_P
+ 665 0532 2DB7      		in r18,__SP_L__
+ 666 0534 3EB7      		in r19,__SP_H__
+ 667 0536 275F      		subi r18,lo8(-(9))
+ 668 0538 3F4F      		sbci r19,hi8(-(9))
+ 669 053a 2DBF      		out __SP_L__,r18
+ 670 053c 00C0      		rjmp .L32
+ 671               	.L31:
+ 672 053e 86E0      		ldi r24,lo8(6)
+ 673 0540 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 674 0544 00D0      		rcall .
+ 675 0546 0F92      		push __tmp_reg__
+ 676 0548 ADB7      		in r26,__SP_L__
+ 677 054a BEB7      		in r27,__SP_H__
+ 678 054c 1196      		adiw r26,1
+ 679 054e CC93      		st X,r28
+ 680 0550 1197      		sbiw r26,1
+ 681 0552 80E0      		ldi r24,lo8(__c.2220)
+ 682 0554 90E0      		ldi r25,hi8(__c.2220)
+ 683 0556 1396      		adiw r26,2+1
+ 684 0558 9C93      		st X,r25
+ 685 055a 8E93      		st -X,r24
+ 686 055c 1297      		sbiw r26,2
+ 687 055e 0E94 0000 		call _printf_P
+ 688 0562 0F90      		pop __tmp_reg__
+ 689 0564 0F90      		pop __tmp_reg__
+ 690 0566 0F90      		pop __tmp_reg__
+ 691               	.L32:
+ 692 0568 8091 0000 		lds r24,NC_ErrorCode
+ 693 056c 8823      		tst r24
+ 694 056e 01F0      		breq .L33
+ 695 0570 86E0      		ldi r24,lo8(6)
+ 696 0572 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 697 0576 00D0      		rcall .
+ 698 0578 00D0      		rcall .
+ 699 057a 0F92      		push __tmp_reg__
+ 700 057c EDB7      		in r30,__SP_L__
+ 701 057e FEB7      		in r31,__SP_H__
+ 702 0580 3196      		adiw r30,1
+ 703 0582 ADB7      		in r26,__SP_L__
+ 704 0584 BEB7      		in r27,__SP_H__
+ 705 0586 1196      		adiw r26,1
+ 706 0588 FC92      		st X,r15
+ 707 058a 80E0      		ldi r24,lo8(__c.2222)
+ 708 058c 90E0      		ldi r25,hi8(__c.2222)
+ 709 058e 9283      		std Z+2,r25
+ 710 0590 8183      		std Z+1,r24
+ 711 0592 8091 0000 		lds r24,NC_ErrorCode
+ 712 0596 8383      		std Z+3,r24
+ 713 0598 1482      		std Z+4,__zero_reg__
+ 714 059a 0E94 0000 		call _printf_P
+ 715 059e 0F90      		pop __tmp_reg__
+ 716 05a0 0F90      		pop __tmp_reg__
+ 717 05a2 0F90      		pop __tmp_reg__
+ 718 05a4 0F90      		pop __tmp_reg__
+ 719 05a6 0F90      		pop __tmp_reg__
+ 720               	.L33:
+ 721 05a8 80E1      		ldi r24,lo8(16)
+ 722 05aa 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 723 05ae 2091 0000 		lds r18,FlugSekunden
+ 724 05b2 3091 0000 		lds r19,(FlugSekunden)+1
+ 725 05b6 EDB7      		in r30,__SP_L__
+ 726 05b8 FEB7      		in r31,__SP_H__
+ 727 05ba 3997      		sbiw r30,9
+ 728 05bc EDBF      		out __SP_L__,r30
+ 729 05be 3196      		adiw r30,1
+ 730 05c0 ADB7      		in r26,__SP_L__
+ 731 05c2 BEB7      		in r27,__SP_H__
+ 732 05c4 1196      		adiw r26,1
+ 733 05c6 FC92      		st X,r15
+ 734 05c8 80E0      		ldi r24,lo8(__c.2224)
+ 735 05ca 90E0      		ldi r25,hi8(__c.2224)
+ 736 05cc 9283      		std Z+2,r25
+ 737 05ce 8183      		std Z+1,r24
+ 738 05d0 8091 0000 		lds r24,Capacity+4
+ 739 05d4 9091 0000 		lds r25,(Capacity+4)+1
+ 740 05d8 9483      		std Z+4,r25
+ 741 05da 8383      		std Z+3,r24
+ 742 05dc C901      		movw r24,r18
+ 743 05de 6CE3      		ldi r22,lo8(60)
+ 744 05e0 70E0      		ldi r23,hi8(60)
+ 745 05e2 0E94 0000 		call __udivmodhi4
+ 746 05e6 7683      		std Z+6,r23
+ 747 05e8 6583      		std Z+5,r22
+ 748 05ea C901      		movw r24,r18
+ 749 05ec 6CE3      		ldi r22,lo8(60)
+ 750 05ee 70E0      		ldi r23,hi8(60)
+ 751 05f0 0E94 0000 		call __udivmodhi4
+ 752 05f4 9087      		std Z+8,r25
+ 753 05f6 8783      		std Z+7,r24
+ 754 05f8 0E94 0000 		call _printf_P
+ 755 05fc 8091 0000 		lds r24,EE_Parameter+13
+ 756 0600 EDB7      		in r30,__SP_L__
+ 757 0602 FEB7      		in r31,__SP_H__
+ 758 0604 3996      		adiw r30,9
+ 759 0606 EDBF      		out __SP_L__,r30
+ 760 0608 80FF      		sbrs r24,0
+ 761 060a 00C0      		rjmp .L35
+ 762 060c 8AE1      		ldi r24,lo8(26)
+ 763 060e 0E94 0000 		call LIBFC_JetiBox_SetPos
+ 764 0612 2DB7      		in r18,__SP_L__
+ 765 0614 3EB7      		in r19,__SP_H__
+ 766 0616 2750      		subi r18,lo8(-(-7))
+ 767 0618 3040      		sbci r19,hi8(-(-7))
+ 768 061a 2DBF      		out __SP_L__,r18
+ 769 061c 0DB7      		in r16,__SP_L__
+ 770 061e 1EB7      		in r17,__SP_H__
+ 771 0620 0F5F      		subi r16,lo8(-(1))
+ 772 0622 1F4F      		sbci r17,hi8(-(1))
+ 773 0624 ADB7      		in r26,__SP_L__
+ 774 0626 BEB7      		in r27,__SP_H__
+ 775 0628 1196      		adiw r26,1
+ 776 062a FC92      		st X,r15
+ 777 062c 80E0      		ldi r24,lo8(__c.2226)
+ 778 062e 90E0      		ldi r25,hi8(__c.2226)
+ 779 0630 F801      		movw r30,r16
+ 780 0632 9283      		std Z+2,r25
+ 781 0634 8183      		std Z+1,r24
+ 782 0636 6091 0000 		lds r22,HoehenWert
+ 783 063a 7091 0000 		lds r23,(HoehenWert)+1
+ 784 063e 8091 0000 		lds r24,(HoehenWert)+2
+ 785 0642 9091 0000 		lds r25,(HoehenWert)+3
+ 786 0646 24E6      		ldi r18,lo8(100)
+ 787 0648 30E0      		ldi r19,hi8(100)
+ 788 064a 40E0      		ldi r20,hlo8(100)
+ 789 064c 50E0      		ldi r21,hhi8(100)
+ 790 064e 0E94 0000 		call __divmodsi4
+ 791 0652 D801      		movw r26,r16
+ 792 0654 1496      		adiw r26,3+1
+ 793 0656 3C93      		st X,r19
+ 794 0658 2E93      		st -X,r18
+ 795 065a 1397      		sbiw r26,3
+ 796 065c 8091 0000 		lds r24,VarioCharacter
+ 797 0660 1596      		adiw r26,5
+ 798 0662 8C93      		st X,r24
+ 799 0664 1597      		sbiw r26,5
+ 800 0666 1696      		adiw r26,6
+ 801 0668 1C92      		st X,__zero_reg__
+ 802 066a 0E94 0000 		call _printf_P
+ 803 066e EDB7      		in r30,__SP_L__
+ 804 0670 FEB7      		in r31,__SP_H__
+ 805 0672 3796      		adiw r30,7
+ 806 0674 EDBF      		out __SP_L__,r30
+ 807               	.L35:
+ 808               	/* epilogue start */
+ 809 0676 CDB7      		in r28,__SP_L__
+ 810 0678 DEB7      		in r29,__SP_H__
+ 811 067a E5E0      		ldi r30, lo8(5)
+ 812 067c 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 814               	.global	JetiBox_Menu
+ 815               		.section	.progmem.data,"a",@progbits
+ 818               	JetiBox_Menu:
+ 819 0000 03        		.byte	3
+ 820 0001 01        		.byte	1
+ 821 0002 00        		.byte	0
+ 822 0003 00        		.byte	0
+ 823 0004 0000      		.word	gs(Menu_Status)
+ 824 0006 00        		.byte	0
+ 825 0007 02        		.byte	2
+ 826 0008 01        		.byte	1
+ 827 0009 01        		.byte	1
+ 828 000a 0000      		.word	gs(Menu_Temperature)
+ 829 000c 01        		.byte	1
+ 830 000d 03        		.byte	3
+ 831 000e 02        		.byte	2
+ 832 000f 02        		.byte	2
+ 833 0010 0000      		.word	gs(Menu_Battery)
+ 834 0012 02        		.byte	2
+ 835 0013 00        		.byte	0
+ 836 0014 03        		.byte	3
+ 837 0015 03        		.byte	3
+ 838 0016 0000      		.word	gs(Menu_PosInfo)
+ 839               		.lcomm last_item.2353,1
+ 840               		.lcomm item.2352,1
+ 843               	__c.2322:
+ 844 0018 4E6F 204E 		.string	"No NaviCtrl!"
+ 844      6176 6943 
+ 844      7472 6C21 
+ 844      00
+ 847               	__c.2320:
+ 848 0025 486F 6D65 		.string	"Home:%3dm %3d%c"
+ 848      3A25 3364 
+ 848      6D20 2533 
+ 848      6425 6300 
+ 851               	__c.2318:
+ 852 0035 4447 5053 		.string	"DGPS"
+ 852      00
+ 855               	__c.2316:
+ 856 003a 4E6F 4678 		.string	"NoFx"
+ 856      00
+ 859               	__c.2310:
+ 860 003f 2020 3344 		.string	"  3D"
+ 860      00
+ 863               	__c.2307:
+ 864 0044 2532 756D 		.string	"%2um/s Sat:%d "
+ 864      2F73 2053 
+ 864      6174 3A25 
+ 864      6420 00
+ 867               	__c.2291:
+ 868 0053 2534 6957 		.string	"%4iW %6imAh"
+ 868      2025 3669 
+ 868      6D41 6800 
+ 871               	__c.2289:
+ 872 005f 2532 692E 		.string	"%2i.%1iV  %3i.%1iA"
+ 872      2531 6956 
+ 872      2020 2533 
+ 872      692E 2531 
+ 872      6941 00
+ 875               	__c.2265:
+ 876 0072 2563 4320 		.string	"%cC     "
+ 876      2020 2020 
+ 876      00
+ 879               	__c.2263:
+ 880 007b 5465 6D70 		.string	"Temperatures    "
+ 880      6572 6174 
+ 880      7572 6573 
+ 880      2020 2020 
+ 880      00
+ 883               	__c.2261:
+ 884 008c 2533 6920 		.string	"%3i %3i %3i %3i"
+ 884      2533 6920 
+ 884      2533 6920 
+ 884      2533 6900 
+ 887               	__c.2259:
+ 888 009c 2533 6920 		.string	"%3i %3i %3i %3i"
+ 888      2533 6920 
+ 888      2533 6920 
+ 888      2533 6900 
+ 891               	__c.2226:
+ 892 00ac 2534 696D 		.string	"%4im%c"
+ 892      2563 00
+ 895               	__c.2224:
+ 896 00b3 2534 6920 		.string	"%4i %2i:%02i"
+ 896      2532 693A 
+ 896      2530 3269 
+ 896      00
+ 899               	__c.2222:
+ 900 00c0 4552 524F 		.string	"ERROR: %2d"
+ 900      523A 2025 
+ 900      3264 00
+ 903               	__c.2220:
+ 904 00cb 5374 6174 		.string	"Status"
+ 904      7573 00
+ 907               	__c.2218:
+ 908 00d2 2533 6425 		.string	"%3d%c %03dm"
+ 908      6320 2530 
+ 908      3364 6D00 
+ 911               	__c.2216:
+ 912 00de 2532 692E 		.string	"%2i.%1iV"
+ 912      2531 6956 
+ 912      00
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 jetimenu.c
+     /tmp/ccmA4Odc.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccmA4Odc.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccmA4Odc.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccmA4Odc.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccmA4Odc.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccmA4Odc.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccmA4Odc.s:13     .text:0000000000000000 JetiBox_Update
+     /tmp/ccmA4Odc.s:839    .bss:0000000000000001 item.2352
+                             .bss:0000000000000000 last_item.2353
+     /tmp/ccmA4Odc.s:818    .progmem.data:0000000000000000 JetiBox_Menu
+     /tmp/ccmA4Odc.s:127    .text:000000000000009e Menu_PosInfo
+     /tmp/ccmA4Odc.s:863    .progmem.data:0000000000000044 __c.2307
+     /tmp/ccmA4Odc.s:859    .progmem.data:000000000000003f __c.2310
+     /tmp/ccmA4Odc.s:855    .progmem.data:000000000000003a __c.2316
+     /tmp/ccmA4Odc.s:851    .progmem.data:0000000000000035 __c.2318
+     /tmp/ccmA4Odc.s:847    .progmem.data:0000000000000025 __c.2320
+     /tmp/ccmA4Odc.s:843    .progmem.data:0000000000000018 __c.2322
+     /tmp/ccmA4Odc.s:294    .text:00000000000001fe Menu_Battery
+     /tmp/ccmA4Odc.s:871    .progmem.data:000000000000005f __c.2289
+     /tmp/ccmA4Odc.s:867    .progmem.data:0000000000000053 __c.2291
+     /tmp/ccmA4Odc.s:402    .text:00000000000002ec Menu_Temperature
+     /tmp/ccmA4Odc.s:887    .progmem.data:000000000000009c __c.2259
+     /tmp/ccmA4Odc.s:883    .progmem.data:000000000000008c __c.2261
+     /tmp/ccmA4Odc.s:879    .progmem.data:000000000000007b __c.2263
+     /tmp/ccmA4Odc.s:875    .progmem.data:0000000000000072 __c.2265
+     /tmp/ccmA4Odc.s:563    .text:000000000000043e Menu_Status
+     /tmp/ccmA4Odc.s:911    .progmem.data:00000000000000de __c.2216
+     /tmp/ccmA4Odc.s:907    .progmem.data:00000000000000d2 __c.2218
+     /tmp/ccmA4Odc.s:903    .progmem.data:00000000000000cb __c.2220
+     /tmp/ccmA4Odc.s:899    .progmem.data:00000000000000c0 __c.2222
+     /tmp/ccmA4Odc.s:895    .progmem.data:00000000000000b3 __c.2224
+     /tmp/ccmA4Odc.s:891    .progmem.data:00000000000000ac __c.2226
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+LIBFC_JetiBox_Clear
+NaviDataOkay
+LIBFC_JetiBox_SetPos
+LIBFC_JetiBox_Putchar
+GPSInfo
+_printf_P
+__udivmodhi4
+UBat
+Capacity
+__divmodhi4
+Motor
+RequiredMotors
+ErsatzKompass
+GIER_GRAD_FAKTOR
+__divmodsi4
+NC_ErrorCode
+FlugSekunden
+EE_Parameter
+HoehenWert
+VarioCharacter
+__epilogue_restores__

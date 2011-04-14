@@ -1,0 +1,76 @@
+   1               		.file	"printf_P.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	Putchar
+  13               	Putchar:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* epilogue start */
+  17 0000 0895      		ret
+  19               	.global	PRINT
+  21               	PRINT:
+  22               	/* prologue: function */
+  23               	/* frame size = 0 */
+  24               	/* epilogue start */
+  25 0002 0895      		ret
+  27               	.global	PRINTP
+  29               	PRINTP:
+  30               	/* prologue: function */
+  31               	/* frame size = 0 */
+  32               	/* epilogue start */
+  33 0004 0895      		ret
+  35               	.global	PAD_SP
+  37               	PAD_SP:
+  38               	/* prologue: function */
+  39               	/* frame size = 0 */
+  40               	/* epilogue start */
+  41 0006 0895      		ret
+  43               	.global	PAD_0
+  45               	PAD_0:
+  46               	/* prologue: function */
+  47               	/* frame size = 0 */
+  48               	/* epilogue start */
+  49 0008 0895      		ret
+  51               	.global	_printf_P
+  53               	_printf_P:
+  54 000a A0E0      		ldi r26,lo8(0)
+  55 000c B0E0      		ldi r27,hi8(0)
+  56 000e E0E0      		ldi r30,lo8(gs(1f))
+  57 0010 F0E0      		ldi r31,hi8(gs(1f))
+  58 0012 0C94 0000 		jmp __prologue_saves__+((18 - 2) * 2)
+  59               	1:
+  60               	/* prologue: function */
+  61               	/* frame size = 0 */
+  62               	/* epilogue start */
+  63 0016 2096      		adiw r28,0
+  64 0018 E2E0      		ldi r30, lo8(2)
+  65 001a 0C94 0000 		jmp __epilogue_restores__ + ((18 - 2) * 2)
+  67               		.comm PrintZiel,1,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 printf_P.c
+     /tmp/ccEdZupf.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccEdZupf.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccEdZupf.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccEdZupf.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccEdZupf.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccEdZupf.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccEdZupf.s:13     .text:0000000000000000 Putchar
+     /tmp/ccEdZupf.s:21     .text:0000000000000002 PRINT
+     /tmp/ccEdZupf.s:29     .text:0000000000000004 PRINTP
+     /tmp/ccEdZupf.s:37     .text:0000000000000006 PAD_SP
+     /tmp/ccEdZupf.s:45     .text:0000000000000008 PAD_0
+     /tmp/ccEdZupf.s:53     .text:000000000000000a _printf_P
+                            *COM*:0000000000000001 PrintZiel
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__prologue_saves__
+__epilogue_restores__

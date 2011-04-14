@@ -1,0 +1,650 @@
+   1               		.file	"rc.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	rc_sum_init
+  13               	rc_sum_init:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 80E0      		ldi r24,lo8(0)
+  17 0002 90E0      		ldi r25,hi8(0)
+  18               	.L2:
+  19 0004 FC01      		movw r30,r24
+  20 0006 EE0F      		lsl r30
+  21 0008 FF1F      		rol r31
+  22 000a DF01      		movw r26,r30
+  23 000c A050      		subi r26,lo8(-(PPM_in))
+  24 000e B040      		sbci r27,hi8(-(PPM_in))
+  25 0010 1196      		adiw r26,1
+  26 0012 1C92      		st X,__zero_reg__
+  27 0014 1E92      		st -X,__zero_reg__
+  28 0016 E050      		subi r30,lo8(-(PPM_diff))
+  29 0018 F040      		sbci r31,hi8(-(PPM_diff))
+  30 001a 1182      		std Z+1,__zero_reg__
+  31 001c 1082      		st Z,__zero_reg__
+  32 001e 0196      		adiw r24,1
+  33 0020 8A31      		cpi r24,26
+  34 0022 9105      		cpc r25,__zero_reg__
+  35 0024 01F4      		brne .L2
+  36 0026 1092 0000 		sts (AdNeutralGier)+1,__zero_reg__
+  37 002a 1092 0000 		sts AdNeutralGier,__zero_reg__
+  38 002e 1092 0000 		sts (AdNeutralRoll)+1,__zero_reg__
+  39 0032 1092 0000 		sts AdNeutralRoll,__zero_reg__
+  40 0036 1092 0000 		sts (AdNeutralNick)+1,__zero_reg__
+  41 003a 1092 0000 		sts AdNeutralNick,__zero_reg__
+  42               	/* epilogue start */
+  43 003e 0895      		ret
+  45               	.global	__vector_12
+  47               	__vector_12:
+  48 0040 1F92      		push __zero_reg__
+  49 0042 0F92      		push r0
+  50 0044 0FB6      		in r0,__SREG__
+  51 0046 0F92      		push r0
+  52 0048 1124      		clr __zero_reg__
+  53 004a 0F93      		push r16
+  54 004c 1F93      		push r17
+  55 004e 2F93      		push r18
+  56 0050 3F93      		push r19
+  57 0052 4F93      		push r20
+  58 0054 5F93      		push r21
+  59 0056 6F93      		push r22
+  60 0058 7F93      		push r23
+  61 005a 8F93      		push r24
+  62 005c 9F93      		push r25
+  63 005e AF93      		push r26
+  64 0060 BF93      		push r27
+  65 0062 CF93      		push r28
+  66 0064 DF93      		push r29
+  67 0066 EF93      		push r30
+  68 0068 FF93      		push r31
+  69               	/* prologue: Signal */
+  70               	/* frame size = 0 */
+  71 006a 8091 0000 		lds r24,EE_Parameter+102
+  72 006e 82FD      		sbrc r24,2
+  73 0070 00C0      		rjmp .L6
+  74 0072 2091 8600 		lds r18,134
+  75 0076 3091 8700 		lds r19,(134)+1
+  76 007a 8091 0000 		lds r24,AltICR.2229
+  77 007e 9091 0000 		lds r25,(AltICR.2229)+1
+  78 0082 281B      		sub r18,r24
+  79 0084 390B      		sbc r19,r25
+  80 0086 8091 8600 		lds r24,134
+  81 008a 9091 8700 		lds r25,(134)+1
+  82 008e 9093 0000 		sts (AltICR.2229)+1,r25
+  83 0092 8093 0000 		sts AltICR.2229,r24
+  84 0096 C901      		movw r24,r18
+  85 0098 8D54      		subi r24,lo8(-(-1101))
+  86 009a 9440      		sbci r25,hi8(-(-1101))
+  87 009c 0091 0000 		lds r16,index.2232
+  88 00a0 1091 0000 		lds r17,(index.2232)+1
+  89 00a4 835F      		subi r24,lo8(6899)
+  90 00a6 9A41      		sbci r25,hi8(6899)
+  91 00a8 00F4      		brsh .L7
+  92 00aa 0093 0000 		sts Channels,r16
+  93 00ae 0430      		cpi r16,4
+  94 00b0 1105      		cpc r17,__zero_reg__
+  95 00b2 04F0      		brlt .L8
+  96 00b4 1092 0000 		sts NewPpmData,__zero_reg__
+  97               	.L8:
+  98 00b8 81E0      		ldi r24,lo8(1)
+  99 00ba 90E0      		ldi r25,hi8(1)
+ 100 00bc 9093 0000 		sts (index.2232)+1,r25
+ 101 00c0 8093 0000 		sts index.2232,r24
+ 102 00c4 00C0      		rjmp .L53
+ 103               	.L7:
+ 104 00c6 0D30      		cpi r16,13
+ 105 00c8 1105      		cpc r17,__zero_reg__
+ 106 00ca 04F0      		brlt .+2
+ 107 00cc 00C0      		rjmp .L53
+ 108 00ce C901      		movw r24,r18
+ 109 00d0 8B5F      		subi r24,lo8(-(-251))
+ 110 00d2 9040      		sbci r25,hi8(-(-251))
+ 111 00d4 845B      		subi r24,lo8(436)
+ 112 00d6 9140      		sbci r25,hi8(436)
+ 113 00d8 00F0      		brlo .+2
+ 114 00da 00C0      		rjmp .L10
+ 115 00dc E901      		movw r28,r18
+ 116 00de C25D      		subi r28,lo8(-(-466))
+ 117 00e0 D140      		sbci r29,hi8(-(-466))
+ 118 00e2 F801      		movw r30,r16
+ 119 00e4 EE0F      		lsl r30
+ 120 00e6 FF1F      		rol r31
+ 121 00e8 E050      		subi r30,lo8(-(PPM_in))
+ 122 00ea F040      		sbci r31,hi8(-(PPM_in))
+ 123 00ec 8081      		ld r24,Z
+ 124 00ee 9181      		ldd r25,Z+1
+ 125 00f0 FE01      		movw r30,r28
+ 126 00f2 E81B      		sub r30,r24
+ 127 00f4 F90B      		sbc r31,r25
+ 128 00f6 CF01      		movw r24,r30
+ 129 00f8 F7FF      		sbrs r31,7
+ 130 00fa 00C0      		rjmp .L12
+ 131 00fc 9095      		com r25
+ 132 00fe 8195      		neg r24
+ 133 0100 9F4F      		sbci r25,lo8(-1)
+ 134               	.L12:
+ 135 0102 0697      		sbiw r24,6
+ 136 0104 04F4      		brge .L11
+ 137 0106 8091 0000 		lds r24,SenderOkay
+ 138 010a 883C      		cpi r24,lo8(-56)
+ 139 010c 00F4      		brsh .L13
+ 140 010e 8091 0000 		lds r24,SenderOkay
+ 141 0112 865F      		subi r24,lo8(-(10))
+ 142 0114 00C0      		rjmp .L55
+ 143               	.L13:
+ 144 0116 88EC      		ldi r24,lo8(-56)
+ 145               	.L55:
+ 146 0118 8093 0000 		sts SenderOkay,r24
+ 147               	.L11:
+ 148 011c F801      		movw r30,r16
+ 149 011e EE0F      		lsl r30
+ 150 0120 FF1F      		rol r31
+ 151 0122 E050      		subi r30,lo8(-(PPM_in))
+ 152 0124 F040      		sbci r31,hi8(-(PPM_in))
+ 153 0126 2081      		ld r18,Z
+ 154 0128 3181      		ldd r19,Z+1
+ 155 012a C901      		movw r24,r18
+ 156 012c 880F      		lsl r24
+ 157 012e 991F      		rol r25
+ 158 0130 820F      		add r24,r18
+ 159 0132 931F      		adc r25,r19
+ 160 0134 8C0F      		add r24,r28
+ 161 0136 9D1F      		adc r25,r29
+ 162 0138 64E0      		ldi r22,lo8(4)
+ 163 013a 70E0      		ldi r23,hi8(4)
+ 164 013c 0E94 0000 		call __divmodhi4
+ 165 0140 9B01      		movw r18,r22
+ 166 0142 CE01      		movw r24,r28
+ 167 0144 0196      		adiw r24,1
+ 168 0146 8617      		cp r24,r22
+ 169 0148 9707      		cpc r25,r23
+ 170 014a 04F4      		brge .L14
+ 171 014c 2150      		subi r18,lo8(-(-1))
+ 172 014e 3040      		sbci r19,hi8(-(-1))
+ 173 0150 00C0      		rjmp .L15
+ 174               	.L14:
+ 175 0152 2197      		sbiw r28,1
+ 176 0154 6C17      		cp r22,r28
+ 177 0156 7D07      		cpc r23,r29
+ 178 0158 04F4      		brge .L15
+ 179 015a 2F5F      		subi r18,lo8(-(1))
+ 180 015c 3F4F      		sbci r19,hi8(-(1))
+ 181               	.L15:
+ 182 015e 8091 0000 		lds r24,SenderOkay
+ 183 0162 E801      		movw r28,r16
+ 184 0164 CC0F      		lsl r28
+ 185 0166 DD1F      		rol r29
+ 186 0168 833C      		cpi r24,lo8(-61)
+ 187 016a 00F0      		brlo .L16
+ 188 016c FE01      		movw r30,r28
+ 189 016e E050      		subi r30,lo8(-(PPM_in))
+ 190 0170 F040      		sbci r31,hi8(-(PPM_in))
+ 191 0172 8081      		ld r24,Z
+ 192 0174 9181      		ldd r25,Z+1
+ 193 0176 A901      		movw r20,r18
+ 194 0178 481B      		sub r20,r24
+ 195 017a 590B      		sbc r21,r25
+ 196 017c CA01      		movw r24,r20
+ 197 017e 63E0      		ldi r22,lo8(3)
+ 198 0180 70E0      		ldi r23,hi8(3)
+ 199 0182 0E94 0000 		call __divmodhi4
+ 200 0186 CB01      		movw r24,r22
+ 201 0188 880F      		lsl r24
+ 202 018a 991F      		rol r25
+ 203 018c 860F      		add r24,r22
+ 204 018e 971F      		adc r25,r23
+ 205 0190 C050      		subi r28,lo8(-(PPM_diff))
+ 206 0192 D040      		sbci r29,hi8(-(PPM_diff))
+ 207 0194 9983      		std Y+1,r25
+ 208 0196 8883      		st Y,r24
+ 209 0198 00C0      		rjmp .L17
+ 210               	.L16:
+ 211 019a C050      		subi r28,lo8(-(PPM_diff))
+ 212 019c D040      		sbci r29,hi8(-(PPM_diff))
+ 213 019e 1982      		std Y+1,__zero_reg__
+ 214 01a0 1882      		st Y,__zero_reg__
+ 215               	.L17:
+ 216 01a2 F801      		movw r30,r16
+ 217 01a4 EE0F      		lsl r30
+ 218 01a6 FF1F      		rol r31
+ 219 01a8 E050      		subi r30,lo8(-(PPM_in))
+ 220 01aa F040      		sbci r31,hi8(-(PPM_in))
+ 221 01ac 3183      		std Z+1,r19
+ 222 01ae 2083      		st Z,r18
+ 223               	.L10:
+ 224 01b0 F801      		movw r30,r16
+ 225 01b2 3196      		adiw r30,1
+ 226 01b4 F093 0000 		sts (index.2232)+1,r31
+ 227 01b8 E093 0000 		sts index.2232,r30
+ 228 01bc 8091 0000 		lds r24,PlatinenVersion
+ 229 01c0 8431      		cpi r24,lo8(20)
+ 230 01c2 00F0      		brlo .+2
+ 231 01c4 00C0      		rjmp .L53
+ 232 01c6 E530      		cpi r30,5
+ 233 01c8 F105      		cpc r31,__zero_reg__
+ 234 01ca 01F4      		brne .L18
+ 235 01cc 5D9A      		sbi 43-32,5
+ 236 01ce 00C0      		rjmp .L19
+ 237               	.L18:
+ 238 01d0 5D98      		cbi 43-32,5
+ 239 01d2 E630      		cpi r30,6
+ 240 01d4 F105      		cpc r31,__zero_reg__
+ 241 01d6 01F4      		brne .L19
+ 242 01d8 5C9A      		sbi 43-32,4
+ 243 01da 00C0      		rjmp .L20
+ 244               	.L19:
+ 245 01dc 5C98      		cbi 43-32,4
+ 246 01de 3797      		sbiw r30,7
+ 247 01e0 01F4      		brne .L20
+ 248 01e2 5B9A      		sbi 43-32,3
+ 249 01e4 00C0      		rjmp .L53
+ 250               	.L20:
+ 251 01e6 5B98      		cbi 43-32,3
+ 252 01e8 00C0      		rjmp .L53
+ 253               	.L6:
+ 254 01ea 2091 8600 		lds r18,134
+ 255 01ee 3091 8700 		lds r19,(134)+1
+ 256 01f2 8091 0000 		lds r24,AltICR.2233
+ 257 01f6 9091 0000 		lds r25,(AltICR.2233)+1
+ 258 01fa 281B      		sub r18,r24
+ 259 01fc 390B      		sbc r19,r25
+ 260 01fe 8091 8600 		lds r24,134
+ 261 0202 9091 8700 		lds r25,(134)+1
+ 262 0206 9093 0000 		sts (AltICR.2233)+1,r25
+ 263 020a 8093 0000 		sts AltICR.2233,r24
+ 264 020e C901      		movw r24,r18
+ 265 0210 8D54      		subi r24,lo8(-(-1101))
+ 266 0212 9440      		sbci r25,hi8(-(-1101))
+ 267 0214 4091 0000 		lds r20,index.2240
+ 268 0218 835F      		subi r24,lo8(6899)
+ 269 021a 9A41      		sbci r25,hi8(6899)
+ 270 021c 00F0      		brlo .+2
+ 271 021e 00C0      		rjmp .L21
+ 272 0220 4093 0000 		sts tmpChannels,r20
+ 273 0224 8091 0000 		lds r24,tmpChannels
+ 274 0228 8430      		cpi r24,lo8(4)
+ 275 022a 00F4      		brsh .+2
+ 276 022c 00C0      		rjmp .L22
+ 277 022e 9091 0000 		lds r25,Channels
+ 278 0232 8091 0000 		lds r24,tmpChannels
+ 279 0236 9817      		cp r25,r24
+ 280 0238 01F0      		breq .+2
+ 281 023a 00C0      		rjmp .L22
+ 282 023c 3091 0000 		lds r19,okay_cnt.2241
+ 283 0240 3B30      		cpi r19,lo8(11)
+ 284 0242 00F0      		brlo .L23
+ 285 0244 1092 0000 		sts NewPpmData,__zero_reg__
+ 286 0248 20E0      		ldi r18,lo8(0)
+ 287 024a 00C0      		rjmp .L24
+ 288               	.L26:
+ 289 024c 3F31      		cpi r19,lo8(31)
+ 290 024e 00F0      		brlo .L25
+ 291 0250 E22F      		mov r30,r18
+ 292 0252 F0E0      		ldi r31,lo8(0)
+ 293 0254 EE0F      		lsl r30
+ 294 0256 FF1F      		rol r31
+ 295 0258 DF01      		movw r26,r30
+ 296 025a A050      		subi r26,lo8(-(PPM_in))
+ 297 025c B040      		sbci r27,hi8(-(PPM_in))
+ 298 025e 8D91      		ld r24,X+
+ 299 0260 9C91      		ld r25,X
+ 300 0262 DF01      		movw r26,r30
+ 301 0264 A050      		subi r26,lo8(-(old_ppm_in.2236))
+ 302 0266 B040      		sbci r27,hi8(-(old_ppm_in.2236))
+ 303 0268 8D93      		st X+,r24
+ 304 026a 9C93      		st X,r25
+ 305 026c DF01      		movw r26,r30
+ 306 026e A050      		subi r26,lo8(-(PPM_diff))
+ 307 0270 B040      		sbci r27,hi8(-(PPM_diff))
+ 308 0272 8D91      		ld r24,X+
+ 309 0274 9C91      		ld r25,X
+ 310 0276 E050      		subi r30,lo8(-(old_ppm_diff.2237))
+ 311 0278 F040      		sbci r31,hi8(-(old_ppm_diff.2237))
+ 312 027a 9183      		std Z+1,r25
+ 313 027c 8083      		st Z,r24
+ 314               	.L25:
+ 315 027e E22F      		mov r30,r18
+ 316 0280 F0E0      		ldi r31,lo8(0)
+ 317 0282 EE0F      		lsl r30
+ 318 0284 FF1F      		rol r31
+ 319 0286 DF01      		movw r26,r30
+ 320 0288 A050      		subi r26,lo8(-(ppm_in.2234))
+ 321 028a B040      		sbci r27,hi8(-(ppm_in.2234))
+ 322 028c 8D91      		ld r24,X+
+ 323 028e 9C91      		ld r25,X
+ 324 0290 DF01      		movw r26,r30
+ 325 0292 A050      		subi r26,lo8(-(PPM_in))
+ 326 0294 B040      		sbci r27,hi8(-(PPM_in))
+ 327 0296 1196      		adiw r26,1
+ 328 0298 9C93      		st X,r25
+ 329 029a 8E93      		st -X,r24
+ 330 029c DF01      		movw r26,r30
+ 331 029e A050      		subi r26,lo8(-(ppm_diff.2235))
+ 332 02a0 B040      		sbci r27,hi8(-(ppm_diff.2235))
+ 333 02a2 8D91      		ld r24,X+
+ 334 02a4 9C91      		ld r25,X
+ 335 02a6 E050      		subi r30,lo8(-(PPM_diff))
+ 336 02a8 F040      		sbci r31,hi8(-(PPM_diff))
+ 337 02aa 9183      		std Z+1,r25
+ 338 02ac 8083      		st Z,r24
+ 339 02ae 2F5F      		subi r18,lo8(-(1))
+ 340               	.L24:
+ 341 02b0 2D30      		cpi r18,lo8(13)
+ 342 02b2 00F0      		brlo .L26
+ 343 02b4 3F3F      		cpi r19,lo8(-1)
+ 344 02b6 01F0      		breq .L27
+ 345               	.L23:
+ 346 02b8 3F5F      		subi r19,lo8(-(1))
+ 347 02ba 3093 0000 		sts okay_cnt.2241,r19
+ 348 02be 00C0      		rjmp .L27
+ 349               	.L22:
+ 350 02c0 8091 0000 		lds r24,okay_cnt.2241
+ 351 02c4 8536      		cpi r24,lo8(101)
+ 352 02c6 00F0      		brlo .L28
+ 353 02c8 8AE0      		ldi r24,lo8(10)
+ 354 02ca 8093 0000 		sts okay_cnt.2241,r24
+ 355 02ce 00C0      		rjmp .L29
+ 356               	.L28:
+ 357 02d0 1092 0000 		sts okay_cnt.2241,__zero_reg__
+ 358               	.L29:
+ 359 02d4 8091 0000 		lds r24,PlatinenVersion
+ 360 02d8 8A30      		cpi r24,lo8(10)
+ 361 02da 01F0      		breq .L30
+ 362 02dc 8431      		cpi r24,lo8(20)
+ 363 02de 00F0      		brlo .L31
+ 364               	.L30:
+ 365 02e0 289A      		sbi 37-32,0
+ 366 02e2 00C0      		rjmp .L27
+ 367               	.L31:
+ 368 02e4 2898      		cbi 37-32,0
+ 369               	.L27:
+ 370 02e6 81E0      		ldi r24,lo8(1)
+ 371 02e8 8093 0000 		sts index.2240,r24
+ 372 02ec 8091 0000 		lds r24,MotorenEin
+ 373 02f0 8823      		tst r24
+ 374 02f2 01F0      		breq .+2
+ 375 02f4 00C0      		rjmp .L53
+ 376 02f6 8091 0000 		lds r24,tmpChannels
+ 377 02fa 8093 0000 		sts Channels,r24
+ 378 02fe 00C0      		rjmp .L53
+ 379               	.L21:
+ 380 0300 4D30      		cpi r20,lo8(13)
+ 381 0302 00F0      		brlo .+2
+ 382 0304 00C0      		rjmp .L32
+ 383 0306 C901      		movw r24,r18
+ 384 0308 8B5F      		subi r24,lo8(-(-251))
+ 385 030a 9040      		sbci r25,hi8(-(-251))
+ 386 030c 845B      		subi r24,lo8(436)
+ 387 030e 9140      		sbci r25,hi8(436)
+ 388 0310 00F0      		brlo .+2
+ 389 0312 00C0      		rjmp .L33
+ 390 0314 E901      		movw r28,r18
+ 391 0316 C25D      		subi r28,lo8(-(-466))
+ 392 0318 D140      		sbci r29,hi8(-(-466))
+ 393 031a 042F      		mov r16,r20
+ 394 031c 10E0      		ldi r17,lo8(0)
+ 395 031e F801      		movw r30,r16
+ 396 0320 EE0F      		lsl r30
+ 397 0322 FF1F      		rol r31
+ 398 0324 E050      		subi r30,lo8(-(ppm_in.2234))
+ 399 0326 F040      		sbci r31,hi8(-(ppm_in.2234))
+ 400 0328 0190      		ld __tmp_reg__,Z+
+ 401 032a F081      		ld r31,Z
+ 402 032c E02D      		mov r30,__tmp_reg__
+ 403 032e CE01      		movw r24,r28
+ 404 0330 8E1B      		sub r24,r30
+ 405 0332 9F0B      		sbc r25,r31
+ 406 0334 0596      		adiw r24,5
+ 407 0336 0B97      		sbiw r24,11
+ 408 0338 00F4      		brsh .L34
+ 409 033a 8091 0000 		lds r24,okay_cnt.2241
+ 410 033e 8A31      		cpi r24,lo8(26)
+ 411 0340 00F0      		brlo .L35
+ 412 0342 8091 0000 		lds r24,SenderOkay
+ 413 0346 865F      		subi r24,lo8(-(10))
+ 414 0348 00C0      		rjmp .L56
+ 415               	.L35:
+ 416 034a 8B30      		cpi r24,lo8(11)
+ 417 034c 00F0      		brlo .L36
+ 418 034e 8091 0000 		lds r24,SenderOkay
+ 419 0352 8E5F      		subi r24,lo8(-(2))
+ 420               	.L56:
+ 421 0354 8093 0000 		sts SenderOkay,r24
+ 422               	.L36:
+ 423 0358 8091 0000 		lds r24,SenderOkay
+ 424 035c 893C      		cpi r24,lo8(-55)
+ 425 035e 00F0      		brlo .L34
+ 426 0360 88EC      		ldi r24,lo8(-56)
+ 427 0362 8093 0000 		sts SenderOkay,r24
+ 428               	.L34:
+ 429 0366 CF01      		movw r24,r30
+ 430 0368 880F      		lsl r24
+ 431 036a 991F      		rol r25
+ 432 036c 8E0F      		add r24,r30
+ 433 036e 9F1F      		adc r25,r31
+ 434 0370 8C0F      		add r24,r28
+ 435 0372 9D1F      		adc r25,r29
+ 436 0374 64E0      		ldi r22,lo8(4)
+ 437 0376 70E0      		ldi r23,hi8(4)
+ 438 0378 0E94 0000 		call __divmodhi4
+ 439 037c 9B01      		movw r18,r22
+ 440 037e CE01      		movw r24,r28
+ 441 0380 0196      		adiw r24,1
+ 442 0382 8617      		cp r24,r22
+ 443 0384 9707      		cpc r25,r23
+ 444 0386 04F4      		brge .L37
+ 445 0388 2150      		subi r18,lo8(-(-1))
+ 446 038a 3040      		sbci r19,hi8(-(-1))
+ 447 038c 00C0      		rjmp .L38
+ 448               	.L37:
+ 449 038e 2197      		sbiw r28,1
+ 450 0390 6C17      		cp r22,r28
+ 451 0392 7D07      		cpc r23,r29
+ 452 0394 04F4      		brge .L38
+ 453 0396 2F5F      		subi r18,lo8(-(1))
+ 454 0398 3F4F      		sbci r19,hi8(-(1))
+ 455               	.L38:
+ 456 039a 8091 0000 		lds r24,SenderOkay
+ 457 039e E801      		movw r28,r16
+ 458 03a0 CC0F      		lsl r28
+ 459 03a2 DD1F      		rol r29
+ 460 03a4 8E3B      		cpi r24,lo8(-66)
+ 461 03a6 00F0      		brlo .L39
+ 462 03a8 C050      		subi r28,lo8(-(ppm_diff.2235))
+ 463 03aa D040      		sbci r29,hi8(-(ppm_diff.2235))
+ 464 03ac C901      		movw r24,r18
+ 465 03ae 8E1B      		sub r24,r30
+ 466 03b0 9F0B      		sbc r25,r31
+ 467 03b2 63E0      		ldi r22,lo8(3)
+ 468 03b4 70E0      		ldi r23,hi8(3)
+ 469 03b6 0E94 0000 		call __divmodhi4
+ 470 03ba CB01      		movw r24,r22
+ 471 03bc 880F      		lsl r24
+ 472 03be 991F      		rol r25
+ 473 03c0 860F      		add r24,r22
+ 474 03c2 971F      		adc r25,r23
+ 475 03c4 9983      		std Y+1,r25
+ 476 03c6 8883      		st Y,r24
+ 477 03c8 00C0      		rjmp .L40
+ 478               	.L39:
+ 479 03ca C050      		subi r28,lo8(-(ppm_diff.2235))
+ 480 03cc D040      		sbci r29,hi8(-(ppm_diff.2235))
+ 481 03ce 1982      		std Y+1,__zero_reg__
+ 482 03d0 1882      		st Y,__zero_reg__
+ 483               	.L40:
+ 484 03d2 000F      		lsl r16
+ 485 03d4 111F      		rol r17
+ 486 03d6 0050      		subi r16,lo8(-(ppm_in.2234))
+ 487 03d8 1040      		sbci r17,hi8(-(ppm_in.2234))
+ 488 03da F801      		movw r30,r16
+ 489 03dc 3183      		std Z+1,r19
+ 490 03de 2083      		st Z,r18
+ 491 03e0 00C0      		rjmp .L41
+ 492               	.L33:
+ 493 03e2 8091 0000 		lds r24,PlatinenVersion
+ 494 03e6 8A30      		cpi r24,lo8(10)
+ 495 03e8 01F0      		breq .L42
+ 496 03ea 8431      		cpi r24,lo8(20)
+ 497 03ec 00F0      		brlo .L43
+ 498               	.L42:
+ 499 03ee 289A      		sbi 37-32,0
+ 500 03f0 00C0      		rjmp .L41
+ 501               	.L43:
+ 502 03f2 2898      		cbi 37-32,0
+ 503               	.L41:
+ 504 03f4 8091 0000 		lds r24,PlatinenVersion
+ 505 03f8 8431      		cpi r24,lo8(20)
+ 506 03fa 00F4      		brsh .L44
+ 507 03fc 4530      		cpi r20,lo8(5)
+ 508 03fe 01F4      		brne .L45
+ 509 0400 5D9A      		sbi 43-32,5
+ 510 0402 00C0      		rjmp .L46
+ 511               	.L45:
+ 512 0404 5D98      		cbi 43-32,5
+ 513 0406 4630      		cpi r20,lo8(6)
+ 514 0408 01F4      		brne .L46
+ 515 040a 5C9A      		sbi 43-32,4
+ 516 040c 00C0      		rjmp .L47
+ 517               	.L46:
+ 518 040e 5C98      		cbi 43-32,4
+ 519 0410 4730      		cpi r20,lo8(7)
+ 520 0412 01F4      		brne .L47
+ 521 0414 5B9A      		sbi 43-32,3
+ 522 0416 00C0      		rjmp .L44
+ 523               	.L47:
+ 524 0418 5B98      		cbi 43-32,3
+ 525 041a 00C0      		rjmp .L44
+ 526               	.L32:
+ 527 041c 4431      		cpi r20,lo8(20)
+ 528 041e 00F4      		brsh .L48
+ 529               	.L44:
+ 530 0420 4F5F      		subi r20,lo8(-(1))
+ 531 0422 4093 0000 		sts index.2240,r20
+ 532 0426 00C0      		rjmp .L53
+ 533               	.L48:
+ 534 0428 4431      		cpi r20,lo8(20)
+ 535 042a 01F4      		brne .L53
+ 536 042c 8091 0000 		lds r24,PlatinenVersion
+ 537 0430 8A30      		cpi r24,lo8(10)
+ 538 0432 01F0      		breq .L49
+ 539 0434 8431      		cpi r24,lo8(20)
+ 540 0436 00F0      		brlo .L50
+ 541               	.L49:
+ 542 0438 289A      		sbi 37-32,0
+ 543 043a 00C0      		rjmp .L51
+ 544               	.L50:
+ 545 043c 2898      		cbi 37-32,0
+ 546               	.L51:
+ 547 043e 8EE1      		ldi r24,lo8(30)
+ 548 0440 8093 0000 		sts index.2240,r24
+ 549 0444 C0E0      		ldi r28,lo8(old_ppm_in.2236)
+ 550 0446 D0E0      		ldi r29,hi8(old_ppm_in.2236)
+ 551 0448 20E0      		ldi r18,lo8(0)
+ 552 044a 30E0      		ldi r19,hi8(0)
+ 553               	.L52:
+ 554 044c 8991      		ld r24,Y+
+ 555 044e 9991      		ld r25,Y+
+ 556 0450 F901      		movw r30,r18
+ 557 0452 EE0F      		lsl r30
+ 558 0454 FF1F      		rol r31
+ 559 0456 DF01      		movw r26,r30
+ 560 0458 A050      		subi r26,lo8(-(PPM_in))
+ 561 045a B040      		sbci r27,hi8(-(PPM_in))
+ 562 045c 1196      		adiw r26,1
+ 563 045e 9C93      		st X,r25
+ 564 0460 8E93      		st -X,r24
+ 565 0462 E050      		subi r30,lo8(-(PPM_diff))
+ 566 0464 F040      		sbci r31,hi8(-(PPM_diff))
+ 567 0466 1182      		std Z+1,__zero_reg__
+ 568 0468 1082      		st Z,__zero_reg__
+ 569 046a 2F5F      		subi r18,lo8(-(1))
+ 570 046c 3F4F      		sbci r19,hi8(-(1))
+ 571 046e 2D30      		cpi r18,13
+ 572 0470 3105      		cpc r19,__zero_reg__
+ 573 0472 01F4      		brne .L52
+ 574               	.L53:
+ 575               	/* epilogue start */
+ 576 0474 FF91      		pop r31
+ 577 0476 EF91      		pop r30
+ 578 0478 DF91      		pop r29
+ 579 047a CF91      		pop r28
+ 580 047c BF91      		pop r27
+ 581 047e AF91      		pop r26
+ 582 0480 9F91      		pop r25
+ 583 0482 8F91      		pop r24
+ 584 0484 7F91      		pop r23
+ 585 0486 6F91      		pop r22
+ 586 0488 5F91      		pop r21
+ 587 048a 4F91      		pop r20
+ 588 048c 3F91      		pop r19
+ 589 048e 2F91      		pop r18
+ 590 0490 1F91      		pop r17
+ 591 0492 0F91      		pop r16
+ 592 0494 0F90      		pop r0
+ 593 0496 0FBE      		out __SREG__,r0
+ 594 0498 0F90      		pop r0
+ 595 049a 1F90      		pop __zero_reg__
+ 596 049c 1895      		reti
+ 598               	.global	tmpChannels
+ 599               	.global	tmpChannels
+ 600               		.section .bss
+ 603               	tmpChannels:
+ 604 0000 00        		.skip 1,0
+ 605               	.global	NewPpmData
+ 606               		.data
+ 609               	NewPpmData:
+ 610 0000 01        		.byte	1
+ 611               		.lcomm okay_cnt.2241,1
+ 612               		.lcomm index.2240,1
+ 613               		.lcomm old_ppm_diff.2237,26
+ 614               		.lcomm old_ppm_in.2236,26
+ 615               		.lcomm ppm_diff.2235,26
+ 616               		.lcomm ppm_in.2234,26
+ 617               		.lcomm AltICR.2233,2
+ 618               		.lcomm index.2232,2
+ 619               		.lcomm AltICR.2229,2
+ 620               		.comm PPM_in,52,1
+ 621               		.comm PPM_diff,52,1
+ 622               		.comm Channels,1,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 rc.c
+     /tmp/ccR0pFdb.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccR0pFdb.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccR0pFdb.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccR0pFdb.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccR0pFdb.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccR0pFdb.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccR0pFdb.s:13     .text:0000000000000000 rc_sum_init
+                            *COM*:0000000000000034 PPM_in
+                            *COM*:0000000000000034 PPM_diff
+     /tmp/ccR0pFdb.s:47     .text:0000000000000040 __vector_12
+     /tmp/ccR0pFdb.s:618    .bss:000000000000006f AltICR.2229
+     /tmp/ccR0pFdb.s:617    .bss:000000000000006d index.2232
+                            *COM*:0000000000000001 Channels
+     /tmp/ccR0pFdb.s:609    .data:0000000000000000 NewPpmData
+     /tmp/ccR0pFdb.s:616    .bss:000000000000006b AltICR.2233
+     /tmp/ccR0pFdb.s:611    .bss:0000000000000002 index.2240
+     /tmp/ccR0pFdb.s:603    .bss:0000000000000000 tmpChannels
+                             .bss:0000000000000001 okay_cnt.2241
+     /tmp/ccR0pFdb.s:613    .bss:000000000000001d old_ppm_in.2236
+     /tmp/ccR0pFdb.s:612    .bss:0000000000000003 old_ppm_diff.2237
+     /tmp/ccR0pFdb.s:615    .bss:0000000000000051 ppm_in.2234
+     /tmp/ccR0pFdb.s:614    .bss:0000000000000037 ppm_diff.2235
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+AdNeutralGier
+AdNeutralRoll
+AdNeutralNick
+EE_Parameter
+SenderOkay
+__divmodhi4
+PlatinenVersion
+MotorenEin

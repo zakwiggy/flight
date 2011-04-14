@@ -1,0 +1,97 @@
+   1               		.file	"GPS.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	GPS_Neutral
+  13               	GPS_Neutral:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 8091 0000 		lds r24,GpsAktuell_X
+  17 0004 9091 0000 		lds r25,(GpsAktuell_X)+1
+  18 0008 A091 0000 		lds r26,(GpsAktuell_X)+2
+  19 000c B091 0000 		lds r27,(GpsAktuell_X)+3
+  20 0010 8093 0000 		sts GpsZiel_X,r24
+  21 0014 9093 0000 		sts (GpsZiel_X)+1,r25
+  22 0018 A093 0000 		sts (GpsZiel_X)+2,r26
+  23 001c B093 0000 		sts (GpsZiel_X)+3,r27
+  24 0020 8091 0000 		lds r24,GpsAktuell_Y
+  25 0024 9091 0000 		lds r25,(GpsAktuell_Y)+1
+  26 0028 A091 0000 		lds r26,(GpsAktuell_Y)+2
+  27 002c B091 0000 		lds r27,(GpsAktuell_Y)+3
+  28 0030 8093 0000 		sts GpsZiel_Y,r24
+  29 0034 9093 0000 		sts (GpsZiel_Y)+1,r25
+  30 0038 A093 0000 		sts (GpsZiel_Y)+2,r26
+  31 003c B093 0000 		sts (GpsZiel_Y)+3,r27
+  32               	/* epilogue start */
+  33 0040 0895      		ret
+  35               	.global	GPS_BerechneZielrichtung
+  37               	GPS_BerechneZielrichtung:
+  38               	/* prologue: function */
+  39               	/* frame size = 0 */
+  40 0042 1092 0000 		sts (GPS_Nick)+1,__zero_reg__
+  41 0046 1092 0000 		sts GPS_Nick,__zero_reg__
+  42 004a 1092 0000 		sts (GPS_Roll)+1,__zero_reg__
+  43 004e 1092 0000 		sts GPS_Roll,__zero_reg__
+  44               	/* epilogue start */
+  45 0052 0895      		ret
+  47               	.global	GPS_Nick
+  48               	.global	GPS_Nick
+  49               		.section .bss
+  52               	GPS_Nick:
+  53 0000 0000      		.skip 2,0
+  54               	.global	GPS_Roll
+  55               	.global	GPS_Roll
+  58               	GPS_Roll:
+  59 0002 0000      		.skip 2,0
+  60               	.global	GPS_Nick2
+  61               	.global	GPS_Nick2
+  64               	GPS_Nick2:
+  65 0004 0000      		.skip 2,0
+  66               	.global	GPS_Roll2
+  67               	.global	GPS_Roll2
+  70               	GPS_Roll2:
+  71 0006 0000      		.skip 2,0
+  72               	.global	GpsAktuell_X
+  73               	.global	GpsAktuell_X
+  76               	GpsAktuell_X:
+  77 0008 0000 0000 		.skip 4,0
+  78               	.global	GpsAktuell_Y
+  79               	.global	GpsAktuell_Y
+  82               	GpsAktuell_Y:
+  83 000c 0000 0000 		.skip 4,0
+  84               	.global	GpsZiel_X
+  85               	.global	GpsZiel_X
+  88               	GpsZiel_X:
+  89 0010 0000 0000 		.skip 4,0
+  90               	.global	GpsZiel_Y
+  91               	.global	GpsZiel_Y
+  94               	GpsZiel_Y:
+  95 0014 0000 0000 		.skip 4,0
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 GPS.c
+     /tmp/cc3nFRYT.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cc3nFRYT.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cc3nFRYT.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cc3nFRYT.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cc3nFRYT.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc3nFRYT.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc3nFRYT.s:13     .text:0000000000000000 GPS_Neutral
+     /tmp/cc3nFRYT.s:76     .bss:0000000000000008 GpsAktuell_X
+     /tmp/cc3nFRYT.s:88     .bss:0000000000000010 GpsZiel_X
+     /tmp/cc3nFRYT.s:82     .bss:000000000000000c GpsAktuell_Y
+     /tmp/cc3nFRYT.s:94     .bss:0000000000000014 GpsZiel_Y
+     /tmp/cc3nFRYT.s:37     .text:0000000000000042 GPS_BerechneZielrichtung
+     /tmp/cc3nFRYT.s:52     .bss:0000000000000000 GPS_Nick
+     /tmp/cc3nFRYT.s:58     .bss:0000000000000002 GPS_Roll
+     /tmp/cc3nFRYT.s:64     .bss:0000000000000004 GPS_Nick2
+     /tmp/cc3nFRYT.s:70     .bss:0000000000000006 GPS_Roll2
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss

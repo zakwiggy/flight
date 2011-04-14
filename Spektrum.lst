@@ -1,0 +1,405 @@
+   1               		.file	"Spektrum.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	SpektrumUartInit
+  13               	SpektrumUartInit:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 9FB7      		in r25,__SREG__
+  17               	/* #APP */
+  18               	 ;  85 "Spektrum.c" 1
+  19 0002 F894      		cli
+  20               	 ;  0 "" 2
+  21               	/* #NOAPP */
+  22 0004 8091 C900 		lds r24,201
+  23 0008 8F77      		andi r24,lo8(127)
+  24 000a 8093 C900 		sts 201,r24
+  25 000e 8091 C900 		lds r24,201
+  26 0012 8F7B      		andi r24,lo8(-65)
+  27 0014 8093 C900 		sts 201,r24
+  28 0018 8091 C900 		lds r24,201
+  29 001c 8F7D      		andi r24,lo8(-33)
+  30 001e 8093 C900 		sts 201,r24
+  31 0022 5A9A      		sbi 43-32,2
+  32 0024 5298      		cbi 42-32,2
+  33 0026 5B9A      		sbi 43-32,3
+  34 0028 539A      		sbi 42-32,3
+  35 002a 1092 CD00 		sts 205,__zero_reg__
+  36 002e 84E1      		ldi r24,lo8(20)
+  37 0030 8093 CC00 		sts 204,r24
+  38 0034 8091 C800 		lds r24,200
+  39 0038 8260      		ori r24,lo8(2)
+  40 003a 8093 C800 		sts 200,r24
+  41 003e 80E1      		ldi r24,lo8(16)
+  42 0040 8093 C900 		sts 201,r24
+  43 0044 8091 CA00 		lds r24,202
+  44 0048 8F77      		andi r24,lo8(127)
+  45 004a 8093 CA00 		sts 202,r24
+  46 004e 8091 CA00 		lds r24,202
+  47 0052 8F7B      		andi r24,lo8(-65)
+  48 0054 8093 CA00 		sts 202,r24
+  49 0058 8091 CA00 		lds r24,202
+  50 005c 8F7D      		andi r24,lo8(-33)
+  51 005e 8093 CA00 		sts 202,r24
+  52 0062 8091 CA00 		lds r24,202
+  53 0066 8F7E      		andi r24,lo8(-17)
+  54 0068 8093 CA00 		sts 202,r24
+  55 006c 8091 CA00 		lds r24,202
+  56 0070 877F      		andi r24,lo8(-9)
+  57 0072 8093 CA00 		sts 202,r24
+  58 0076 8091 C900 		lds r24,201
+  59 007a 8B7F      		andi r24,lo8(-5)
+  60 007c 8093 C900 		sts 201,r24
+  61 0080 8091 CA00 		lds r24,202
+  62 0084 8460      		ori r24,lo8(4)
+  63 0086 8093 CA00 		sts 202,r24
+  64 008a 8091 CA00 		lds r24,202
+  65 008e 8260      		ori r24,lo8(2)
+  66 0090 8093 CA00 		sts 202,r24
+  67 0094 00C0      		rjmp .L2
+  68               	.L3:
+  69 0096 8091 CE00 		lds r24,206
+  70               	.L2:
+  71 009a 8091 C800 		lds r24,200
+  72 009e 87FD      		sbrc r24,7
+  73 00a0 00C0      		rjmp .L3
+  74 00a2 8091 C900 		lds r24,201
+  75 00a6 8068      		ori r24,lo8(-128)
+  76 00a8 8093 C900 		sts 201,r24
+  77 00ac 9FBF      		out __SREG__,r25
+  78               	/* epilogue start */
+  79 00ae 0895      		ret
+  81               	.global	SpektrumParser
+  83               	SpektrumParser:
+  84 00b0 0F93      		push r16
+  85 00b2 1F93      		push r17
+  86 00b4 CF93      		push r28
+  87 00b6 DF93      		push r29
+  88               	/* prologue: function */
+  89               	/* frame size = 0 */
+  90 00b8 982F      		mov r25,r24
+  91 00ba 8091 0000 		lds r24,ReSync.2275
+  92 00be 8130      		cpi r24,lo8(1)
+  93 00c0 01F4      		brne .L6
+  94 00c2 1092 0000 		sts ReSync.2275,__zero_reg__
+  95 00c6 84E4      		ldi r24,lo8(68)
+  96 00c8 8093 0000 		sts SpektrumTimer,r24
+  97 00cc 1092 0000 		sts FrameCnt.2273,__zero_reg__
+  98 00d0 1092 0000 		sts Sync.2272,__zero_reg__
+  99 00d4 1092 0000 		sts ByteHigh.2274,__zero_reg__
+ 100 00d8 00C0      		rjmp .L27
+ 101               	.L6:
+ 102 00da 20E0      		ldi r18,lo8(0)
+ 103 00dc 30E0      		ldi r19,hi8(0)
+ 104 00de 8091 0000 		lds r24,SpektrumTimer
+ 105 00e2 8823      		tst r24
+ 106 00e4 01F4      		brne .L8
+ 107 00e6 21E0      		ldi r18,lo8(1)
+ 108 00e8 30E0      		ldi r19,hi8(1)
+ 109               	.L8:
+ 110 00ea 8091 0000 		lds r24,Sync.2272
+ 111 00ee 8823      		tst r24
+ 112 00f0 01F4      		brne .L9
+ 113 00f2 232B      		or r18,r19
+ 114 00f4 01F0      		breq .L10
+ 115 00f6 81E0      		ldi r24,lo8(1)
+ 116 00f8 00C0      		rjmp .L31
+ 117               	.L10:
+ 118 00fa 84E4      		ldi r24,lo8(68)
+ 119 00fc 8093 0000 		sts SpektrumTimer,r24
+ 120 0100 1092 0000 		sts FrameCnt.2273,__zero_reg__
+ 121 0104 1092 0000 		sts Sync.2272,__zero_reg__
+ 122 0108 1092 0000 		sts ByteHigh.2274,__zero_reg__
+ 123 010c 00C0      		rjmp .L11
+ 124               	.L9:
+ 125 010e 8130      		cpi r24,lo8(1)
+ 126 0110 01F4      		brne .L12
+ 127 0112 232B      		or r18,r19
+ 128 0114 01F0      		breq .+2
+ 129 0116 00C0      		rjmp .L15
+ 130 0118 82E0      		ldi r24,lo8(2)
+ 131               	.L31:
+ 132 011a 8093 0000 		sts Sync.2272,r24
+ 133 011e 8091 0000 		lds r24,FrameCnt.2273
+ 134 0122 8F5F      		subi r24,lo8(-(1))
+ 135 0124 8093 0000 		sts FrameCnt.2273,r24
+ 136 0128 83E0      		ldi r24,lo8(3)
+ 137 012a 00C0      		rjmp .L30
+ 138               	.L12:
+ 139 012c 8230      		cpi r24,lo8(2)
+ 140 012e 01F4      		brne .L13
+ 141 0130 232B      		or r18,r19
+ 142 0132 01F0      		breq .+2
+ 143 0134 00C0      		rjmp .L15
+ 144 0136 83E0      		ldi r24,lo8(3)
+ 145 0138 8093 0000 		sts SpektrumTimer,r24
+ 146 013c 9093 0000 		sts ByteHigh.2274,r25
+ 147 0140 2091 0000 		lds r18,FrameCnt.2273
+ 148 0144 2230      		cpi r18,lo8(2)
+ 149 0146 01F4      		brne .L14
+ 150 0148 1092 0000 		sts Frame2.2276,__zero_reg__
+ 151 014c 97FF      		sbrs r25,7
+ 152 014e 00C0      		rjmp .L14
+ 153 0150 81E0      		ldi r24,lo8(1)
+ 154 0152 8093 0000 		sts Frame2.2276,r24
+ 155               	.L14:
+ 156 0156 83E0      		ldi r24,lo8(3)
+ 157 0158 8093 0000 		sts Sync.2272,r24
+ 158 015c 2F5F      		subi r18,lo8(-(1))
+ 159 015e 2093 0000 		sts FrameCnt.2273,r18
+ 160 0162 00C0      		rjmp .L11
+ 161               	.L13:
+ 162 0164 8330      		cpi r24,lo8(3)
+ 163 0166 01F0      		breq .+2
+ 164 0168 00C0      		rjmp .L15
+ 165 016a 232B      		or r18,r19
+ 166 016c 01F0      		breq .+2
+ 167 016e 00C0      		rjmp .L15
+ 168 0170 8093 0000 		sts SpektrumTimer,r24
+ 169 0174 82E0      		ldi r24,lo8(2)
+ 170 0176 8093 0000 		sts Sync.2272,r24
+ 171 017a 8091 0000 		lds r24,FrameCnt.2273
+ 172 017e 8F5F      		subi r24,lo8(-(1))
+ 173 0180 8093 0000 		sts FrameCnt.2273,r24
+ 174 0184 4091 0000 		lds r20,ByteHigh.2274
+ 175 0188 292F      		mov r18,r25
+ 176 018a 30E0      		ldi r19,lo8(0)
+ 177 018c 942F      		mov r25,r20
+ 178 018e 80E0      		ldi r24,lo8(0)
+ 179 0190 282B      		or r18,r24
+ 180 0192 392B      		or r19,r25
+ 181 0194 8091 0000 		lds r24,EE_Parameter+39
+ 182 0198 8130      		cpi r24,lo8(1)
+ 183 019a 01F4      		brne .L16
+ 184 019c 3370      		andi r19,hi8(1023)
+ 185 019e C901      		movw r24,r18
+ 186 01a0 8050      		subi r24,lo8(-(-512))
+ 187 01a2 9240      		sbci r25,hi8(-(-512))
+ 188 01a4 63E0      		ldi r22,lo8(3)
+ 189 01a6 70E0      		ldi r23,hi8(3)
+ 190 01a8 00C0      		rjmp .L28
+ 191               	.L16:
+ 192 01aa 8230      		cpi r24,lo8(2)
+ 193 01ac 01F4      		brne .L18
+ 194 01ae 3770      		andi r19,hi8(2047)
+ 195 01b0 C901      		movw r24,r18
+ 196 01b2 8050      		subi r24,lo8(-(-1024))
+ 197 01b4 9440      		sbci r25,hi8(-(-1024))
+ 198 01b6 66E0      		ldi r22,lo8(6)
+ 199 01b8 70E0      		ldi r23,hi8(6)
+ 200 01ba 0E94 0000 		call __divmodhi4
+ 201 01be EB01      		movw r28,r22
+ 202 01c0 4695      		lsr r20
+ 203 01c2 4695      		lsr r20
+ 204 01c4 4695      		lsr r20
+ 205 01c6 00C0      		rjmp .L29
+ 206               	.L18:
+ 207 01c8 3370      		andi r19,hi8(1023)
+ 208 01ca C901      		movw r24,r18
+ 209 01cc 8856      		subi r24,lo8(-(-360))
+ 210 01ce 9140      		sbci r25,hi8(-(-360))
+ 211 01d0 62E0      		ldi r22,lo8(2)
+ 212 01d2 70E0      		ldi r23,hi8(2)
+ 213               	.L28:
+ 214 01d4 0E94 0000 		call __divmodhi4
+ 215 01d8 EB01      		movw r28,r22
+ 216 01da 4695      		lsr r20
+ 217 01dc 4695      		lsr r20
+ 218               	.L29:
+ 219 01de 842F      		mov r24,r20
+ 220 01e0 90E0      		ldi r25,lo8(0)
+ 221 01e2 8F70      		andi r24,lo8(15)
+ 222 01e4 9070      		andi r25,hi8(15)
+ 223 01e6 8C01      		movw r16,r24
+ 224 01e8 0F5F      		subi r16,lo8(-(1))
+ 225 01ea 1F4F      		sbci r17,hi8(-(1))
+ 226 01ec 0D30      		cpi r16,13
+ 227 01ee 1105      		cpc r17,__zero_reg__
+ 228 01f0 00F0      		brlo .+2
+ 229 01f2 00C0      		rjmp .L11
+ 230 01f4 F801      		movw r30,r16
+ 231 01f6 EE0F      		lsl r30
+ 232 01f8 FF1F      		rol r31
+ 233 01fa E050      		subi r30,lo8(-(PPM_in))
+ 234 01fc F040      		sbci r31,hi8(-(PPM_in))
+ 235 01fe 8081      		ld r24,Z
+ 236 0200 9181      		ldd r25,Z+1
+ 237 0202 9E01      		movw r18,r28
+ 238 0204 281B      		sub r18,r24
+ 239 0206 390B      		sbc r19,r25
+ 240 0208 C901      		movw r24,r18
+ 241 020a 37FF      		sbrs r19,7
+ 242 020c 00C0      		rjmp .L20
+ 243 020e 9095      		com r25
+ 244 0210 8195      		neg r24
+ 245 0212 9F4F      		sbci r25,lo8(-1)
+ 246               	.L20:
+ 247 0214 0697      		sbiw r24,6
+ 248 0216 04F4      		brge .L19
+ 249 0218 8091 0000 		lds r24,SenderOkay
+ 250 021c 883C      		cpi r24,lo8(-56)
+ 251 021e 00F4      		brsh .L21
+ 252 0220 8091 0000 		lds r24,SenderOkay
+ 253 0224 865F      		subi r24,lo8(-(10))
+ 254 0226 8093 0000 		sts SenderOkay,r24
+ 255 022a 00C0      		rjmp .L19
+ 256               	.L21:
+ 257 022c 88EC      		ldi r24,lo8(-56)
+ 258 022e 8093 0000 		sts SenderOkay,r24
+ 259 0232 8091 6F00 		lds r24,111
+ 260 0236 8F7D      		andi r24,lo8(-33)
+ 261 0238 8093 6F00 		sts 111,r24
+ 262               	.L19:
+ 263 023c F801      		movw r30,r16
+ 264 023e EE0F      		lsl r30
+ 265 0240 FF1F      		rol r31
+ 266 0242 E050      		subi r30,lo8(-(PPM_in))
+ 267 0244 F040      		sbci r31,hi8(-(PPM_in))
+ 268 0246 2081      		ld r18,Z
+ 269 0248 3181      		ldd r19,Z+1
+ 270 024a C901      		movw r24,r18
+ 271 024c 880F      		lsl r24
+ 272 024e 991F      		rol r25
+ 273 0250 820F      		add r24,r18
+ 274 0252 931F      		adc r25,r19
+ 275 0254 8C0F      		add r24,r28
+ 276 0256 9D1F      		adc r25,r29
+ 277 0258 64E0      		ldi r22,lo8(4)
+ 278 025a 70E0      		ldi r23,hi8(4)
+ 279 025c 0E94 0000 		call __divmodhi4
+ 280 0260 9B01      		movw r18,r22
+ 281 0262 CE01      		movw r24,r28
+ 282 0264 0196      		adiw r24,1
+ 283 0266 8617      		cp r24,r22
+ 284 0268 9707      		cpc r25,r23
+ 285 026a 04F4      		brge .L22
+ 286 026c 2150      		subi r18,lo8(-(-1))
+ 287 026e 3040      		sbci r19,hi8(-(-1))
+ 288 0270 00C0      		rjmp .L23
+ 289               	.L22:
+ 290 0272 2197      		sbiw r28,1
+ 291 0274 6C17      		cp r22,r28
+ 292 0276 7D07      		cpc r23,r29
+ 293 0278 04F4      		brge .L23
+ 294 027a 2F5F      		subi r18,lo8(-(1))
+ 295 027c 3F4F      		sbci r19,hi8(-(1))
+ 296               	.L23:
+ 297 027e 8091 0000 		lds r24,SenderOkay
+ 298 0282 E801      		movw r28,r16
+ 299 0284 CC0F      		lsl r28
+ 300 0286 DD1F      		rol r29
+ 301 0288 843B      		cpi r24,lo8(-76)
+ 302 028a 00F0      		brlo .L24
+ 303 028c FE01      		movw r30,r28
+ 304 028e E050      		subi r30,lo8(-(PPM_in))
+ 305 0290 F040      		sbci r31,hi8(-(PPM_in))
+ 306 0292 8081      		ld r24,Z
+ 307 0294 9181      		ldd r25,Z+1
+ 308 0296 A901      		movw r20,r18
+ 309 0298 481B      		sub r20,r24
+ 310 029a 590B      		sbc r21,r25
+ 311 029c CA01      		movw r24,r20
+ 312 029e 63E0      		ldi r22,lo8(3)
+ 313 02a0 70E0      		ldi r23,hi8(3)
+ 314 02a2 0E94 0000 		call __divmodhi4
+ 315 02a6 CB01      		movw r24,r22
+ 316 02a8 880F      		lsl r24
+ 317 02aa 991F      		rol r25
+ 318 02ac 860F      		add r24,r22
+ 319 02ae 971F      		adc r25,r23
+ 320 02b0 C050      		subi r28,lo8(-(PPM_diff))
+ 321 02b2 D040      		sbci r29,hi8(-(PPM_diff))
+ 322 02b4 9983      		std Y+1,r25
+ 323 02b6 8883      		st Y,r24
+ 324 02b8 00C0      		rjmp .L25
+ 325               	.L24:
+ 326 02ba C050      		subi r28,lo8(-(PPM_diff))
+ 327 02bc D040      		sbci r29,hi8(-(PPM_diff))
+ 328 02be 1982      		std Y+1,__zero_reg__
+ 329 02c0 1882      		st Y,__zero_reg__
+ 330               	.L25:
+ 331 02c2 000F      		lsl r16
+ 332 02c4 111F      		rol r17
+ 333 02c6 0050      		subi r16,lo8(-(PPM_in))
+ 334 02c8 1040      		sbci r17,hi8(-(PPM_in))
+ 335 02ca F801      		movw r30,r16
+ 336 02cc 3183      		std Z+1,r19
+ 337 02ce 2083      		st Z,r18
+ 338 02d0 00C0      		rjmp .L11
+ 339               	.L15:
+ 340 02d2 81E0      		ldi r24,lo8(1)
+ 341 02d4 8093 0000 		sts ReSync.2275,r24
+ 342 02d8 1092 0000 		sts FrameCnt.2273,__zero_reg__
+ 343 02dc 1092 0000 		sts Frame2.2276,__zero_reg__
+ 344 02e0 84E4      		ldi r24,lo8(68)
+ 345               	.L30:
+ 346 02e2 8093 0000 		sts SpektrumTimer,r24
+ 347               	.L11:
+ 348 02e6 8091 0000 		lds r24,FrameCnt.2273
+ 349 02ea 8031      		cpi r24,lo8(16)
+ 350 02ec 00F0      		brlo .L27
+ 351 02ee 8091 0000 		lds r24,Frame2.2276
+ 352 02f2 8823      		tst r24
+ 353 02f4 01F4      		brne .L26
+ 354 02f6 8091 0000 		lds r24,ReSync.2275
+ 355 02fa 8823      		tst r24
+ 356 02fc 01F4      		brne .L26
+ 357 02fe 1092 0000 		sts NewPpmData,__zero_reg__
+ 358               	.L26:
+ 359 0302 1092 0000 		sts FrameCnt.2273,__zero_reg__
+ 360 0306 1092 0000 		sts Frame2.2276,__zero_reg__
+ 361 030a 1092 0000 		sts Sync.2272,__zero_reg__
+ 362 030e 84E4      		ldi r24,lo8(68)
+ 363 0310 8093 0000 		sts SpektrumTimer,r24
+ 364               	.L27:
+ 365               	/* epilogue start */
+ 366 0314 DF91      		pop r29
+ 367 0316 CF91      		pop r28
+ 368 0318 1F91      		pop r17
+ 369 031a 0F91      		pop r16
+ 370 031c 0895      		ret
+ 372               	.global	SpektrumTimer
+ 373               	.global	SpektrumTimer
+ 374               		.section .bss
+ 377               	SpektrumTimer:
+ 378 0000 00        		.skip 1,0
+ 379               		.lcomm Frame2.2276,1
+ 380               		.data
+ 383               	ReSync.2275:
+ 384 0000 01        		.byte	1
+ 385               		.lcomm ByteHigh.2274,1
+ 386               		.lcomm FrameCnt.2273,1
+ 387               		.lcomm Sync.2272,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 Spektrum.c
+     /tmp/ccAc6864.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccAc6864.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccAc6864.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccAc6864.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccAc6864.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccAc6864.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccAc6864.s:13     .text:0000000000000000 SpektrumUartInit
+     /tmp/ccAc6864.s:83     .text:00000000000000b0 SpektrumParser
+     /tmp/ccAc6864.s:383    .data:0000000000000000 ReSync.2275
+     /tmp/ccAc6864.s:377    .bss:0000000000000000 SpektrumTimer
+     /tmp/ccAc6864.s:385    .bss:0000000000000003 FrameCnt.2273
+     /tmp/ccAc6864.s:386    .bss:0000000000000004 Sync.2272
+     /tmp/ccAc6864.s:379    .bss:0000000000000002 ByteHigh.2274
+                             .bss:0000000000000001 Frame2.2276
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+EE_Parameter
+__divmodhi4
+PPM_in
+SenderOkay
+PPM_diff
+NewPpmData

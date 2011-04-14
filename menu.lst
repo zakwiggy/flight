@@ -1,0 +1,186 @@
+   1               		.file	"menu.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	LcdClear
+  13               	LcdClear:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 E0E0      		ldi r30,lo8(DisplayBuff)
+  17 0002 F0E0      		ldi r31,hi8(DisplayBuff)
+  18 0004 80E2      		ldi r24,lo8(32)
+  19               	.L2:
+  20 0006 8193      		st Z+,r24
+  21 0008 90E0      		ldi r25,hi8(DisplayBuff+80)
+  22 000a E030      		cpi r30,lo8(DisplayBuff+80)
+  23 000c F907      		cpc r31,r25
+  24 000e 01F4      		brne .L2
+  25               	/* epilogue start */
+  26 0010 0895      		ret
+  28               	.global	Menu_Putchar
+  30               	Menu_Putchar:
+  31               	/* prologue: function */
+  32               	/* frame size = 0 */
+  33 0012 9091 0000 		lds r25,DispPtr
+  34 0016 E0E0      		ldi r30,lo8(DisplayBuff)
+  35 0018 F0E0      		ldi r31,hi8(DisplayBuff)
+  36 001a E90F      		add r30,r25
+  37 001c F11D      		adc r31,__zero_reg__
+  38 001e 8083      		st Z,r24
+  39 0020 9F5F      		subi r25,lo8(-(1))
+  40 0022 9093 0000 		sts DispPtr,r25
+  41               	/* epilogue start */
+  42 0026 0895      		ret
+  44               	.global	Menu
+  46               	Menu:
+  47               	/* prologue: function */
+  48               	/* frame size = 0 */
+  49 0028 8091 0000 		lds r24,RemoteKeys
+  50 002c 282F      		mov r18,r24
+  51 002e 30E0      		ldi r19,lo8(0)
+  52 0030 80FF      		sbrs r24,0
+  53 0032 00C0      		rjmp .L8
+  54 0034 8091 0000 		lds r24,MenuePunkt
+  55 0038 8823      		tst r24
+  56 003a 01F0      		breq .L9
+  57 003c 8150      		subi r24,lo8(-(-1))
+  58 003e 00C0      		rjmp .L24
+  59               	.L9:
+  60 0040 8091 0000 		lds r24,MaxMenue
+  61               	.L24:
+  62 0044 8093 0000 		sts MenuePunkt,r24
+  63               	.L8:
+  64 0048 21FF      		sbrs r18,1
+  65 004a 00C0      		rjmp .L10
+  66 004c 9091 0000 		lds r25,MenuePunkt
+  67 0050 8091 0000 		lds r24,MaxMenue
+  68 0054 9817      		cp r25,r24
+  69 0056 01F4      		brne .L11
+  70 0058 1092 0000 		sts MenuePunkt,__zero_reg__
+  71 005c 00C0      		rjmp .L10
+  72               	.L11:
+  73 005e 9F5F      		subi r25,lo8(-(1))
+  74 0060 9093 0000 		sts MenuePunkt,r25
+  75               	.L10:
+  76 0064 C901      		movw r24,r18
+  77 0066 8370      		andi r24,lo8(3)
+  78 0068 9070      		andi r25,hi8(3)
+  79 006a 0397      		sbiw r24,3
+  80 006c 01F4      		brne .L12
+  81 006e 1092 0000 		sts MenuePunkt,__zero_reg__
+  82               	.L12:
+  83 0072 E0E0      		ldi r30,lo8(DisplayBuff)
+  84 0074 F0E0      		ldi r31,hi8(DisplayBuff)
+  85 0076 80E2      		ldi r24,lo8(32)
+  86               	.L13:
+  87 0078 8193      		st Z+,r24
+  88 007a 90E0      		ldi r25,hi8(DisplayBuff+80)
+  89 007c E030      		cpi r30,lo8(DisplayBuff+80)
+  90 007e F907      		cpc r31,r25
+  91 0080 01F4      		brne .L13
+  92 0082 9091 0000 		lds r25,MenuePunkt
+  93 0086 9131      		cpi r25,lo8(17)
+  94 0088 00F4      		brsh .L18
+  95 008a 9130      		cpi r25,lo8(1)
+  96 008c 00F4      		brsh .L16
+  97 008e 00C0      		rjmp .L25
+  98               	.L18:
+  99 0090 9131      		cpi r25,lo8(17)
+ 100 0092 01F4      		brne .L23
+ 101 0094 00C0      		rjmp .L26
+ 102               	.L25:
+ 103 0096 8091 0000 		lds r24,VersionInfo+5
+ 104 009a 8823      		tst r24
+ 105 009c 01F4      		brne .L16
+ 106 009e 8091 0000 		lds r24,MissingMotor
+ 107 00a2 8823      		tst r24
+ 108 00a4 01F4      		brne .L16
+ 109 00a6 8091 0000 		lds r24,VersionInfo+6
+ 110 00aa 84FD      		sbrc r24,4
+ 111 00ac 00C0      		rjmp .L16
+ 112 00ae 8091 0000 		lds r24,I2CTimeout
+ 113 00b2 9091 0000 		lds r25,(I2CTimeout)+1
+ 114 00b6 00C0      		rjmp .L16
+ 115               	.L26:
+ 116 00b8 23FF      		sbrs r18,3
+ 117 00ba 00C0      		rjmp .L16
+ 118 00bc 1092 0000 		sts (FlugMinuten)+1,__zero_reg__
+ 119 00c0 1092 0000 		sts FlugMinuten,__zero_reg__
+ 120 00c4 8EE0      		ldi r24,lo8(14)
+ 121 00c6 90E0      		ldi r25,hi8(14)
+ 122 00c8 60E0      		ldi r22,lo8(0)
+ 123 00ca 70E0      		ldi r23,hi8(0)
+ 124 00cc 0E94 0000 		call SetParamWord
+ 125 00d0 00C0      		rjmp .L16
+ 126               	.L23:
+ 127 00d2 8091 0000 		lds r24,MaxMenue
+ 128 00d6 9817      		cp r25,r24
+ 129 00d8 01F4      		brne .L19
+ 130 00da 9150      		subi r25,lo8(-(-1))
+ 131 00dc 9093 0000 		sts MaxMenue,r25
+ 132               	.L19:
+ 133 00e0 1092 0000 		sts MenuePunkt,__zero_reg__
+ 134               	.L16:
+ 135 00e4 1092 0000 		sts RemoteKeys,__zero_reg__
+ 136               	/* epilogue start */
+ 137 00e8 0895      		ret
+ 139               	.global	DisplayBuff
+ 140               		.data
+ 143               	DisplayBuff:
+ 144 0000 4865 6C6C 		.string	"Hello World"
+ 144      6F20 576F 
+ 144      726C 6400 
+ 145 000c 0000 0000 		.skip 68,0
+ 145      0000 0000 
+ 145      0000 0000 
+ 145      0000 0000 
+ 145      0000 0000 
+ 146               	.global	DispPtr
+ 147               	.global	DispPtr
+ 148               		.section .bss
+ 151               	DispPtr:
+ 152 0000 00        		.skip 1,0
+ 153               	.global	MaxMenue
+ 154               		.data
+ 157               	MaxMenue:
+ 158 0050 11        		.byte	17
+ 159               	.global	MenuePunkt
+ 160               	.global	MenuePunkt
+ 161               		.section .bss
+ 164               	MenuePunkt:
+ 165 0001 00        		.skip 1,0
+ 166               	.global	RemoteKeys
+ 167               	.global	RemoteKeys
+ 170               	RemoteKeys:
+ 171 0002 00        		.skip 1,0
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 menu.c
+     /tmp/cc6cmZI0.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cc6cmZI0.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cc6cmZI0.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cc6cmZI0.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cc6cmZI0.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc6cmZI0.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc6cmZI0.s:13     .text:0000000000000000 LcdClear
+     /tmp/cc6cmZI0.s:143    .data:0000000000000000 DisplayBuff
+     /tmp/cc6cmZI0.s:30     .text:0000000000000012 Menu_Putchar
+     /tmp/cc6cmZI0.s:151    .bss:0000000000000000 DispPtr
+     /tmp/cc6cmZI0.s:46     .text:0000000000000028 Menu
+     /tmp/cc6cmZI0.s:170    .bss:0000000000000002 RemoteKeys
+     /tmp/cc6cmZI0.s:164    .bss:0000000000000001 MenuePunkt
+     /tmp/cc6cmZI0.s:157    .data:0000000000000050 MaxMenue
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+VersionInfo
+MissingMotor
+I2CTimeout
+FlugMinuten
+SetParamWord

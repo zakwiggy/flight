@@ -1,0 +1,1135 @@
+   1               		.file	"timer0.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	__vector_18
+  13               	__vector_18:
+  14 0000 1F92      		push __zero_reg__
+  15 0002 0F92      		push r0
+  16 0004 0FB6      		in r0,__SREG__
+  17 0006 0F92      		push r0
+  18 0008 1124      		clr __zero_reg__
+  19 000a 2F93      		push r18
+  20 000c 3F93      		push r19
+  21 000e 5F93      		push r21
+  22 0010 6F93      		push r22
+  23 0012 7F93      		push r23
+  24 0014 8F93      		push r24
+  25 0016 9F93      		push r25
+  26 0018 AF93      		push r26
+  27 001a BF93      		push r27
+  28               	/* prologue: Signal */
+  29               	/* frame size = 0 */
+  30 001c 8091 0000 		lds r24,SendSPI
+  31 0020 8823      		tst r24
+  32 0022 01F0      		breq .L2
+  33 0024 8091 0000 		lds r24,SendSPI
+  34 0028 8150      		subi r24,lo8(-(-1))
+  35 002a 8093 0000 		sts SendSPI,r24
+  36               	.L2:
+  37 002e 8091 0000 		lds r24,SpektrumTimer
+  38 0032 8823      		tst r24
+  39 0034 01F0      		breq .L3
+  40 0036 8150      		subi r24,lo8(-(-1))
+  41 0038 8093 0000 		sts SpektrumTimer,r24
+  42               	.L3:
+  43 003c 8091 0000 		lds r24,cnt.2240
+  44 0040 8150      		subi r24,lo8(-(-1))
+  45 0042 8093 0000 		sts cnt.2240,r24
+  46 0046 8F5F      		subi r24,lo8(-(1))
+  47 0048 01F0      		breq .+2
+  48 004a 00C0      		rjmp .L4
+  49 004c 89E0      		ldi r24,lo8(9)
+  50 004e 8093 0000 		sts cnt.2240,r24
+  51 0052 8091 0000 		lds r24,CountMilliseconds
+  52 0056 9091 0000 		lds r25,(CountMilliseconds)+1
+  53 005a 0196      		adiw r24,1
+  54 005c 9093 0000 		sts (CountMilliseconds)+1,r25
+  55 0060 8093 0000 		sts CountMilliseconds,r24
+  56 0064 8091 0000 		lds r24,cnt_1ms.2239
+  57 0068 8F5F      		subi r24,lo8(-(1))
+  58 006a 8170      		andi r24,lo8(1)
+  59 006c 8093 0000 		sts cnt_1ms.2239,r24
+  60 0070 8823      		tst r24
+  61 0072 01F4      		brne .L5
+  62 0074 81E0      		ldi r24,lo8(1)
+  63 0076 8093 0000 		sts UpdateMotor,r24
+  64               	.L5:
+  65 007a 3499      		sbic 38-32,4
+  66 007c 00C0      		rjmp .L6
+  67 007e 81E0      		ldi r24,lo8(1)
+  68 0080 8093 0000 		sts compass_active.2241,r24
+  69               	.L6:
+  70 0084 8091 0000 		lds r24,beeptime
+  71 0088 9091 0000 		lds r25,(beeptime)+1
+  72 008c 892B      		or r24,r25
+  73 008e 01F0      		breq .L7
+  74 0090 8091 0000 		lds r24,beeptime
+  75 0094 9091 0000 		lds r25,(beeptime)+1
+  76 0098 0B97      		sbiw r24,11
+  77 009a 00F0      		brlo .L8
+  78 009c 8091 0000 		lds r24,beeptime
+  79 00a0 9091 0000 		lds r25,(beeptime)+1
+  80 00a4 0A97      		sbiw r24,10
+  81 00a6 9093 0000 		sts (beeptime)+1,r25
+  82 00aa 8093 0000 		sts beeptime,r24
+  83 00ae 00C0      		rjmp .L9
+  84               	.L8:
+  85 00b0 1092 0000 		sts (beeptime)+1,__zero_reg__
+  86 00b4 1092 0000 		sts beeptime,__zero_reg__
+  87               	.L9:
+  88 00b8 8091 0000 		lds r24,beeptime
+  89 00bc 9091 0000 		lds r25,(beeptime)+1
+  90 00c0 2091 0000 		lds r18,BeepMuster
+  91 00c4 3091 0000 		lds r19,(BeepMuster)+1
+  92 00c8 8223      		and r24,r18
+  93 00ca 9323      		and r25,r19
+  94 00cc 892B      		or r24,r25
+  95 00ce 01F0      		breq .+2
+  96 00d0 00C0      		rjmp .L10
+  97 00d2 00C0      		rjmp .L11
+  98               	.L7:
+  99 00d4 8FEF      		ldi r24,lo8(-1)
+ 100 00d6 9FEF      		ldi r25,hi8(-1)
+ 101 00d8 9093 0000 		sts (BeepMuster)+1,r25
+ 102 00dc 8093 0000 		sts BeepMuster,r24
+ 103               	.L11:
+ 104 00e0 8091 0000 		lds r24,PlatinenVersion
+ 105 00e4 8A30      		cpi r24,lo8(10)
+ 106 00e6 01F4      		brne .L22
+ 107 00e8 00C0      		rjmp .L24
+ 108               	.L25:
+ 109 00ea 5A9A      		sbi 43-32,2
+ 110 00ec 00C0      		rjmp .L4
+ 111               	.L23:
+ 112 00ee 479A      		sbi 40-32,7
+ 113 00f0 00C0      		rjmp .L4
+ 114               	.L24:
+ 115 00f2 5A98      		cbi 43-32,2
+ 116 00f4 00C0      		rjmp .L4
+ 117               	.L22:
+ 118 00f6 4798      		cbi 40-32,7
+ 119               	.L4:
+ 120 00f8 8091 0000 		lds r24,compass_active.2241
+ 121 00fc 8823      		tst r24
+ 122 00fe 01F4      		brne .+2
+ 123 0100 00C0      		rjmp .L21
+ 124 0102 8091 0000 		lds r24,NaviDataOkay
+ 125 0106 8823      		tst r24
+ 126 0108 01F0      		breq .+2
+ 127 010a 00C0      		rjmp .L21
+ 128 010c 8091 0000 		lds r24,EE_Parameter+13
+ 129 0110 83FF      		sbrs r24,3
+ 130 0112 00C0      		rjmp .L21
+ 131 0114 349B      		sbis 38-32,4
+ 132 0116 00C0      		rjmp .L15
+ 133 0118 8091 0000 		lds r24,cntKompass
+ 134 011c 9091 0000 		lds r25,(cntKompass)+1
+ 135 0120 0196      		adiw r24,1
+ 136 0122 9093 0000 		sts (cntKompass)+1,r25
+ 137 0126 8093 0000 		sts cntKompass,r24
+ 138 012a 8091 0000 		lds r24,cntKompass
+ 139 012e 9091 0000 		lds r25,(cntKompass)+1
+ 140 0132 895E      		subi r24,lo8(1001)
+ 141 0134 9340      		sbci r25,hi8(1001)
+ 142 0136 00F4      		brsh .+2
+ 143 0138 00C0      		rjmp .L21
+ 144 013a 1092 0000 		sts compass_active.2241,__zero_reg__
+ 145 013e 00C0      		rjmp .L21
+ 146               	.L15:
+ 147 0140 8091 0000 		lds r24,cntKompass
+ 148 0144 9091 0000 		lds r25,(cntKompass)+1
+ 149 0148 892B      		or r24,r25
+ 150 014a 01F4      		brne .+2
+ 151 014c 00C0      		rjmp .L16
+ 152 014e 8091 0000 		lds r24,cntKompass
+ 153 0152 9091 0000 		lds r25,(cntKompass)+1
+ 154 0156 8A56      		subi r24,lo8(362)
+ 155 0158 9140      		sbci r25,hi8(362)
+ 156 015a 00F4      		brsh .L16
+ 157 015c 2091 0000 		lds r18,cntKompass
+ 158 0160 3091 0000 		lds r19,(cntKompass)+1
+ 159 0164 8091 0000 		lds r24,cntKompass
+ 160 0168 9091 0000 		lds r25,(cntKompass)+1
+ 161 016c 69E2      		ldi r22,lo8(41)
+ 162 016e 70E0      		ldi r23,hi8(41)
+ 163 0170 0E94 0000 		call __udivmodhi4
+ 164 0174 260F      		add r18,r22
+ 165 0176 371F      		adc r19,r23
+ 166 0178 3093 0000 		sts (cntKompass)+1,r19
+ 167 017c 2093 0000 		sts cntKompass,r18
+ 168 0180 8091 0000 		lds r24,cntKompass
+ 169 0184 9091 0000 		lds r25,(cntKompass)+1
+ 170 0188 0B97      		sbiw r24,11
+ 171 018a 00F0      		brlo .L17
+ 172 018c 8091 0000 		lds r24,cntKompass
+ 173 0190 9091 0000 		lds r25,(cntKompass)+1
+ 174 0194 0A97      		sbiw r24,10
+ 175 0196 9093 0000 		sts (KompassValue)+1,r25
+ 176 019a 8093 0000 		sts KompassValue,r24
+ 177 019e 00C0      		rjmp .L18
+ 178               	.L17:
+ 179 01a0 1092 0000 		sts (KompassValue)+1,__zero_reg__
+ 180 01a4 1092 0000 		sts KompassValue,__zero_reg__
+ 181               	.L18:
+ 182 01a8 8091 0000 		lds r24,KompassValue
+ 183 01ac 9091 0000 		lds r25,(KompassValue)+1
+ 184 01b0 845E      		subi r24,lo8(-(540))
+ 185 01b2 9D4F      		sbci r25,hi8(-(540))
+ 186 01b4 2091 0000 		lds r18,KompassSollWert
+ 187 01b8 3091 0000 		lds r19,(KompassSollWert)+1
+ 188 01bc 821B      		sub r24,r18
+ 189 01be 930B      		sbc r25,r19
+ 190 01c0 68E6      		ldi r22,lo8(360)
+ 191 01c2 71E0      		ldi r23,hi8(360)
+ 192 01c4 0E94 0000 		call __divmodhi4
+ 193 01c8 845B      		subi r24,lo8(-(-180))
+ 194 01ca 9040      		sbci r25,hi8(-(-180))
+ 195 01cc 9093 0000 		sts (KompassRichtung)+1,r25
+ 196 01d0 8093 0000 		sts KompassRichtung,r24
+ 197               	.L16:
+ 198 01d4 1092 0000 		sts (cntKompass)+1,__zero_reg__
+ 199 01d8 1092 0000 		sts cntKompass,__zero_reg__
+ 200 01dc 00C0      		rjmp .L21
+ 201               	.L10:
+ 202 01de 8091 0000 		lds r24,PlatinenVersion
+ 203 01e2 8A30      		cpi r24,lo8(10)
+ 204 01e4 01F0      		breq .+2
+ 205 01e6 00C0      		rjmp .L23
+ 206 01e8 00C0      		rjmp .L25
+ 207               	.L21:
+ 208               	/* epilogue start */
+ 209 01ea BF91      		pop r27
+ 210 01ec AF91      		pop r26
+ 211 01ee 9F91      		pop r25
+ 212 01f0 8F91      		pop r24
+ 213 01f2 7F91      		pop r23
+ 214 01f4 6F91      		pop r22
+ 215 01f6 5F91      		pop r21
+ 216 01f8 3F91      		pop r19
+ 217 01fa 2F91      		pop r18
+ 218 01fc 0F90      		pop r0
+ 219 01fe 0FBE      		out __SREG__,r0
+ 220 0200 0F90      		pop r0
+ 221 0202 1F90      		pop __zero_reg__
+ 222 0204 1895      		reti
+ 224               	.global	SetDelay
+ 226               	SetDelay:
+ 227               	/* prologue: function */
+ 228               	/* frame size = 0 */
+ 229 0206 2091 0000 		lds r18,CountMilliseconds
+ 230 020a 3091 0000 		lds r19,(CountMilliseconds)+1
+ 231 020e 2F5F      		subi r18,lo8(-(1))
+ 232 0210 3F4F      		sbci r19,hi8(-(1))
+ 233 0212 280F      		add r18,r24
+ 234 0214 391F      		adc r19,r25
+ 235 0216 C901      		movw r24,r18
+ 236               	/* epilogue start */
+ 237 0218 0895      		ret
+ 239               	.global	CheckDelay
+ 241               	CheckDelay:
+ 242               	/* prologue: function */
+ 243               	/* frame size = 0 */
+ 244 021a 2091 0000 		lds r18,CountMilliseconds
+ 245 021e 3091 0000 		lds r19,(CountMilliseconds)+1
+ 246 0222 821B      		sub r24,r18
+ 247 0224 930B      		sbc r25,r19
+ 248 0226 8070      		andi r24,lo8(-32768)
+ 249 0228 9078      		andi r25,hi8(-32768)
+ 250 022a 892F      		mov r24,r25
+ 251 022c 8695      		lsr r24
+ 252               	/* epilogue start */
+ 253 022e 0895      		ret
+ 255               	.global	Delay_ms
+ 257               	Delay_ms:
+ 258               	/* prologue: function */
+ 259               	/* frame size = 0 */
+ 260 0230 2091 0000 		lds r18,CountMilliseconds
+ 261 0234 3091 0000 		lds r19,(CountMilliseconds)+1
+ 262 0238 2F5F      		subi r18,lo8(-(1))
+ 263 023a 3F4F      		sbci r19,hi8(-(1))
+ 264 023c 280F      		add r18,r24
+ 265 023e 391F      		adc r19,r25
+ 266               	.L31:
+ 267 0240 8091 0000 		lds r24,CountMilliseconds
+ 268 0244 9091 0000 		lds r25,(CountMilliseconds)+1
+ 269 0248 A901      		movw r20,r18
+ 270 024a 481B      		sub r20,r24
+ 271 024c 590B      		sbc r21,r25
+ 272 024e CA01      		movw r24,r20
+ 273 0250 8070      		andi r24,lo8(-32768)
+ 274 0252 9078      		andi r25,hi8(-32768)
+ 275 0254 892F      		mov r24,r25
+ 276 0256 8695      		lsr r24
+ 277 0258 01F0      		breq .L31
+ 278               	/* epilogue start */
+ 279 025a 0895      		ret
+ 281               	.global	Delay_ms_Mess
+ 283               	Delay_ms_Mess:
+ 284               	/* prologue: function */
+ 285               	/* frame size = 0 */
+ 286 025c 2091 0000 		lds r18,CountMilliseconds
+ 287 0260 3091 0000 		lds r19,(CountMilliseconds)+1
+ 288 0264 2F5F      		subi r18,lo8(-(1))
+ 289 0266 3F4F      		sbci r19,hi8(-(1))
+ 290 0268 280F      		add r18,r24
+ 291 026a 391F      		adc r19,r25
+ 292 026c 4FEC      		ldi r20,lo8(-49)
+ 293 026e 00C0      		rjmp .L40
+ 294               	.L36:
+ 295 0270 8091 0000 		lds r24,AdReady
+ 296 0274 8823      		tst r24
+ 297 0276 01F0      		breq .L40
+ 298 0278 1092 0000 		sts AdReady,__zero_reg__
+ 299 027c 4093 7A00 		sts 122,r20
+ 300               	.L40:
+ 301 0280 8091 0000 		lds r24,CountMilliseconds
+ 302 0284 9091 0000 		lds r25,(CountMilliseconds)+1
+ 303 0288 B901      		movw r22,r18
+ 304 028a 681B      		sub r22,r24
+ 305 028c 790B      		sbc r23,r25
+ 306 028e CB01      		movw r24,r22
+ 307 0290 8070      		andi r24,lo8(-32768)
+ 308 0292 9078      		andi r25,hi8(-32768)
+ 309 0294 892F      		mov r24,r25
+ 310 0296 8695      		lsr r24
+ 311 0298 01F0      		breq .L36
+ 312               	/* epilogue start */
+ 313 029a 0895      		ret
+ 315               	.global	TIMER2_Init
+ 317               	TIMER2_Init:
+ 318               	/* prologue: function */
+ 319               	/* frame size = 0 */
+ 320 029c 9FB7      		in r25,__SREG__
+ 321               	/* #APP */
+ 322               	 ;  134 "timer0.c" 1
+ 323 029e F894      		cli
+ 324               	 ;  0 "" 2
+ 325               	/* #NOAPP */
+ 326 02a0 5F98      		cbi 43-32,7
+ 327 02a2 3E9A      		sbi 39-32,6
+ 328 02a4 469A      		sbi 40-32,6
+ 329 02a6 A0EB      		ldi r26,lo8(176)
+ 330 02a8 B0E0      		ldi r27,hi8(176)
+ 331 02aa 8C91      		ld r24,X
+ 332 02ac 8F70      		andi r24,lo8(15)
+ 333 02ae 8C93      		st X,r24
+ 334 02b0 8C91      		ld r24,X
+ 335 02b2 8360      		ori r24,lo8(3)
+ 336 02b4 8C93      		st X,r24
+ 337 02b6 E1EB      		ldi r30,lo8(177)
+ 338 02b8 F0E0      		ldi r31,hi8(177)
+ 339 02ba 8081      		ld r24,Z
+ 340 02bc 8B73      		andi r24,lo8(59)
+ 341 02be 8083      		st Z,r24
+ 342 02c0 8081      		ld r24,Z
+ 343 02c2 8B60      		ori r24,lo8(11)
+ 344 02c4 8083      		st Z,r24
+ 345 02c6 1092 B200 		sts 178,__zero_reg__
+ 346 02ca 8FEF      		ldi r24,lo8(-1)
+ 347 02cc 8093 B300 		sts 179,r24
+ 348 02d0 8C91      		ld r24,X
+ 349 02d2 8068      		ori r24,lo8(-128)
+ 350 02d4 8C93      		st X,r24
+ 351 02d6 E0E7      		ldi r30,lo8(112)
+ 352 02d8 F0E0      		ldi r31,hi8(112)
+ 353 02da 8081      		ld r24,Z
+ 354 02dc 8A7F      		andi r24,lo8(-6)
+ 355 02de 8083      		st Z,r24
+ 356 02e0 8081      		ld r24,Z
+ 357 02e2 8260      		ori r24,lo8(2)
+ 358 02e4 8083      		st Z,r24
+ 359 02e6 9FBF      		out __SREG__,r25
+ 360               	/* epilogue start */
+ 361 02e8 0895      		ret
+ 363               	.global	Timer_Init
+ 365               	Timer_Init:
+ 366               	/* prologue: function */
+ 367               	/* frame size = 0 */
+ 368 02ea 8091 0000 		lds r24,CountMilliseconds
+ 369 02ee 9091 0000 		lds r25,(CountMilliseconds)+1
+ 370 02f2 0B96      		adiw r24,11
+ 371 02f4 9093 0000 		sts (tim_main)+1,r25
+ 372 02f8 8093 0000 		sts tim_main,r24
+ 373 02fc 82E0      		ldi r24,lo8(2)
+ 374 02fe 85BD      		out 69-32,r24
+ 375 0300 83EA      		ldi r24,lo8(-93)
+ 376 0302 84BD      		out 68-32,r24
+ 377 0304 17BC      		out 71-32,__zero_reg__
+ 378 0306 84EB      		ldi r24,lo8(-76)
+ 379 0308 88BD      		out 72-32,r24
+ 380 030a 86E0      		ldi r24,lo8(6)
+ 381 030c 86BD      		out 70-32,r24
+ 382 030e EEE6      		ldi r30,lo8(110)
+ 383 0310 F0E0      		ldi r31,hi8(110)
+ 384 0312 8081      		ld r24,Z
+ 385 0314 8160      		ori r24,lo8(1)
+ 386 0316 8083      		st Z,r24
+ 387               	/* epilogue start */
+ 388 0318 0895      		ret
+ 390               	.global	CalculateServo
+ 392               	CalculateServo:
+ 393 031a 2F92      		push r2
+ 394 031c 3F92      		push r3
+ 395 031e 4F92      		push r4
+ 396 0320 5F92      		push r5
+ 397 0322 6F92      		push r6
+ 398 0324 7F92      		push r7
+ 399 0326 8F92      		push r8
+ 400 0328 9F92      		push r9
+ 401 032a AF92      		push r10
+ 402 032c BF92      		push r11
+ 403 032e CF92      		push r12
+ 404 0330 DF92      		push r13
+ 405 0332 EF92      		push r14
+ 406 0334 FF92      		push r15
+ 407 0336 0F93      		push r16
+ 408 0338 1F93      		push r17
+ 409               	/* prologue: function */
+ 410               	/* frame size = 0 */
+ 411 033a E091 0000 		lds r30,EE_Parameter+55
+ 412 033e F0E0      		ldi r31,lo8(0)
+ 413 0340 E050      		subi r30,lo8(-(sintab))
+ 414 0342 F040      		sbci r31,hi8(-(sintab))
+ 415 0344 9681      		ldd r25,Z+6
+ 416 0346 8081      		ld r24,Z
+ 417 0348 2091 0000 		lds r18,CalculateServoSignals
+ 418 034c A82E      		mov r10,r24
+ 419 034e BB24      		clr r11
+ 420 0350 A7FC      		sbrc r10,7
+ 421 0352 B094      		com r11
+ 422 0354 CB2C      		mov r12,r11
+ 423 0356 DB2C      		mov r13,r11
+ 424 0358 E090 0000 		lds r14,IntegralRoll
+ 425 035c F090 0000 		lds r15,(IntegralRoll)+1
+ 426 0360 0091 0000 		lds r16,(IntegralRoll)+2
+ 427 0364 1091 0000 		lds r17,(IntegralRoll)+3
+ 428 0368 692E      		mov r6,r25
+ 429 036a 7724      		clr r7
+ 430 036c 67FC      		sbrc r6,7
+ 431 036e 7094      		com r7
+ 432 0370 872C      		mov r8,r7
+ 433 0372 972C      		mov r9,r7
+ 434 0374 2090 0000 		lds r2,IntegralNick
+ 435 0378 3090 0000 		lds r3,(IntegralNick)+1
+ 436 037c 4090 0000 		lds r4,(IntegralNick)+2
+ 437 0380 5090 0000 		lds r5,(IntegralNick)+3
+ 438 0384 2130      		cpi r18,lo8(1)
+ 439 0386 01F0      		breq .+2
+ 440 0388 00C0      		rjmp .L46
+ 441 038a C601      		movw r24,r12
+ 442 038c B501      		movw r22,r10
+ 443 038e A801      		movw r20,r16
+ 444 0390 9701      		movw r18,r14
+ 445 0392 0E94 0000 		call __mulsi3
+ 446 0396 20E8      		ldi r18,lo8(128)
+ 447 0398 30E0      		ldi r19,hi8(128)
+ 448 039a 40E0      		ldi r20,hlo8(128)
+ 449 039c 50E0      		ldi r21,hhi8(128)
+ 450 039e 0E94 0000 		call __divmodsi4
+ 451 03a2 7901      		movw r14,r18
+ 452 03a4 8A01      		movw r16,r20
+ 453 03a6 1095      		com r17
+ 454 03a8 0095      		com r16
+ 455 03aa F094      		com r15
+ 456 03ac E094      		com r14
+ 457 03ae E11C      		adc r14,__zero_reg__
+ 458 03b0 F11C      		adc r15,__zero_reg__
+ 459 03b2 011D      		adc r16,__zero_reg__
+ 460 03b4 111D      		adc r17,__zero_reg__
+ 461 03b6 2091 0000 		lds r18,POI_KameraNick
+ 462 03ba 3091 0000 		lds r19,(POI_KameraNick)+1
+ 463 03be C901      		movw r24,r18
+ 464 03c0 A3E0      		ldi r26,3
+ 465 03c2 880F      	1:	lsl r24
+ 466 03c4 991F      		rol r25
+ 467 03c6 AA95      		dec r26
+ 468 03c8 01F4      		brne 1b
+ 469 03ca 821B      		sub r24,r18
+ 470 03cc 930B      		sbc r25,r19
+ 471 03ce AA27      		clr r26
+ 472 03d0 97FD      		sbrc r25,7
+ 473 03d2 A095      		com r26
+ 474 03d4 BA2F      		mov r27,r26
+ 475 03d6 E81A      		sub r14,r24
+ 476 03d8 F90A      		sbc r15,r25
+ 477 03da 0A0B      		sbc r16,r26
+ 478 03dc 1B0B      		sbc r17,r27
+ 479 03de C401      		movw r24,r8
+ 480 03e0 B301      		movw r22,r6
+ 481 03e2 A201      		movw r20,r4
+ 482 03e4 9101      		movw r18,r2
+ 483 03e6 0E94 0000 		call __mulsi3
+ 484 03ea 20E8      		ldi r18,lo8(128)
+ 485 03ec 30E0      		ldi r19,hi8(128)
+ 486 03ee 40E0      		ldi r20,hlo8(128)
+ 487 03f0 50E0      		ldi r21,hhi8(128)
+ 488 03f2 0E94 0000 		call __divmodsi4
+ 489 03f6 E20E      		add r14,r18
+ 490 03f8 F31E      		adc r15,r19
+ 491 03fa 041F      		adc r16,r20
+ 492 03fc 151F      		adc r17,r21
+ 493 03fe 2091 0000 		lds r18,EE_Parameter+46
+ 494 0402 30E0      		ldi r19,lo8(0)
+ 495 0404 40E0      		ldi r20,lo8(0)
+ 496 0406 50E0      		ldi r21,hi8(0)
+ 497 0408 C801      		movw r24,r16
+ 498 040a B701      		movw r22,r14
+ 499 040c 0E94 0000 		call __mulsi3
+ 500 0410 20E0      		ldi r18,lo8(512)
+ 501 0412 32E0      		ldi r19,hi8(512)
+ 502 0414 40E0      		ldi r20,hlo8(512)
+ 503 0416 50E0      		ldi r21,hhi8(512)
+ 504 0418 0E94 0000 		call __divmodsi4
+ 505 041c 7901      		movw r14,r18
+ 506 041e 2091 0000 		lds r18,ServoNickOffset
+ 507 0422 3091 0000 		lds r19,(ServoNickOffset)+1
+ 508 0426 4091 0000 		lds r20,ServoNickOffset
+ 509 042a 5091 0000 		lds r21,(ServoNickOffset)+1
+ 510 042e 8091 0000 		lds r24,Parameter_ServoNickControl
+ 511 0432 90E0      		ldi r25,lo8(0)
+ 512 0434 F6E0      		ldi r31,6
+ 513 0436 880F      	1:	lsl r24
+ 514 0438 991F      		rol r25
+ 515 043a FA95      		dec r31
+ 516 043c 01F4      		brne 1b
+ 517 043e 6091 0000 		lds r22,EE_Parameter+54
+ 518 0442 841B      		sub r24,r20
+ 519 0444 950B      		sbc r25,r21
+ 520 0446 70E0      		ldi r23,lo8(0)
+ 521 0448 0E94 0000 		call __divmodhi4
+ 522 044c 260F      		add r18,r22
+ 523 044e 371F      		adc r19,r23
+ 524 0450 3093 0000 		sts (ServoNickOffset)+1,r19
+ 525 0454 2093 0000 		sts ServoNickOffset,r18
+ 526 0458 8091 0000 		lds r24,ServoNickOffset
+ 527 045c 9091 0000 		lds r25,(ServoNickOffset)+1
+ 528 0460 60E1      		ldi r22,lo8(16)
+ 529 0462 70E0      		ldi r23,hi8(16)
+ 530 0464 0E94 0000 		call __divmodhi4
+ 531 0468 7093 0000 		sts (ServoNickValue)+1,r23
+ 532 046c 6093 0000 		sts ServoNickValue,r22
+ 533 0470 8091 0000 		lds r24,EE_Parameter+101
+ 534 0474 80FF      		sbrs r24,0
+ 535 0476 00C0      		rjmp .L47
+ 536 0478 8091 0000 		lds r24,ServoNickValue
+ 537 047c 9091 0000 		lds r25,(ServoNickValue)+1
+ 538 0480 8E0D      		add r24,r14
+ 539 0482 9F1D      		adc r25,r15
+ 540 0484 00C0      		rjmp .L58
+ 541               	.L47:
+ 542 0486 8091 0000 		lds r24,ServoNickValue
+ 543 048a 9091 0000 		lds r25,(ServoNickValue)+1
+ 544 048e 8E19      		sub r24,r14
+ 545 0490 9F09      		sbc r25,r15
+ 546               	.L58:
+ 547 0492 9093 0000 		sts (ServoNickValue)+1,r25
+ 548 0496 8093 0000 		sts ServoNickValue,r24
+ 549 049a 2091 0000 		lds r18,ServoNickValue
+ 550 049e 3091 0000 		lds r19,(ServoNickValue)+1
+ 551 04a2 8091 0000 		lds r24,EE_Parameter+47
+ 552 04a6 90E0      		ldi r25,lo8(0)
+ 553 04a8 880F      		lsl r24
+ 554 04aa 991F      		rol r25
+ 555 04ac 880F      		lsl r24
+ 556 04ae 991F      		rol r25
+ 557 04b0 2817      		cp r18,r24
+ 558 04b2 3907      		cpc r19,r25
+ 559 04b4 04F0      		brlt .L59
+ 560               	.L49:
+ 561 04b6 2091 0000 		lds r18,ServoNickValue
+ 562 04ba 3091 0000 		lds r19,(ServoNickValue)+1
+ 563 04be 8091 0000 		lds r24,EE_Parameter+48
+ 564 04c2 90E0      		ldi r25,lo8(0)
+ 565 04c4 880F      		lsl r24
+ 566 04c6 991F      		rol r25
+ 567 04c8 880F      		lsl r24
+ 568 04ca 991F      		rol r25
+ 569 04cc 8217      		cp r24,r18
+ 570 04ce 9307      		cpc r25,r19
+ 571 04d0 04F4      		brge .L50
+ 572               	.L59:
+ 573 04d2 9093 0000 		sts (ServoNickValue)+1,r25
+ 574 04d6 8093 0000 		sts ServoNickValue,r24
+ 575               	.L50:
+ 576 04da 8091 0000 		lds r24,PlatinenVersion
+ 577 04de 8431      		cpi r24,lo8(20)
+ 578 04e0 00F4      		brsh .+2
+ 579 04e2 00C0      		rjmp .L56
+ 580               	.L51:
+ 581 04e4 8091 0000 		lds r24,CalculateServoSignals
+ 582 04e8 8F5F      		subi r24,lo8(-(1))
+ 583 04ea 8093 0000 		sts CalculateServoSignals,r24
+ 584 04ee 00C0      		rjmp .L57
+ 585               	.L46:
+ 586 04f0 C401      		movw r24,r8
+ 587 04f2 B301      		movw r22,r6
+ 588 04f4 A801      		movw r20,r16
+ 589 04f6 9701      		movw r18,r14
+ 590 04f8 0E94 0000 		call __mulsi3
+ 591 04fc 20E8      		ldi r18,lo8(128)
+ 592 04fe 30E0      		ldi r19,hi8(128)
+ 593 0500 40E0      		ldi r20,hlo8(128)
+ 594 0502 50E0      		ldi r21,hhi8(128)
+ 595 0504 0E94 0000 		call __divmodsi4
+ 596 0508 7901      		movw r14,r18
+ 597 050a 8A01      		movw r16,r20
+ 598 050c C601      		movw r24,r12
+ 599 050e B501      		movw r22,r10
+ 600 0510 A201      		movw r20,r4
+ 601 0512 9101      		movw r18,r2
+ 602 0514 0E94 0000 		call __mulsi3
+ 603 0518 20E8      		ldi r18,lo8(128)
+ 604 051a 30E0      		ldi r19,hi8(128)
+ 605 051c 40E0      		ldi r20,hlo8(128)
+ 606 051e 50E0      		ldi r21,hhi8(128)
+ 607 0520 0E94 0000 		call __divmodsi4
+ 608 0524 E20E      		add r14,r18
+ 609 0526 F31E      		adc r15,r19
+ 610 0528 041F      		adc r16,r20
+ 611 052a 151F      		adc r17,r21
+ 612 052c 2091 0000 		lds r18,EE_Parameter+50
+ 613 0530 30E0      		ldi r19,lo8(0)
+ 614 0532 40E0      		ldi r20,lo8(0)
+ 615 0534 50E0      		ldi r21,hi8(0)
+ 616 0536 C801      		movw r24,r16
+ 617 0538 B701      		movw r22,r14
+ 618 053a 0E94 0000 		call __mulsi3
+ 619 053e 20E0      		ldi r18,lo8(512)
+ 620 0540 32E0      		ldi r19,hi8(512)
+ 621 0542 40E0      		ldi r20,hlo8(512)
+ 622 0544 50E0      		ldi r21,hhi8(512)
+ 623 0546 0E94 0000 		call __divmodsi4
+ 624 054a 7901      		movw r14,r18
+ 625 054c 2091 0000 		lds r18,ServoRollOffset
+ 626 0550 3091 0000 		lds r19,(ServoRollOffset)+1
+ 627 0554 4091 0000 		lds r20,ServoRollOffset
+ 628 0558 5091 0000 		lds r21,(ServoRollOffset)+1
+ 629 055c 8091 0000 		lds r24,Parameter_ServoRollControl
+ 630 0560 90E0      		ldi r25,lo8(0)
+ 631 0562 66E0      		ldi r22,6
+ 632 0564 880F      	1:	lsl r24
+ 633 0566 991F      		rol r25
+ 634 0568 6A95      		dec r22
+ 635 056a 01F4      		brne 1b
+ 636 056c 6091 0000 		lds r22,EE_Parameter+54
+ 637 0570 841B      		sub r24,r20
+ 638 0572 950B      		sbc r25,r21
+ 639 0574 70E0      		ldi r23,lo8(0)
+ 640 0576 0E94 0000 		call __divmodhi4
+ 641 057a 260F      		add r18,r22
+ 642 057c 371F      		adc r19,r23
+ 643 057e 3093 0000 		sts (ServoRollOffset)+1,r19
+ 644 0582 2093 0000 		sts ServoRollOffset,r18
+ 645 0586 8091 0000 		lds r24,ServoRollOffset
+ 646 058a 9091 0000 		lds r25,(ServoRollOffset)+1
+ 647 058e 60E1      		ldi r22,lo8(16)
+ 648 0590 70E0      		ldi r23,hi8(16)
+ 649 0592 0E94 0000 		call __divmodhi4
+ 650 0596 7093 0000 		sts (ServoRollValue)+1,r23
+ 651 059a 6093 0000 		sts ServoRollValue,r22
+ 652 059e 8091 0000 		lds r24,EE_Parameter+101
+ 653 05a2 81FF      		sbrs r24,1
+ 654 05a4 00C0      		rjmp .L53
+ 655 05a6 8091 0000 		lds r24,ServoRollValue
+ 656 05aa 9091 0000 		lds r25,(ServoRollValue)+1
+ 657 05ae 8E0D      		add r24,r14
+ 658 05b0 9F1D      		adc r25,r15
+ 659 05b2 00C0      		rjmp .L60
+ 660               	.L53:
+ 661 05b4 8091 0000 		lds r24,ServoRollValue
+ 662 05b8 9091 0000 		lds r25,(ServoRollValue)+1
+ 663 05bc 8E19      		sub r24,r14
+ 664 05be 9F09      		sbc r25,r15
+ 665               	.L60:
+ 666 05c0 9093 0000 		sts (ServoRollValue)+1,r25
+ 667 05c4 8093 0000 		sts ServoRollValue,r24
+ 668 05c8 2091 0000 		lds r18,ServoRollValue
+ 669 05cc 3091 0000 		lds r19,(ServoRollValue)+1
+ 670 05d0 8091 0000 		lds r24,EE_Parameter+51
+ 671 05d4 90E0      		ldi r25,lo8(0)
+ 672 05d6 880F      		lsl r24
+ 673 05d8 991F      		rol r25
+ 674 05da 880F      		lsl r24
+ 675 05dc 991F      		rol r25
+ 676 05de 2817      		cp r18,r24
+ 677 05e0 3907      		cpc r19,r25
+ 678 05e2 04F0      		brlt .L61
+ 679               	.L55:
+ 680 05e4 2091 0000 		lds r18,ServoRollValue
+ 681 05e8 3091 0000 		lds r19,(ServoRollValue)+1
+ 682 05ec 8091 0000 		lds r24,EE_Parameter+52
+ 683 05f0 90E0      		ldi r25,lo8(0)
+ 684 05f2 880F      		lsl r24
+ 685 05f4 991F      		rol r25
+ 686 05f6 880F      		lsl r24
+ 687 05f8 991F      		rol r25
+ 688 05fa 8217      		cp r24,r18
+ 689 05fc 9307      		cpc r25,r19
+ 690 05fe 04F4      		brge .L56
+ 691               	.L61:
+ 692 0600 9093 0000 		sts (ServoRollValue)+1,r25
+ 693 0604 8093 0000 		sts ServoRollValue,r24
+ 694               	.L56:
+ 695 0608 1092 0000 		sts CalculateServoSignals,__zero_reg__
+ 696               	.L57:
+ 697               	/* epilogue start */
+ 698 060c 1F91      		pop r17
+ 699 060e 0F91      		pop r16
+ 700 0610 FF90      		pop r15
+ 701 0612 EF90      		pop r14
+ 702 0614 DF90      		pop r13
+ 703 0616 CF90      		pop r12
+ 704 0618 BF90      		pop r11
+ 705 061a AF90      		pop r10
+ 706 061c 9F90      		pop r9
+ 707 061e 8F90      		pop r8
+ 708 0620 7F90      		pop r7
+ 709 0622 6F90      		pop r6
+ 710 0624 5F90      		pop r5
+ 711 0626 4F90      		pop r4
+ 712 0628 3F90      		pop r3
+ 713 062a 2F90      		pop r2
+ 714 062c 0895      		ret
+ 716               	.global	__vector_9
+ 718               	__vector_9:
+ 719 062e 1F92      		push __zero_reg__
+ 720 0630 0F92      		push r0
+ 721 0632 0FB6      		in r0,__SREG__
+ 722 0634 0F92      		push r0
+ 723 0636 1124      		clr __zero_reg__
+ 724 0638 2F93      		push r18
+ 725 063a 3F93      		push r19
+ 726 063c 4F93      		push r20
+ 727 063e 5F93      		push r21
+ 728 0640 8F93      		push r24
+ 729 0642 9F93      		push r25
+ 730 0644 EF93      		push r30
+ 731 0646 FF93      		push r31
+ 732               	/* prologue: Signal */
+ 733               	/* frame size = 0 */
+ 734 0648 8091 0000 		lds r24,PlatinenVersion
+ 735 064c 9091 0000 		lds r25,PulseOutput.2485
+ 736 0650 8431      		cpi r24,lo8(20)
+ 737 0652 00F0      		brlo .+2
+ 738 0654 00C0      		rjmp .L63
+ 739 0656 9923      		tst r25
+ 740 0658 01F0      		breq .+2
+ 741 065a 00C0      		rjmp .L64
+ 742 065c 8091 B000 		lds r24,176
+ 743 0660 86FF      		sbrs r24,6
+ 744 0662 00C0      		rjmp .L65
+ 745 0664 8091 B000 		lds r24,176
+ 746 0668 8F7B      		andi r24,lo8(-65)
+ 747 066a 8093 B000 		sts 176,r24
+ 748 066e 8091 0000 		lds r24,ServoNickValue
+ 749 0672 9091 0000 		lds r25,(ServoNickValue)+1
+ 750 0676 8755      		subi r24,lo8(-(425))
+ 751 0678 9E4F      		sbci r25,hi8(-(425))
+ 752 067a 9093 0000 		sts (RemainingPulse)+1,r25
+ 753 067e 8093 0000 		sts RemainingPulse,r24
+ 754 0682 25E0      		ldi r18,hi8(1501)
+ 755 0684 8D3D      		cpi r24,lo8(1501)
+ 756 0686 9207      		cpc r25,r18
+ 757 0688 00F0      		brlo .L66
+ 758 068a 8CED      		ldi r24,lo8(1500)
+ 759 068c 95E0      		ldi r25,hi8(1500)
+ 760 068e 00C0      		rjmp .L91
+ 761               	.L66:
+ 762 0690 8757      		subi r24,lo8(375)
+ 763 0692 9140      		sbci r25,hi8(375)
+ 764 0694 00F4      		brsh .L67
+ 765 0696 87E7      		ldi r24,lo8(375)
+ 766 0698 91E0      		ldi r25,hi8(375)
+ 767               	.L91:
+ 768 069a 9093 0000 		sts (RemainingPulse)+1,r25
+ 769 069e 8093 0000 		sts RemainingPulse,r24
+ 770               	.L67:
+ 771 06a2 8091 0000 		lds r24,RemainingPulse
+ 772 06a6 9091 0000 		lds r25,(RemainingPulse)+1
+ 773 06aa 00C0      		rjmp .L96
+ 774               	.L65:
+ 775 06ac 8091 B000 		lds r24,176
+ 776 06b0 8064      		ori r24,lo8(64)
+ 777 06b2 8093 B000 		sts 176,r24
+ 778 06b6 8091 0000 		lds r24,EE_Parameter+53
+ 779 06ba 90E0      		ldi r25,lo8(0)
+ 780 06bc 2DED      		ldi r18,lo8(1757)
+ 781 06be 36E0      		ldi r19,hi8(1757)
+ 782 06c0 AC01      		movw r20,r24
+ 783 06c2 429F      		mul r20,r18
+ 784 06c4 C001      		movw r24,r0
+ 785 06c6 439F      		mul r20,r19
+ 786 06c8 900D      		add r25,r0
+ 787 06ca 529F      		mul r21,r18
+ 788 06cc 900D      		add r25,r0
+ 789 06ce 1124      		clr r1
+ 790 06d0 2091 0000 		lds r18,ServoFrameTime.2486
+ 791 06d4 3091 0000 		lds r19,(ServoFrameTime.2486)+1
+ 792 06d8 821B      		sub r24,r18
+ 793 06da 930B      		sbc r25,r19
+ 794 06dc 9093 0000 		sts (RemainingPulse)+1,r25
+ 795 06e0 8093 0000 		sts RemainingPulse,r24
+ 796 06e4 81E0      		ldi r24,lo8(1)
+ 797 06e6 8093 0000 		sts CalculateServoSignals,r24
+ 798 06ea 00C0      		rjmp .L71
+ 799               	.L63:
+ 800 06ec 9923      		tst r25
+ 801 06ee 01F0      		breq .+2
+ 802 06f0 00C0      		rjmp .L64
+ 803 06f2 8091 B000 		lds r24,176
+ 804 06f6 86FF      		sbrs r24,6
+ 805 06f8 00C0      		rjmp .L69
+ 806 06fa 8091 B000 		lds r24,176
+ 807 06fe 8F7B      		andi r24,lo8(-65)
+ 808 0700 8093 B000 		sts 176,r24
+ 809 0704 E091 0000 		lds r30,ServoIndex.2487
+ 810 0708 EE23      		tst r30
+ 811 070a 01F4      		brne .L70
+ 812 070c 8091 0000 		lds r24,EE_Parameter+53
+ 813 0710 90E0      		ldi r25,lo8(0)
+ 814 0712 2DED      		ldi r18,lo8(1757)
+ 815 0714 36E0      		ldi r19,hi8(1757)
+ 816 0716 AC01      		movw r20,r24
+ 817 0718 429F      		mul r20,r18
+ 818 071a C001      		movw r24,r0
+ 819 071c 439F      		mul r20,r19
+ 820 071e 900D      		add r25,r0
+ 821 0720 529F      		mul r21,r18
+ 822 0722 900D      		add r25,r0
+ 823 0724 1124      		clr r1
+ 824 0726 2091 0000 		lds r18,ServoFrameTime.2486
+ 825 072a 3091 0000 		lds r19,(ServoFrameTime.2486)+1
+ 826 072e 821B      		sub r24,r18
+ 827 0730 930B      		sbc r25,r19
+ 828 0732 9093 0000 		sts (RemainingPulse)+1,r25
+ 829 0736 8093 0000 		sts RemainingPulse,r24
+ 830 073a 1092 0000 		sts (ServoFrameTime.2486)+1,__zero_reg__
+ 831 073e 1092 0000 		sts ServoFrameTime.2486,__zero_reg__
+ 832 0742 469A      		sbi 40-32,6
+ 833 0744 00C0      		rjmp .L71
+ 834               	.L70:
+ 835 0746 89EA      		ldi r24,lo8(937)
+ 836 0748 93E0      		ldi r25,hi8(937)
+ 837 074a 9093 0000 		sts (RemainingPulse)+1,r25
+ 838 074e 8093 0000 		sts RemainingPulse,r24
+ 839 0752 E330      		cpi r30,lo8(3)
+ 840 0754 01F0      		breq .L75
+ 841 0756 E430      		cpi r30,lo8(4)
+ 842 0758 00F4      		brsh .L78
+ 843 075a E130      		cpi r30,lo8(1)
+ 844 075c 01F0      		breq .L73
+ 845 075e E230      		cpi r30,lo8(2)
+ 846 0760 01F4      		brne .L72
+ 847 0762 00C0      		rjmp .L98
+ 848               	.L78:
+ 849 0764 E430      		cpi r30,lo8(4)
+ 850 0766 01F0      		breq .L76
+ 851 0768 E530      		cpi r30,lo8(5)
+ 852 076a 01F4      		brne .L72
+ 853 076c 00C0      		rjmp .L99
+ 854               	.L73:
+ 855 076e 8091 0000 		lds r24,ServoNickValue
+ 856 0772 9091 0000 		lds r25,(ServoNickValue)+1
+ 857 0776 00C0      		rjmp .L95
+ 858               	.L98:
+ 859 0778 8091 0000 		lds r24,ServoRollValue
+ 860 077c 9091 0000 		lds r25,(ServoRollValue)+1
+ 861 0780 00C0      		rjmp .L95
+ 862               	.L75:
+ 863 0782 8091 0000 		lds r24,Parameter_Servo3
+ 864 0786 00C0      		rjmp .L97
+ 865               	.L76:
+ 866 0788 8091 0000 		lds r24,Parameter_Servo4
+ 867 078c 00C0      		rjmp .L97
+ 868               	.L99:
+ 869 078e 8091 0000 		lds r24,Parameter_Servo5
+ 870               	.L97:
+ 871 0792 90E0      		ldi r25,lo8(0)
+ 872 0794 880F      		lsl r24
+ 873 0796 991F      		rol r25
+ 874 0798 880F      		lsl r24
+ 875 079a 991F      		rol r25
+ 876               	.L95:
+ 877 079c 8755      		subi r24,lo8(-(425))
+ 878 079e 9E4F      		sbci r25,hi8(-(425))
+ 879 07a0 00C0      		rjmp .L92
+ 880               	.L72:
+ 881 07a2 F0E0      		ldi r31,lo8(0)
+ 882 07a4 EE0F      		lsl r30
+ 883 07a6 FF1F      		rol r31
+ 884 07a8 E050      		subi r30,lo8(-(PPM_in))
+ 885 07aa F040      		sbci r31,hi8(-(PPM_in))
+ 886 07ac 8081      		ld r24,Z
+ 887 07ae 9181      		ldd r25,Z+1
+ 888 07b0 880F      		lsl r24
+ 889 07b2 991F      		rol r25
+ 890 07b4 8755      		subi r24,lo8(-(937))
+ 891 07b6 9C4F      		sbci r25,hi8(-(937))
+ 892               	.L92:
+ 893 07b8 9093 0000 		sts (RemainingPulse)+1,r25
+ 894 07bc 8093 0000 		sts RemainingPulse,r24
+ 895 07c0 8091 0000 		lds r24,RemainingPulse
+ 896 07c4 9091 0000 		lds r25,(RemainingPulse)+1
+ 897 07c8 55E0      		ldi r21,hi8(1501)
+ 898 07ca 8D3D      		cpi r24,lo8(1501)
+ 899 07cc 9507      		cpc r25,r21
+ 900 07ce 00F0      		brlo .L80
+ 901 07d0 8CED      		ldi r24,lo8(1500)
+ 902 07d2 95E0      		ldi r25,hi8(1500)
+ 903 07d4 00C0      		rjmp .L93
+ 904               	.L80:
+ 905 07d6 8757      		subi r24,lo8(375)
+ 906 07d8 9140      		sbci r25,hi8(375)
+ 907 07da 00F4      		brsh .L81
+ 908 07dc 87E7      		ldi r24,lo8(375)
+ 909 07de 91E0      		ldi r25,hi8(375)
+ 910               	.L93:
+ 911 07e0 9093 0000 		sts (RemainingPulse)+1,r25
+ 912 07e4 8093 0000 		sts RemainingPulse,r24
+ 913               	.L81:
+ 914 07e8 2091 0000 		lds r18,RemainingPulse
+ 915 07ec 3091 0000 		lds r19,(RemainingPulse)+1
+ 916 07f0 2C5B      		subi r18,lo8(-(-188))
+ 917 07f2 3040      		sbci r19,hi8(-(-188))
+ 918 07f4 3093 0000 		sts (RemainingPulse)+1,r19
+ 919 07f8 2093 0000 		sts RemainingPulse,r18
+ 920 07fc 8091 0000 		lds r24,ServoFrameTime.2486
+ 921 0800 9091 0000 		lds r25,(ServoFrameTime.2486)+1
+ 922 0804 820F      		add r24,r18
+ 923 0806 931F      		adc r25,r19
+ 924               	.L96:
+ 925 0808 9093 0000 		sts (ServoFrameTime.2486)+1,r25
+ 926 080c 8093 0000 		sts ServoFrameTime.2486,r24
+ 927 0810 00C0      		rjmp .L71
+ 928               	.L69:
+ 929 0812 8091 B000 		lds r24,176
+ 930 0816 8064      		ori r24,lo8(64)
+ 931 0818 8093 B000 		sts 176,r24
+ 932 081c 8CEB      		ldi r24,lo8(188)
+ 933 081e 90E0      		ldi r25,hi8(188)
+ 934 0820 9093 0000 		sts (RemainingPulse)+1,r25
+ 935 0824 8093 0000 		sts RemainingPulse,r24
+ 936 0828 8091 0000 		lds r24,ServoFrameTime.2486
+ 937 082c 9091 0000 		lds r25,(ServoFrameTime.2486)+1
+ 938 0830 8454      		subi r24,lo8(-(188))
+ 939 0832 9F4F      		sbci r25,hi8(-(188))
+ 940 0834 9093 0000 		sts (ServoFrameTime.2486)+1,r25
+ 941 0838 8093 0000 		sts ServoFrameTime.2486,r24
+ 942 083c 8091 0000 		lds r24,ServoActive
+ 943 0840 8823      		tst r24
+ 944 0842 01F0      		breq .L82
+ 945 0844 8091 0000 		lds r24,SenderOkay
+ 946 0848 8333      		cpi r24,lo8(51)
+ 947 084a 00F4      		brsh .L83
+ 948               	.L82:
+ 949 084c 8091 0000 		lds r24,ServoActive
+ 950 0850 8230      		cpi r24,lo8(2)
+ 951 0852 01F4      		brne .L84
+ 952               	.L83:
+ 953 0854 4698      		cbi 40-32,6
+ 954 0856 00C0      		rjmp .L85
+ 955               	.L84:
+ 956 0858 469A      		sbi 40-32,6
+ 957               	.L85:
+ 958 085a 8091 0000 		lds r24,ServoIndex.2487
+ 959 085e 8F5F      		subi r24,lo8(-(1))
+ 960 0860 8093 0000 		sts ServoIndex.2487,r24
+ 961 0864 9091 0000 		lds r25,EE_Parameter+53
+ 962 0868 9817      		cp r25,r24
+ 963 086a 00F4      		brsh .L71
+ 964 086c 81E0      		ldi r24,lo8(1)
+ 965 086e 8093 0000 		sts CalculateServoSignals,r24
+ 966 0872 1092 0000 		sts ServoIndex.2487,__zero_reg__
+ 967               	.L71:
+ 968 0876 81E0      		ldi r24,lo8(1)
+ 969 0878 8093 0000 		sts PulseOutput.2485,r24
+ 970               	.L64:
+ 971 087c 2091 0000 		lds r18,RemainingPulse
+ 972 0880 3091 0000 		lds r19,(RemainingPulse)+1
+ 973 0884 41E0      		ldi r20,hi8(383)
+ 974 0886 2F37      		cpi r18,lo8(383)
+ 975 0888 3407      		cpc r19,r20
+ 976 088a 00F0      		brlo .L86
+ 977 088c 8FEF      		ldi r24,lo8(-1)
+ 978 088e 8093 B300 		sts 179,r24
+ 979 0892 2F5F      		subi r18,lo8(-(-255))
+ 980 0894 3040      		sbci r19,hi8(-(-255))
+ 981 0896 00C0      		rjmp .L94
+ 982               	.L86:
+ 983 0898 2F3F      		cpi r18,255
+ 984 089a 3105      		cpc r19,__zero_reg__
+ 985 089c 01F0      		breq .L88
+ 986 089e 00F0      		brlo .L88
+ 987 08a0 A901      		movw r20,r18
+ 988 08a2 4F5F      		subi r20,lo8(-(-255))
+ 989 08a4 5040      		sbci r21,hi8(-(-255))
+ 990 08a6 4F37      		cpi r20,127
+ 991 08a8 5105      		cpc r21,__zero_reg__
+ 992 08aa 00F4      		brsh .L89
+ 993 08ac 80E8      		ldi r24,lo8(-128)
+ 994 08ae 8093 B300 		sts 179,r24
+ 995 08b2 2058      		subi r18,lo8(-(-128))
+ 996 08b4 3040      		sbci r19,hi8(-(-128))
+ 997               	.L94:
+ 998 08b6 3093 0000 		sts (RemainingPulse)+1,r19
+ 999 08ba 2093 0000 		sts RemainingPulse,r18
+ 1000 08be 00C0      		rjmp .L90
+ 1001               	.L89:
+ 1002 08c0 8FEF      		ldi r24,lo8(-1)
+ 1003 08c2 8093 B300 		sts 179,r24
+ 1004 08c6 5093 0000 		sts (RemainingPulse)+1,r21
+ 1005 08ca 4093 0000 		sts RemainingPulse,r20
+ 1006 08ce 00C0      		rjmp .L90
+ 1007               	.L88:
+ 1008 08d0 2093 B300 		sts 179,r18
+ 1009 08d4 1092 0000 		sts (RemainingPulse)+1,__zero_reg__
+ 1010 08d8 1092 0000 		sts RemainingPulse,__zero_reg__
+ 1011 08dc 1092 0000 		sts PulseOutput.2485,__zero_reg__
+ 1012               	.L90:
+ 1013               	/* epilogue start */
+ 1014 08e0 FF91      		pop r31
+ 1015 08e2 EF91      		pop r30
+ 1016 08e4 9F91      		pop r25
+ 1017 08e6 8F91      		pop r24
+ 1018 08e8 5F91      		pop r21
+ 1019 08ea 4F91      		pop r20
+ 1020 08ec 3F91      		pop r19
+ 1021 08ee 2F91      		pop r18
+ 1022 08f0 0F90      		pop r0
+ 1023 08f2 0FBE      		out __SREG__,r0
+ 1024 08f4 0F90      		pop r0
+ 1025 08f6 1F90      		pop __zero_reg__
+ 1026 08f8 1895      		reti
+ 1028               	.global	CountMilliseconds
+ 1029               	.global	CountMilliseconds
+ 1030               		.section .bss
+ 1033               	CountMilliseconds:
+ 1034 0000 0000      		.skip 2,0
+ 1035               	.global	UpdateMotor
+ 1036               	.global	UpdateMotor
+ 1039               	UpdateMotor:
+ 1040 0002 00        		.skip 1,0
+ 1041               	.global	cntKompass
+ 1042               	.global	cntKompass
+ 1045               	cntKompass:
+ 1046 0003 0000      		.skip 2,0
+ 1047               	.global	beeptime
+ 1048               	.global	beeptime
+ 1051               	beeptime:
+ 1052 0005 0000      		.skip 2,0
+ 1053               	.global	SendSPI
+ 1054               	.global	SendSPI
+ 1057               	SendSPI:
+ 1058 0007 00        		.skip 1,0
+ 1059               	.global	ServoActive
+ 1060               	.global	ServoActive
+ 1063               	ServoActive:
+ 1064 0008 00        		.skip 1,0
+ 1065               	.global	CalculateServoSignals
+ 1066               		.data
+ 1069               	CalculateServoSignals:
+ 1070 0000 01        		.byte	1
+ 1071               	.global	RemainingPulse
+ 1072               	.global	RemainingPulse
+ 1073               		.section .bss
+ 1076               	RemainingPulse:
+ 1077 0009 0000      		.skip 2,0
+ 1078               	.global	ServoNickOffset
+ 1079               		.data
+ 1082               	ServoNickOffset:
+ 1083 0001 C01F      		.word	8128
+ 1084               	.global	ServoRollOffset
+ 1087               	ServoRollOffset:
+ 1088 0003 C01F      		.word	8128
+ 1089               	.global	BeepMuster
+ 1092               	BeepMuster:
+ 1093 0005 FFFF      		.word	-1
+ 1094               	.global	ServoNickValue
+ 1095               	.global	ServoNickValue
+ 1096               		.section .bss
+ 1099               	ServoNickValue:
+ 1100 000b 0000      		.skip 2,0
+ 1101               	.global	ServoRollValue
+ 1102               	.global	ServoRollValue
+ 1105               	ServoRollValue:
+ 1106 000d 0000      		.skip 2,0
+ 1107               		.lcomm ServoIndex.2487,1
+ 1108               		.lcomm ServoFrameTime.2486,2
+ 1109               		.lcomm PulseOutput.2485,1
+ 1110               		.lcomm compass_active.2241,1
+ 1111               		.lcomm cnt.2240,1
+ 1112               		.data
+ 1115               	cnt_1ms.2239:
+ 1116 0007 01        		.byte	1
+ 1117               		.lcomm tim_main,2
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 timer0.c
+     /tmp/ccyKzyAP.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccyKzyAP.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccyKzyAP.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccyKzyAP.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccyKzyAP.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccyKzyAP.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccyKzyAP.s:13     .text:0000000000000000 __vector_18
+     /tmp/ccyKzyAP.s:1057   .bss:0000000000000007 SendSPI
+     /tmp/ccyKzyAP.s:1110   .bss:0000000000000014 cnt.2240
+     /tmp/ccyKzyAP.s:1033   .bss:0000000000000000 CountMilliseconds
+     /tmp/ccyKzyAP.s:1115   .data:0000000000000007 cnt_1ms.2239
+     /tmp/ccyKzyAP.s:1039   .bss:0000000000000002 UpdateMotor
+     /tmp/ccyKzyAP.s:1109   .bss:0000000000000013 compass_active.2241
+     /tmp/ccyKzyAP.s:1051   .bss:0000000000000005 beeptime
+     /tmp/ccyKzyAP.s:1092   .data:0000000000000005 BeepMuster
+     /tmp/ccyKzyAP.s:1045   .bss:0000000000000003 cntKompass
+     /tmp/ccyKzyAP.s:226    .text:0000000000000206 SetDelay
+     /tmp/ccyKzyAP.s:241    .text:000000000000021a CheckDelay
+     /tmp/ccyKzyAP.s:257    .text:0000000000000230 Delay_ms
+     /tmp/ccyKzyAP.s:283    .text:000000000000025c Delay_ms_Mess
+     /tmp/ccyKzyAP.s:317    .text:000000000000029c TIMER2_Init
+     /tmp/ccyKzyAP.s:365    .text:00000000000002ea Timer_Init
+     /tmp/ccyKzyAP.s:1111   .bss:0000000000000015 tim_main
+     /tmp/ccyKzyAP.s:392    .text:000000000000031a CalculateServo
+     /tmp/ccyKzyAP.s:1069   .data:0000000000000000 CalculateServoSignals
+     /tmp/ccyKzyAP.s:1082   .data:0000000000000001 ServoNickOffset
+     /tmp/ccyKzyAP.s:1099   .bss:000000000000000b ServoNickValue
+     /tmp/ccyKzyAP.s:1087   .data:0000000000000003 ServoRollOffset
+     /tmp/ccyKzyAP.s:1105   .bss:000000000000000d ServoRollValue
+     /tmp/ccyKzyAP.s:718    .text:000000000000062e __vector_9
+     /tmp/ccyKzyAP.s:1108   .bss:0000000000000012 PulseOutput.2485
+     /tmp/ccyKzyAP.s:1076   .bss:0000000000000009 RemainingPulse
+     /tmp/ccyKzyAP.s:1107   .bss:0000000000000010 ServoFrameTime.2486
+                             .bss:000000000000000f ServoIndex.2487
+     /tmp/ccyKzyAP.s:1063   .bss:0000000000000008 ServoActive
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+SpektrumTimer
+PlatinenVersion
+NaviDataOkay
+EE_Parameter
+__udivmodhi4
+KompassValue
+KompassSollWert
+__divmodhi4
+KompassRichtung
+AdReady
+sintab
+IntegralRoll
+IntegralNick
+__mulsi3
+__divmodsi4
+POI_KameraNick
+Parameter_ServoNickControl
+Parameter_ServoRollControl
+Parameter_Servo3
+Parameter_Servo4
+Parameter_Servo5
+PPM_in
+SenderOkay

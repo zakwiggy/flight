@@ -115,7 +115,7 @@ OPT = s
 # List C source files here. (C dependencies are automatically generated.)
 SRC = main.c uart.c timer0.c analog.c menu.c eeprom.c
 SRC += twimaster.c rc.c fc.c GPS.c spi.c led.c Spektrum.c
-SRC += mymath.c jetimenu.c capacity.c debug.c
+SRC += mymath.c jetimenu.c capacity.c debug.c libfc.c printf_P.c
 
 ##########################################################################################################
 
@@ -190,7 +190,6 @@ LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
 # -lm = math library
 LDFLAGS += -lm
 
-LDFLAGS += libfc$(LIBFC_EXT).a
 
 ##LDFLAGS += -T./linkerfile/avr5.x
 

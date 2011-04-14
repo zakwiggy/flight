@@ -1,0 +1,1093 @@
+   1               		.file	"spi.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	SPI_MasterInit
+  13               	SPI_MasterInit:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 84B1      		in r24,36-32
+  17 0002 806A      		ori r24,lo8(-96)
+  18 0004 84B9      		out 36-32,r24
+  19 0006 3D9A      		sbi 39-32,5
+  20 0008 82E5      		ldi r24,lo8(82)
+  21 000a 8CBD      		out 76-32,r24
+  22 000c 1DBC      		out 77-32,__zero_reg__
+  23 000e 459A      		sbi 40-32,5
+  24 0010 81E0      		ldi r24,lo8(1)
+  25 0012 8093 0000 		sts SPITransferCompleted,r24
+  26 0016 8AEA      		ldi r24,lo8(-86)
+  27 0018 8093 0000 		sts ToNaviCtrl,r24
+  28 001c 83E8      		ldi r24,lo8(-125)
+  29 001e 8093 0000 		sts ToNaviCtrl+1,r24
+  30 0022 8AE0      		ldi r24,lo8(10)
+  31 0024 8093 0000 		sts ToNaviCtrl+2,r24
+  32 0028 1092 0000 		sts (ToNaviCtrl+3)+1,__zero_reg__
+  33 002c 1092 0000 		sts ToNaviCtrl+3,__zero_reg__
+  34 0030 1092 0000 		sts (ToNaviCtrl+5)+1,__zero_reg__
+  35 0034 1092 0000 		sts ToNaviCtrl+5,__zero_reg__
+  36 0038 1092 0000 		sts FromNaviCtrl_Value+3,__zero_reg__
+  37 003c 1092 0000 		sts SPI_RxDataValid,__zero_reg__
+  38               	/* epilogue start */
+  39 0040 0895      		ret
+  41               	.global	UpdateSPI_Buffer
+  43               	UpdateSPI_Buffer:
+  44 0042 EF92      		push r14
+  45 0044 FF92      		push r15
+  46 0046 0F93      		push r16
+  47 0048 1F93      		push r17
+  48               	/* prologue: function */
+  49               	/* frame size = 0 */
+  50 004a E090 0000 		lds r14,EE_Parameter+28
+  51 004e FF24      		clr r15
+  52 0050 EE0C      		lsl r14
+  53 0052 FF1C      		rol r15
+  54 0054 EE0C      		lsl r14
+  55 0056 FF1C      		rol r15
+  56 0058 0027      		clr r16
+  57 005a F7FC      		sbrc r15,7
+  58 005c 0095      		com r16
+  59 005e 102F      		mov r17,r16
+  60 0060 6091 0000 		lds r22,IntegralNick
+  61 0064 7091 0000 		lds r23,(IntegralNick)+1
+  62 0068 8091 0000 		lds r24,(IntegralNick)+2
+  63 006c 9091 0000 		lds r25,(IntegralNick)+3
+  64 0070 A801      		movw r20,r16
+  65 0072 9701      		movw r18,r14
+  66 0074 0E94 0000 		call __divmodsi4
+  67 0078 3093 0000 		sts (ToNaviCtrl+3)+1,r19
+  68 007c 2093 0000 		sts ToNaviCtrl+3,r18
+  69 0080 6091 0000 		lds r22,IntegralRoll
+  70 0084 7091 0000 		lds r23,(IntegralRoll)+1
+  71 0088 8091 0000 		lds r24,(IntegralRoll)+2
+  72 008c 9091 0000 		lds r25,(IntegralRoll)+3
+  73 0090 A801      		movw r20,r16
+  74 0092 9701      		movw r18,r14
+  75 0094 0E94 0000 		call __divmodsi4
+  76 0098 3093 0000 		sts (ToNaviCtrl+5)+1,r19
+  77 009c 2093 0000 		sts ToNaviCtrl+5,r18
+  78 00a0 6091 0000 		lds r22,ErsatzKompass
+  79 00a4 7091 0000 		lds r23,(ErsatzKompass)+1
+  80 00a8 8091 0000 		lds r24,(ErsatzKompass)+2
+  81 00ac 9091 0000 		lds r25,(ErsatzKompass)+3
+  82 00b0 2AE0      		ldi r18,lo8(10)
+  83 00b2 30E0      		ldi r19,hi8(10)
+  84 00b4 40E0      		ldi r20,hlo8(10)
+  85 00b6 50E0      		ldi r21,hhi8(10)
+  86 00b8 0E94 0000 		call __mulsi3
+  87 00bc 2091 0000 		lds r18,GIER_GRAD_FAKTOR
+  88 00c0 3091 0000 		lds r19,(GIER_GRAD_FAKTOR)+1
+  89 00c4 4091 0000 		lds r20,(GIER_GRAD_FAKTOR)+2
+  90 00c8 5091 0000 		lds r21,(GIER_GRAD_FAKTOR)+3
+  91 00cc 0E94 0000 		call __divmodsi4
+  92 00d0 3093 0000 		sts (ToNaviCtrl+11)+1,r19
+  93 00d4 2093 0000 		sts ToNaviCtrl+11,r18
+  94 00d8 2091 0000 		lds r18,AdWertGier
+  95 00dc 3091 0000 		lds r19,(AdWertGier)+1
+  96 00e0 8091 0000 		lds r24,AdNeutralGier
+  97 00e4 9091 0000 		lds r25,(AdNeutralGier)+1
+  98 00e8 821B      		sub r24,r18
+  99 00ea 930B      		sbc r25,r19
+ 100 00ec 9093 0000 		sts (ToNaviCtrl+17)+1,r25
+ 101 00f0 8093 0000 		sts ToNaviCtrl+17,r24
+ 102 00f4 2091 0000 		lds r18,NaviCntAcc
+ 103 00f8 3091 0000 		lds r19,(NaviCntAcc)+1
+ 104 00fc 8091 0000 		lds r24,NaviAccNick
+ 105 0100 9091 0000 		lds r25,(NaviAccNick)+1
+ 106 0104 B901      		movw r22,r18
+ 107 0106 0E94 0000 		call __divmodhi4
+ 108 010a CB01      		movw r24,r22
+ 109 010c 880F      		lsl r24
+ 110 010e 991F      		rol r25
+ 111 0110 860F      		add r24,r22
+ 112 0112 971F      		adc r25,r23
+ 113 0114 880F      		lsl r24
+ 114 0116 991F      		rol r25
+ 115 0118 64E0      		ldi r22,lo8(4)
+ 116 011a 70E0      		ldi r23,hi8(4)
+ 117 011c 0E94 0000 		call __divmodhi4
+ 118 0120 7093 0000 		sts (ToNaviCtrl+7)+1,r23
+ 119 0124 6093 0000 		sts ToNaviCtrl+7,r22
+ 120 0128 8091 0000 		lds r24,NaviAccRoll
+ 121 012c 9091 0000 		lds r25,(NaviAccRoll)+1
+ 122 0130 B901      		movw r22,r18
+ 123 0132 0E94 0000 		call __divmodhi4
+ 124 0136 CB01      		movw r24,r22
+ 125 0138 880F      		lsl r24
+ 126 013a 991F      		rol r25
+ 127 013c 860F      		add r24,r22
+ 128 013e 971F      		adc r25,r23
+ 129 0140 880F      		lsl r24
+ 130 0142 991F      		rol r25
+ 131 0144 64E0      		ldi r22,lo8(4)
+ 132 0146 70E0      		ldi r23,hi8(4)
+ 133 0148 0E94 0000 		call __divmodhi4
+ 134 014c 7093 0000 		sts (ToNaviCtrl+9)+1,r23
+ 135 0150 6093 0000 		sts ToNaviCtrl+9,r22
+ 136 0154 1092 0000 		sts (NaviCntAcc)+1,__zero_reg__
+ 137 0158 1092 0000 		sts NaviCntAcc,__zero_reg__
+ 138 015c 1092 0000 		sts (NaviAccNick)+1,__zero_reg__
+ 139 0160 1092 0000 		sts NaviAccNick,__zero_reg__
+ 140 0164 1092 0000 		sts (NaviAccRoll)+1,__zero_reg__
+ 141 0168 1092 0000 		sts NaviAccRoll,__zero_reg__
+ 142 016c 8091 0000 		lds r24,ToNaviCtrl+2
+ 143 0170 8D30      		cpi r24,lo8(13)
+ 144 0172 01F4      		brne .+2
+ 145 0174 00C0      		rjmp .L8
+ 146 0176 8E30      		cpi r24,lo8(14)
+ 147 0178 00F4      		brsh .L12
+ 148 017a 8B30      		cpi r24,lo8(11)
+ 149 017c 01F4      		brne .+2
+ 150 017e 00C0      		rjmp .L6
+ 151 0180 8C30      		cpi r24,lo8(12)
+ 152 0182 00F0      		brlo .+2
+ 153 0184 00C0      		rjmp .L7
+ 154 0186 8A30      		cpi r24,lo8(10)
+ 155 0188 01F0      		breq .+2
+ 156 018a 00C0      		rjmp .L4
+ 157 018c 00C0      		rjmp .L35
+ 158               	.L12:
+ 159 018e 8F30      		cpi r24,lo8(15)
+ 160 0190 01F4      		brne .+2
+ 161 0192 00C0      		rjmp .L10
+ 162 0194 8F30      		cpi r24,lo8(15)
+ 163 0196 00F4      		brsh .+2
+ 164 0198 00C0      		rjmp .L9
+ 165 019a 8031      		cpi r24,lo8(16)
+ 166 019c 01F0      		breq .+2
+ 167 019e 00C0      		rjmp .L4
+ 168 01a0 00C0      		rjmp .L36
+ 169               	.L35:
+ 170 01a2 8091 0000 		lds r24,Parameter_UserParam1
+ 171 01a6 8093 0000 		sts ToNaviCtrl+21,r24
+ 172 01aa 8091 0000 		lds r24,Parameter_UserParam2
+ 173 01ae 8093 0000 		sts ToNaviCtrl+22,r24
+ 174 01b2 8091 0000 		lds r24,Parameter_UserParam3
+ 175 01b6 8093 0000 		sts ToNaviCtrl+23,r24
+ 176 01ba 8091 0000 		lds r24,Parameter_UserParam4
+ 177 01be 8093 0000 		sts ToNaviCtrl+24,r24
+ 178 01c2 8091 0000 		lds r24,Parameter_UserParam5
+ 179 01c6 8093 0000 		sts ToNaviCtrl+25,r24
+ 180 01ca 8091 0000 		lds r24,Parameter_UserParam6
+ 181 01ce 8093 0000 		sts ToNaviCtrl+26,r24
+ 182 01d2 8091 0000 		lds r24,Parameter_UserParam7
+ 183 01d6 8093 0000 		sts ToNaviCtrl+27,r24
+ 184 01da 8091 0000 		lds r24,Parameter_UserParam8
+ 185 01de 8093 0000 		sts ToNaviCtrl+28,r24
+ 186 01e2 8091 0000 		lds r24,FC_StatusFlags
+ 187 01e6 8093 0000 		sts ToNaviCtrl+29,r24
+ 188 01ea 8091 0000 		lds r24,FC_StatusFlags
+ 189 01ee 837F      		andi r24,lo8(-13)
+ 190 01f0 8093 0000 		sts FC_StatusFlags,r24
+ 191 01f4 0E94 0000 		call GetActiveParamSet
+ 192 01f8 8093 0000 		sts ToNaviCtrl+30,r24
+ 193 01fc 8091 0000 		lds r24,ControlHeading
+ 194 0200 8093 0000 		sts ToNaviCtrl+31,r24
+ 195 0204 8091 0000 		lds r24,FC_StatusFlags2
+ 196 0208 00C0      		rjmp .L33
+ 197               	.L36:
+ 198 020a 8091 0000 		lds r24,Capacity
+ 199 020e 9091 0000 		lds r25,(Capacity)+1
+ 200 0212 9093 0000 		sts (ToNaviCtrl+21)+1,r25
+ 201 0216 8093 0000 		sts ToNaviCtrl+21,r24
+ 202 021a 8091 0000 		lds r24,Capacity+4
+ 203 021e 9091 0000 		lds r25,(Capacity+4)+1
+ 204 0222 9093 0000 		sts (ToNaviCtrl+23)+1,r25
+ 205 0226 8093 0000 		sts ToNaviCtrl+23,r24
+ 206 022a 8091 0000 		lds r24,UBat
+ 207 022e 9091 0000 		lds r25,(UBat)+1
+ 208 0232 8093 0000 		sts ToNaviCtrl+25,r24
+ 209 0236 8091 0000 		lds r24,BattLowVoltageWarning
+ 210 023a 8093 0000 		sts ToNaviCtrl+26,r24
+ 211 023e 8091 0000 		lds r24,VarioCharacter
+ 212 0242 8093 0000 		sts ToNaviCtrl+27,r24
+ 213 0246 00C0      		rjmp .L4
+ 214               	.L8:
+ 215 0248 8091 0000 		lds r24,EE_Parameter+80
+ 216 024c 8093 0000 		sts ToNaviCtrl+21,r24
+ 217 0250 8091 0000 		lds r24,EE_Parameter+81
+ 218 0254 8093 0000 		sts ToNaviCtrl+22,r24
+ 219 0258 8091 0000 		lds r24,EE_Parameter+82
+ 220 025c 8093 0000 		sts ToNaviCtrl+23,r24
+ 221 0260 8091 0000 		lds r24,EE_Parameter+83
+ 222 0264 8093 0000 		sts ToNaviCtrl+24,r24
+ 223 0268 8091 0000 		lds r24,EE_Parameter+84
+ 224 026c 8093 0000 		sts ToNaviCtrl+25,r24
+ 225 0270 8091 0000 		lds r24,EE_Parameter+88
+ 226 0274 8093 0000 		sts ToNaviCtrl+26,r24
+ 227 0278 8091 0000 		lds r24,EE_Parameter+89
+ 228 027c 8093 0000 		sts ToNaviCtrl+27,r24
+ 229 0280 8091 0000 		lds r24,EE_Parameter+90
+ 230 0284 8093 0000 		sts ToNaviCtrl+28,r24
+ 231 0288 8091 0000 		lds r24,EE_Parameter+93
+ 232 028c 8093 0000 		sts ToNaviCtrl+29,r24
+ 233 0290 8091 0000 		lds r24,EE_Parameter+91
+ 234 0294 8093 0000 		sts ToNaviCtrl+30,r24
+ 235 0298 8091 0000 		lds r24,EE_Parameter+92
+ 236 029c 8093 0000 		sts ToNaviCtrl+31,r24
+ 237 02a0 8091 0000 		lds r24,EE_Parameter+94
+ 238               	.L33:
+ 239 02a4 8093 0000 		sts ToNaviCtrl+32,r24
+ 240 02a8 00C0      		rjmp .L4
+ 241               	.L6:
+ 242               	/* #APP */
+ 243               	 ;  215 "spi.c" 1
+ 244 02aa F894      		cli
+ 245               	 ;  0 "" 2
+ 246               	/* #NOAPP */
+ 247 02ac E091 0000 		lds r30,EE_Parameter+3
+ 248 02b0 F0E0      		ldi r31,lo8(0)
+ 249 02b2 EE0F      		lsl r30
+ 250 02b4 FF1F      		rol r31
+ 251 02b6 E050      		subi r30,lo8(-(PPM_in))
+ 252 02b8 F040      		sbci r31,hi8(-(PPM_in))
+ 253 02ba 0190      		ld __tmp_reg__,Z+
+ 254 02bc F081      		ld r31,Z
+ 255 02be E02D      		mov r30,__tmp_reg__
+ 256 02c0 2FEF      		ldi r18,hi8(-127)
+ 257 02c2 E138      		cpi r30,lo8(-127)
+ 258 02c4 F207      		cpc r31,r18
+ 259 02c6 04F4      		brge .L13
+ 260 02c8 E1E8      		ldi r30,lo8(-127)
+ 261 02ca FFEF      		ldi r31,hi8(-127)
+ 262               	.L13:
+ 263 02cc E038      		cpi r30,128
+ 264 02ce F105      		cpc r31,__zero_reg__
+ 265 02d0 04F0      		brlt .L14
+ 266 02d2 EFE7      		ldi r30,lo8(127)
+ 267 02d4 F0E0      		ldi r31,hi8(127)
+ 268               	.L14:
+ 269 02d6 E093 0000 		sts ToNaviCtrl+21,r30
+ 270 02da E091 0000 		lds r30,EE_Parameter+4
+ 271 02de F0E0      		ldi r31,lo8(0)
+ 272 02e0 EE0F      		lsl r30
+ 273 02e2 FF1F      		rol r31
+ 274 02e4 E050      		subi r30,lo8(-(PPM_in))
+ 275 02e6 F040      		sbci r31,hi8(-(PPM_in))
+ 276 02e8 0190      		ld __tmp_reg__,Z+
+ 277 02ea F081      		ld r31,Z
+ 278 02ec E02D      		mov r30,__tmp_reg__
+ 279 02ee 4FEF      		ldi r20,hi8(-127)
+ 280 02f0 E138      		cpi r30,lo8(-127)
+ 281 02f2 F407      		cpc r31,r20
+ 282 02f4 04F4      		brge .L15
+ 283 02f6 E1E8      		ldi r30,lo8(-127)
+ 284 02f8 FFEF      		ldi r31,hi8(-127)
+ 285               	.L15:
+ 286 02fa E038      		cpi r30,128
+ 287 02fc F105      		cpc r31,__zero_reg__
+ 288 02fe 04F0      		brlt .L16
+ 289 0300 EFE7      		ldi r30,lo8(127)
+ 290 0302 F0E0      		ldi r31,hi8(127)
+ 291               	.L16:
+ 292 0304 E093 0000 		sts ToNaviCtrl+22,r30
+ 293 0308 E091 0000 		lds r30,EE_Parameter+2
+ 294 030c F0E0      		ldi r31,lo8(0)
+ 295 030e EE0F      		lsl r30
+ 296 0310 FF1F      		rol r31
+ 297 0312 E050      		subi r30,lo8(-(PPM_in))
+ 298 0314 F040      		sbci r31,hi8(-(PPM_in))
+ 299 0316 0190      		ld __tmp_reg__,Z+
+ 300 0318 F081      		ld r31,Z
+ 301 031a E02D      		mov r30,__tmp_reg__
+ 302 031c 5FEF      		ldi r21,hi8(-127)
+ 303 031e E138      		cpi r30,lo8(-127)
+ 304 0320 F507      		cpc r31,r21
+ 305 0322 04F4      		brge .L17
+ 306 0324 E1E8      		ldi r30,lo8(-127)
+ 307 0326 FFEF      		ldi r31,hi8(-127)
+ 308               	.L17:
+ 309 0328 E038      		cpi r30,128
+ 310 032a F105      		cpc r31,__zero_reg__
+ 311 032c 04F0      		brlt .L18
+ 312 032e EFE7      		ldi r30,lo8(127)
+ 313 0330 F0E0      		ldi r31,hi8(127)
+ 314               	.L18:
+ 315 0332 E093 0000 		sts ToNaviCtrl+23,r30
+ 316 0336 E091 0000 		lds r30,EE_Parameter+1
+ 317 033a F0E0      		ldi r31,lo8(0)
+ 318 033c EE0F      		lsl r30
+ 319 033e FF1F      		rol r31
+ 320 0340 E050      		subi r30,lo8(-(PPM_in))
+ 321 0342 F040      		sbci r31,hi8(-(PPM_in))
+ 322 0344 0190      		ld __tmp_reg__,Z+
+ 323 0346 F081      		ld r31,Z
+ 324 0348 E02D      		mov r30,__tmp_reg__
+ 325 034a 6FEF      		ldi r22,hi8(-127)
+ 326 034c E138      		cpi r30,lo8(-127)
+ 327 034e F607      		cpc r31,r22
+ 328 0350 04F4      		brge .L19
+ 329 0352 E1E8      		ldi r30,lo8(-127)
+ 330 0354 FFEF      		ldi r31,hi8(-127)
+ 331               	.L19:
+ 332               	/* #APP */
+ 333               	 ;  223 "spi.c" 1
+ 334 0356 7894      		sei
+ 335               	 ;  0 "" 2
+ 336               	/* #NOAPP */
+ 337 0358 E038      		cpi r30,128
+ 338 035a F105      		cpc r31,__zero_reg__
+ 339 035c 04F0      		brlt .L20
+ 340 035e EFE7      		ldi r30,lo8(127)
+ 341 0360 F0E0      		ldi r31,hi8(127)
+ 342               	.L20:
+ 343 0362 E093 0000 		sts ToNaviCtrl+24,r30
+ 344 0366 8091 0000 		lds r24,Poti
+ 345 036a 8093 0000 		sts ToNaviCtrl+25,r24
+ 346 036e 8091 0000 		lds r24,Poti+1
+ 347 0372 8093 0000 		sts ToNaviCtrl+26,r24
+ 348 0376 8091 0000 		lds r24,Poti+2
+ 349 037a 8093 0000 		sts ToNaviCtrl+27,r24
+ 350 037e 8091 0000 		lds r24,Poti+3
+ 351 0382 8093 0000 		sts ToNaviCtrl+28,r24
+ 352 0386 8091 0000 		lds r24,Poti+4
+ 353 038a 8093 0000 		sts ToNaviCtrl+29,r24
+ 354 038e 8091 0000 		lds r24,Poti+5
+ 355 0392 8093 0000 		sts ToNaviCtrl+30,r24
+ 356 0396 8091 0000 		lds r24,Poti+6
+ 357 039a 8093 0000 		sts ToNaviCtrl+31,r24
+ 358 039e 8091 0000 		lds r24,Poti+7
+ 359 03a2 00C0      		rjmp .L33
+ 360               	.L7:
+ 361 03a4 8091 0000 		lds r24,WinkelOut+6
+ 362 03a8 8630      		cpi r24,lo8(6)
+ 363 03aa 00F0      		brlo .L21
+ 364 03ac 1092 0000 		sts WinkelOut+6,__zero_reg__
+ 365 03b0 85E0      		ldi r24,lo8(5)
+ 366               	.L21:
+ 367 03b2 8093 0000 		sts ToNaviCtrl+21,r24
+ 368 03b6 8091 0000 		lds r24,EE_Parameter+95
+ 369 03ba 8093 0000 		sts ToNaviCtrl+22,r24
+ 370 03be 6091 0000 		lds r22,HoehenWert
+ 371 03c2 7091 0000 		lds r23,(HoehenWert)+1
+ 372 03c6 8091 0000 		lds r24,(HoehenWert)+2
+ 373 03ca 9091 0000 		lds r25,(HoehenWert)+3
+ 374 03ce 25E0      		ldi r18,lo8(5)
+ 375 03d0 30E0      		ldi r19,hi8(5)
+ 376 03d2 40E0      		ldi r20,hlo8(5)
+ 377 03d4 50E0      		ldi r21,hhi8(5)
+ 378 03d6 0E94 0000 		call __divmodsi4
+ 379 03da 3093 0000 		sts (ToNaviCtrl+23)+1,r19
+ 380 03de 2093 0000 		sts ToNaviCtrl+23,r18
+ 381 03e2 6091 0000 		lds r22,SollHoehe
+ 382 03e6 7091 0000 		lds r23,(SollHoehe)+1
+ 383 03ea 8091 0000 		lds r24,(SollHoehe)+2
+ 384 03ee 9091 0000 		lds r25,(SollHoehe)+3
+ 385 03f2 25E0      		ldi r18,lo8(5)
+ 386 03f4 30E0      		ldi r19,hi8(5)
+ 387 03f6 40E0      		ldi r20,hlo8(5)
+ 388 03f8 50E0      		ldi r21,hhi8(5)
+ 389 03fa 0E94 0000 		call __divmodsi4
+ 390 03fe 3093 0000 		sts (ToNaviCtrl+25)+1,r19
+ 391 0402 2093 0000 		sts ToNaviCtrl+25,r18
+ 392 0406 8091 0000 		lds r24,EE_Parameter+85
+ 393 040a 8093 0000 		sts ToNaviCtrl+27,r24
+ 394 040e 8091 0000 		lds r24,EE_Parameter+86
+ 395 0412 8093 0000 		sts ToNaviCtrl+28,r24
+ 396 0416 8091 0000 		lds r24,EE_Parameter+87
+ 397 041a 8093 0000 		sts ToNaviCtrl+29,r24
+ 398 041e 8091 0000 		lds r24,SenderOkay
+ 399 0422 8093 0000 		sts ToNaviCtrl+30,r24
+ 400 0426 8091 0000 		lds r24,PPM_in
+ 401 042a 9091 0000 		lds r25,(PPM_in)+1
+ 402 042e 8093 0000 		sts ToNaviCtrl+31,r24
+ 403 0432 8091 0000 		lds r24,DebugOut+16
+ 404 0436 9091 0000 		lds r25,(DebugOut+16)+1
+ 405 043a 64E0      		ldi r22,lo8(4)
+ 406 043c 70E0      		ldi r23,hi8(4)
+ 407 043e 0E94 0000 		call __divmodhi4
+ 408 0442 6093 0000 		sts ToNaviCtrl+32,r22
+ 409 0446 00C0      		rjmp .L4
+ 410               	.L9:
+ 411 0448 1092 0000 		sts ToNaviCtrl+21,__zero_reg__
+ 412 044c 84E5      		ldi r24,lo8(84)
+ 413 044e 8093 0000 		sts ToNaviCtrl+22,r24
+ 414 0452 1092 0000 		sts ToNaviCtrl+23,__zero_reg__
+ 415 0456 83E1      		ldi r24,lo8(19)
+ 416 0458 8093 0000 		sts ToNaviCtrl+24,r24
+ 417 045c 8091 0000 		lds r24,PlatinenVersion
+ 418 0460 8093 0000 		sts ToNaviCtrl+25,r24
+ 419 0464 8091 0000 		lds r24,VersionInfo+5
+ 420 0468 8093 0000 		sts ToNaviCtrl+26,r24
+ 421 046c 8091 0000 		lds r24,VersionInfo+6
+ 422 0470 8093 0000 		sts ToNaviCtrl+27,r24
+ 423 0474 8091 0000 		lds r24,VersionInfo+7
+ 424 0478 8093 0000 		sts ToNaviCtrl+28,r24
+ 425 047c 8091 0000 		lds r24,VersionInfo+8
+ 426 0480 8093 0000 		sts ToNaviCtrl+29,r24
+ 427 0484 8091 0000 		lds r24,VersionInfo+9
+ 428 0488 00C0      		rjmp .L34
+ 429               	.L10:
+ 430 048a 8091 0000 		lds r24,EE_Parameter+53
+ 431 048e 8093 0000 		sts ToNaviCtrl+21,r24
+ 432 0492 8091 0000 		lds r24,EE_Parameter+101
+ 433 0496 8093 0000 		sts ToNaviCtrl+22,r24
+ 434 049a 8091 0000 		lds r24,Parameter_ServoNickControl
+ 435 049e 8093 0000 		sts ToNaviCtrl+23,r24
+ 436 04a2 8091 0000 		lds r24,EE_Parameter+46
+ 437 04a6 8093 0000 		sts ToNaviCtrl+24,r24
+ 438 04aa 8091 0000 		lds r24,EE_Parameter+47
+ 439 04ae 8093 0000 		sts ToNaviCtrl+25,r24
+ 440 04b2 8091 0000 		lds r24,EE_Parameter+48
+ 441 04b6 8093 0000 		sts ToNaviCtrl+26,r24
+ 442 04ba 8091 0000 		lds r24,Parameter_ServoRollControl
+ 443 04be 8093 0000 		sts ToNaviCtrl+27,r24
+ 444 04c2 8091 0000 		lds r24,EE_Parameter+50
+ 445 04c6 8093 0000 		sts ToNaviCtrl+28,r24
+ 446 04ca 8091 0000 		lds r24,EE_Parameter+51
+ 447 04ce 8093 0000 		sts ToNaviCtrl+29,r24
+ 448 04d2 8091 0000 		lds r24,EE_Parameter+52
+ 449               	.L34:
+ 450 04d6 8093 0000 		sts ToNaviCtrl+30,r24
+ 451               	.L4:
+ 452 04da 8091 0000 		lds r24,SPI_RxDataValid
+ 453 04de 8823      		tst r24
+ 454 04e0 01F4      		brne .+2
+ 455 04e2 00C0      		rjmp .L23
+ 456 04e4 8AEF      		ldi r24,lo8(-6)
+ 457 04e6 8093 0000 		sts NaviDataOkay,r24
+ 458 04ea 81E0      		ldi r24,lo8(1)
+ 459 04ec 8093 0000 		sts CalculateCompassTimer,r24
+ 460 04f0 4091 0000 		lds r20,FromNaviCtrl+1
+ 461 04f4 5091 0000 		lds r21,(FromNaviCtrl+1)+1
+ 462 04f8 CA01      		movw r24,r20
+ 463 04fa 8150      		subi r24,lo8(-(511))
+ 464 04fc 9E4F      		sbci r25,hi8(-(511))
+ 465 04fe 8F5F      		subi r24,lo8(1023)
+ 466 0500 9340      		sbci r25,hi8(1023)
+ 467 0502 00F4      		brsh .L24
+ 468 0504 2091 0000 		lds r18,FromNaviCtrl+3
+ 469 0508 3091 0000 		lds r19,(FromNaviCtrl+3)+1
+ 470 050c C901      		movw r24,r18
+ 471 050e 8150      		subi r24,lo8(-(511))
+ 472 0510 9E4F      		sbci r25,hi8(-(511))
+ 473 0512 8F5F      		subi r24,lo8(1023)
+ 474 0514 9340      		sbci r25,hi8(1023)
+ 475 0516 00F4      		brsh .L24
+ 476 0518 8091 0000 		lds r24,EE_Parameter+13
+ 477 051c 85FF      		sbrs r24,5
+ 478 051e 00C0      		rjmp .L24
+ 479 0520 5093 0000 		sts (GPS_Nick)+1,r21
+ 480 0524 4093 0000 		sts GPS_Nick,r20
+ 481 0528 3093 0000 		sts (GPS_Roll)+1,r19
+ 482 052c 2093 0000 		sts GPS_Roll,r18
+ 483               	.L24:
+ 484 0530 8091 0000 		lds r24,FromNaviCtrl+9
+ 485 0534 9091 0000 		lds r25,(FromNaviCtrl+9)+1
+ 486 0538 9093 0000 		sts (MagVec)+1,r25
+ 487 053c 8093 0000 		sts MagVec,r24
+ 488 0540 8091 0000 		lds r24,FromNaviCtrl+11
+ 489 0544 9091 0000 		lds r25,(FromNaviCtrl+11)+1
+ 490 0548 9093 0000 		sts (MagVec+2)+1,r25
+ 491 054c 8093 0000 		sts MagVec+2,r24
+ 492 0550 8091 0000 		lds r24,FromNaviCtrl+13
+ 493 0554 9091 0000 		lds r25,(FromNaviCtrl+13)+1
+ 494 0558 9093 0000 		sts (MagVec+4)+1,r25
+ 495 055c 8093 0000 		sts MagVec+4,r24
+ 496 0560 8091 0000 		lds r24,FromNaviCtrl+7
+ 497 0564 9091 0000 		lds r25,(FromNaviCtrl+7)+1
+ 498 0568 21E0      		ldi r18,hi8(361)
+ 499 056a 8936      		cpi r24,lo8(361)
+ 500 056c 9207      		cpc r25,r18
+ 501 056e 04F4      		brge .L25
+ 502 0570 9093 0000 		sts (KompassValue)+1,r25
+ 503 0574 8093 0000 		sts KompassValue,r24
+ 504               	.L25:
+ 505 0578 8091 0000 		lds r24,KompassValue
+ 506 057c 9091 0000 		lds r25,(KompassValue)+1
+ 507 0580 845E      		subi r24,lo8(-(540))
+ 508 0582 9D4F      		sbci r25,hi8(-(540))
+ 509 0584 2091 0000 		lds r18,KompassSollWert
+ 510 0588 3091 0000 		lds r19,(KompassSollWert)+1
+ 511 058c 821B      		sub r24,r18
+ 512 058e 930B      		sbc r25,r19
+ 513 0590 68E6      		ldi r22,lo8(360)
+ 514 0592 71E0      		ldi r23,hi8(360)
+ 515 0594 0E94 0000 		call __divmodhi4
+ 516 0598 845B      		subi r24,lo8(-(-180))
+ 517 059a 9040      		sbci r25,hi8(-(-180))
+ 518 059c 9093 0000 		sts (KompassRichtung)+1,r25
+ 519 05a0 8093 0000 		sts KompassRichtung,r24
+ 520 05a4 2091 0000 		lds r18,FromNaviCtrl+17
+ 521 05a8 3091 0000 		lds r19,(FromNaviCtrl+17)+1
+ 522 05ac 8091 0000 		lds r24,beeptime
+ 523 05b0 9091 0000 		lds r25,(beeptime)+1
+ 524 05b4 8217      		cp r24,r18
+ 525 05b6 9307      		cpc r25,r19
+ 526 05b8 00F4      		brsh .L26
+ 527 05ba 3093 0000 		sts (beeptime)+1,r19
+ 528 05be 2093 0000 		sts beeptime,r18
+ 529               	.L26:
+ 530 05c2 8091 0000 		lds r24,FromNaviCtrl
+ 531 05c6 8836      		cpi r24,lo8(104)
+ 532 05c8 01F4      		brne .+2
+ 533 05ca 00C0      		rjmp .L29
+ 534 05cc 8936      		cpi r24,lo8(105)
+ 535 05ce 01F4      		brne .+2
+ 536 05d0 00C0      		rjmp .L30
+ 537 05d2 8736      		cpi r24,lo8(103)
+ 538 05d4 01F0      		breq .+2
+ 539 05d6 00C0      		rjmp .L32
+ 540 05d8 8091 0000 		lds r24,FromNaviCtrl+19
+ 541 05dc 8093 0000 		sts FromNaviCtrl_Value,r24
+ 542 05e0 8091 0000 		lds r24,FromNaviCtrl+20
+ 543 05e4 8093 0000 		sts FromNaviCtrl_Value+2,r24
+ 544 05e8 8091 0000 		lds r24,FromNaviCtrl+21
+ 545 05ec 8093 0000 		sts FromNaviCtrl_Value+1,r24
+ 546 05f0 8091 0000 		lds r24,FromNaviCtrl+22
+ 547 05f4 8093 0000 		sts FromNaviCtrl_Value+3,r24
+ 548 05f8 8091 0000 		lds r24,FromNaviCtrl+23
+ 549 05fc 8093 0000 		sts FromNaviCtrl_Value+4,r24
+ 550 0600 8091 0000 		lds r24,FromNaviCtrl+24
+ 551 0604 8093 0000 		sts FromNC_Rotate_C,r24
+ 552 0608 8091 0000 		lds r24,FromNaviCtrl+25
+ 553 060c 8093 0000 		sts FromNC_Rotate_S,r24
+ 554 0610 8091 0000 		lds r24,CareFree
+ 555 0614 8823      		tst r24
+ 556 0616 01F0      		breq .L31
+ 557 0618 2091 0000 		lds r18,FromNaviCtrl+27
+ 558 061c 3091 0000 		lds r19,(FromNaviCtrl+27)+1
+ 559 0620 37FD      		sbrc r19,7
+ 560 0622 00C0      		rjmp .L31
+ 561 0624 3093 0000 		sts (KompassSollWert)+1,r19
+ 562 0628 2093 0000 		sts KompassSollWert,r18
+ 563 062c 9091 0000 		lds r25,EE_Parameter+55
+ 564 0630 9923      		tst r25
+ 565 0632 01F0      		breq .L31
+ 566 0634 2859      		subi r18,lo8(-(360))
+ 567 0636 3E4F      		sbci r19,hi8(-(360))
+ 568 0638 8FE0      		ldi r24,lo8(15)
+ 569 063a 989F      		mul r25,r24
+ 570 063c C001      		movw r24,r0
+ 571 063e 1124      		clr r1
+ 572 0640 A901      		movw r20,r18
+ 573 0642 481B      		sub r20,r24
+ 574 0644 590B      		sbc r21,r25
+ 575 0646 CA01      		movw r24,r20
+ 576 0648 68E6      		ldi r22,lo8(360)
+ 577 064a 71E0      		ldi r23,hi8(360)
+ 578 064c 0E94 0000 		call __divmodhi4
+ 579 0650 9093 0000 		sts (KompassSollWert)+1,r25
+ 580 0654 8093 0000 		sts KompassSollWert,r24
+ 581               	.L31:
+ 582 0658 8091 0000 		lds r24,FromNaviCtrl+29
+ 583 065c 9091 0000 		lds r25,(FromNaviCtrl+29)+1
+ 584 0660 2091 0000 		lds r18,POI_KameraNick
+ 585 0664 3091 0000 		lds r19,(POI_KameraNick)+1
+ 586 0668 820F      		add r24,r18
+ 587 066a 931F      		adc r25,r19
+ 588 066c 62E0      		ldi r22,lo8(2)
+ 589 066e 70E0      		ldi r23,hi8(2)
+ 590 0670 0E94 0000 		call __divmodhi4
+ 591 0674 7093 0000 		sts (POI_KameraNick)+1,r23
+ 592 0678 6093 0000 		sts POI_KameraNick,r22
+ 593 067c 00C0      		rjmp .L32
+ 594               	.L29:
+ 595 067e 8091 0000 		lds r24,FromNaviCtrl+19
+ 596 0682 8093 0000 		sts NC_Version,r24
+ 597 0686 8091 0000 		lds r24,FromNaviCtrl+20
+ 598 068a 8093 0000 		sts NC_Version+1,r24
+ 599 068e 8091 0000 		lds r24,FromNaviCtrl+21
+ 600 0692 8093 0000 		sts NC_Version+2,r24
+ 601 0696 8091 0000 		lds r24,FromNaviCtrl+22
+ 602 069a 8093 0000 		sts NC_Version+3,r24
+ 603 069e 8091 0000 		lds r24,FromNaviCtrl+23
+ 604 06a2 8093 0000 		sts NC_Version+4,r24
+ 605 06a6 8091 0000 		lds r24,FromNaviCtrl+24
+ 606 06aa 9091 0000 		lds r25,DebugOut
+ 607 06ae 892B      		or r24,r25
+ 608 06b0 8093 0000 		sts DebugOut,r24
+ 609 06b4 9091 0000 		lds r25,FromNaviCtrl+25
+ 610 06b8 9093 0000 		sts NC_ErrorCode,r25
+ 611 06bc 9C70      		andi r25,lo8(12)
+ 612 06be 8091 0000 		lds r24,DebugOut+1
+ 613 06c2 8370      		andi r24,lo8(3)
+ 614 06c4 982B      		or r25,r24
+ 615 06c6 9093 0000 		sts DebugOut+1,r25
+ 616 06ca 00C0      		rjmp .L32
+ 617               	.L30:
+ 618 06cc 8091 0000 		lds r24,FromNaviCtrl+19
+ 619 06d0 8093 0000 		sts GPSInfo,r24
+ 620 06d4 8091 0000 		lds r24,FromNaviCtrl+20
+ 621 06d8 8093 0000 		sts GPSInfo+1,r24
+ 622 06dc 8091 0000 		lds r24,FromNaviCtrl+21
+ 623 06e0 8093 0000 		sts GPSInfo+2,r24
+ 624 06e4 8091 0000 		lds r24,FromNaviCtrl+22
+ 625 06e8 8093 0000 		sts GPSInfo+3,r24
+ 626 06ec 8091 0000 		lds r24,FromNaviCtrl+23
+ 627 06f0 9091 0000 		lds r25,(FromNaviCtrl+23)+1
+ 628 06f4 9093 0000 		sts (GPSInfo+4)+1,r25
+ 629 06f8 8093 0000 		sts GPSInfo+4,r24
+ 630 06fc 8091 0000 		lds r24,FromNaviCtrl+25
+ 631 0700 9091 0000 		lds r25,(FromNaviCtrl+25)+1
+ 632 0704 9093 0000 		sts (GPSInfo+6)+1,r25
+ 633 0708 8093 0000 		sts GPSInfo+6,r24
+ 634 070c 8091 0000 		lds r24,FromNaviCtrl+27
+ 635 0710 9927      		clr r25
+ 636 0712 87FD      		sbrc r24,7
+ 637 0714 9095      		com r25
+ 638 0716 9093 0000 		sts (PPM_in+50)+1,r25
+ 639 071a 8093 0000 		sts PPM_in+50,r24
+ 640 071e 8091 0000 		lds r24,FromNaviCtrl+28
+ 641 0722 8093 0000 		sts FromNC_AltitudeSpeed,r24
+ 642 0726 6091 0000 		lds r22,FromNaviCtrl+29
+ 643 072a 7091 0000 		lds r23,(FromNaviCtrl+29)+1
+ 644 072e 8827      		clr r24
+ 645 0730 77FD      		sbrc r23,7
+ 646 0732 8095      		com r24
+ 647 0734 982F      		mov r25,r24
+ 648 0736 2AE0      		ldi r18,lo8(10)
+ 649 0738 30E0      		ldi r19,hi8(10)
+ 650 073a 40E0      		ldi r20,hlo8(10)
+ 651 073c 50E0      		ldi r21,hhi8(10)
+ 652 073e 0E94 0000 		call __mulsi3
+ 653 0742 6093 0000 		sts FromNC_AltitudeSetpoint,r22
+ 654 0746 7093 0000 		sts (FromNC_AltitudeSetpoint)+1,r23
+ 655 074a 8093 0000 		sts (FromNC_AltitudeSetpoint)+2,r24
+ 656 074e 9093 0000 		sts (FromNC_AltitudeSetpoint)+3,r25
+ 657 0752 00C0      		rjmp .L32
+ 658               	.L23:
+ 659 0754 1092 0000 		sts (GPS_Nick)+1,__zero_reg__
+ 660 0758 1092 0000 		sts GPS_Nick,__zero_reg__
+ 661 075c 1092 0000 		sts (GPS_Roll)+1,__zero_reg__
+ 662 0760 1092 0000 		sts GPS_Roll,__zero_reg__
+ 663               	.L32:
+ 664               	/* epilogue start */
+ 665 0764 1F91      		pop r17
+ 666 0766 0F91      		pop r16
+ 667 0768 FF90      		pop r15
+ 668 076a EF90      		pop r14
+ 669 076c 0895      		ret
+ 671               	.global	SPI_StartTransmitPacket
+ 673               	SPI_StartTransmitPacket:
+ 674               	/* prologue: function */
+ 675               	/* frame size = 0 */
+ 676 076e 8091 0000 		lds r24,SPITransferCompleted
+ 677 0772 8823      		tst r24
+ 678 0774 01F4      		brne .+2
+ 679 0776 00C0      		rjmp .L40
+ 680 0778 4598      		cbi 40-32,5
+ 681 077a 80E0      		ldi r24,lo8(ToNaviCtrl)
+ 682 077c 90E0      		ldi r25,hi8(ToNaviCtrl)
+ 683 077e 9093 0000 		sts (SPI_TX_Buffer)+1,r25
+ 684 0782 8093 0000 		sts SPI_TX_Buffer,r24
+ 685 0786 9091 0000 		lds r25,SPI_CommandCounter
+ 686 078a E92F      		mov r30,r25
+ 687 078c F0E0      		ldi r31,lo8(0)
+ 688 078e E050      		subi r30,lo8(-(SPI_CommandSequence))
+ 689 0790 F040      		sbci r31,hi8(-(SPI_CommandSequence))
+ 690 0792 8081      		ld r24,Z
+ 691 0794 8093 0000 		sts ToNaviCtrl+2,r24
+ 692 0798 9F5F      		subi r25,lo8(-(1))
+ 693 079a 9093 0000 		sts SPI_CommandCounter,r25
+ 694 079e 9930      		cpi r25,lo8(9)
+ 695 07a0 00F0      		brlo .L39
+ 696 07a2 1092 0000 		sts SPI_CommandCounter,__zero_reg__
+ 697               	.L39:
+ 698 07a6 1092 0000 		sts SPITransferCompleted,__zero_reg__
+ 699 07aa 0E94 0000 		call UpdateSPI_Buffer
+ 700 07ae 81E0      		ldi r24,lo8(1)
+ 701 07b0 8093 0000 		sts SPI_BufferIndex,r24
+ 702               	/* #APP */
+ 703               	 ;  77 "spi.c" 1
+ 704 07b4 0000      		nop
+ 705               	 ;  0 "" 2
+ 706               	 ;  77 "spi.c" 1
+ 707 07b6 0000      		nop
+ 708               	 ;  0 "" 2
+ 709               	 ;  77 "spi.c" 1
+ 710 07b8 0000      		nop
+ 711               	 ;  0 "" 2
+ 712               	 ;  77 "spi.c" 1
+ 713 07ba 0000      		nop
+ 714               	 ;  0 "" 2
+ 715               	 ;  77 "spi.c" 1
+ 716 07bc 0000      		nop
+ 717               	 ;  0 "" 2
+ 718               	 ;  77 "spi.c" 1
+ 719 07be 0000      		nop
+ 720               	 ;  0 "" 2
+ 721               	 ;  77 "spi.c" 1
+ 722 07c0 0000      		nop
+ 723               	 ;  0 "" 2
+ 724               	 ;  77 "spi.c" 1
+ 725 07c2 0000      		nop
+ 726               	 ;  0 "" 2
+ 727               	 ;  78 "spi.c" 1
+ 728 07c4 0000      		nop
+ 729               	 ;  0 "" 2
+ 730               	 ;  78 "spi.c" 1
+ 731 07c6 0000      		nop
+ 732               	 ;  0 "" 2
+ 733               	 ;  78 "spi.c" 1
+ 734 07c8 0000      		nop
+ 735               	 ;  0 "" 2
+ 736               	 ;  78 "spi.c" 1
+ 737 07ca 0000      		nop
+ 738               	 ;  0 "" 2
+ 739               	 ;  78 "spi.c" 1
+ 740 07cc 0000      		nop
+ 741               	 ;  0 "" 2
+ 742               	 ;  78 "spi.c" 1
+ 743 07ce 0000      		nop
+ 744               	 ;  0 "" 2
+ 745               	 ;  78 "spi.c" 1
+ 746 07d0 0000      		nop
+ 747               	 ;  0 "" 2
+ 748               	 ;  78 "spi.c" 1
+ 749 07d2 0000      		nop
+ 750               	 ;  0 "" 2
+ 751               	 ;  79 "spi.c" 1
+ 752 07d4 0000      		nop
+ 753               	 ;  0 "" 2
+ 754               	 ;  79 "spi.c" 1
+ 755 07d6 0000      		nop
+ 756               	 ;  0 "" 2
+ 757               	 ;  79 "spi.c" 1
+ 758 07d8 0000      		nop
+ 759               	 ;  0 "" 2
+ 760               	 ;  79 "spi.c" 1
+ 761 07da 0000      		nop
+ 762               	 ;  0 "" 2
+ 763               	 ;  79 "spi.c" 1
+ 764 07dc 0000      		nop
+ 765               	 ;  0 "" 2
+ 766               	 ;  79 "spi.c" 1
+ 767 07de 0000      		nop
+ 768               	 ;  0 "" 2
+ 769               	 ;  79 "spi.c" 1
+ 770 07e0 0000      		nop
+ 771               	 ;  0 "" 2
+ 772               	 ;  79 "spi.c" 1
+ 773 07e2 0000      		nop
+ 774               	 ;  0 "" 2
+ 775               	/* #NOAPP */
+ 776 07e4 8091 0000 		lds r24,ToNaviCtrl
+ 777 07e8 8093 0000 		sts ToNaviCtrl+33,r24
+ 778 07ec 8EBD      		out 78-32,r24
+ 779               	.L40:
+ 780 07ee 0895      		ret
+ 782               	.global	SPI_TransmitByte
+ 784               	SPI_TransmitByte:
+ 785               	/* prologue: function */
+ 786               	/* frame size = 0 */
+ 787 07f0 8091 0000 		lds r24,SPITransferCompleted
+ 788 07f4 8823      		tst r24
+ 789 07f6 01F0      		breq .+2
+ 790 07f8 00C0      		rjmp .L54
+ 791 07fa 0DB4      		in __tmp_reg__,77-32
+ 792 07fc 07FE      		sbrs __tmp_reg__,7
+ 793 07fe 00C0      		rjmp .L54
+ 794 0800 84E0      		ldi r24,lo8(4)
+ 795 0802 8093 0000 		sts SendSPI,r24
+ 796 0806 459A      		sbi 40-32,5
+ 797 0808 2EB5      		in r18,78-32
+ 798 080a 8091 0000 		lds r24,SPI_RXState.2261
+ 799 080e 8130      		cpi r24,lo8(1)
+ 800 0810 01F0      		breq .L45
+ 801 0812 8130      		cpi r24,lo8(1)
+ 802 0814 00F0      		brlo .L44
+ 803 0816 8230      		cpi r24,lo8(2)
+ 804 0818 01F4      		brne .L43
+ 805 081a 00C0      		rjmp .L57
+ 806               	.L44:
+ 807 081c 1092 0000 		sts SPI_RxBufferIndex,__zero_reg__
+ 808 0820 2093 0000 		sts rxchksum.2263,r18
+ 809 0824 2138      		cpi r18,lo8(-127)
+ 810 0826 01F4      		brne .L43
+ 811 0828 81E0      		ldi r24,lo8(1)
+ 812 082a 00C0      		rjmp .L56
+ 813               	.L45:
+ 814 082c 2535      		cpi r18,lo8(85)
+ 815 082e 01F4      		brne .L51
+ 816 0830 8091 0000 		lds r24,rxchksum.2263
+ 817 0834 8B5A      		subi r24,lo8(-(85))
+ 818 0836 8093 0000 		sts rxchksum.2263,r24
+ 819 083a 82E0      		ldi r24,lo8(2)
+ 820               	.L56:
+ 821 083c 8093 0000 		sts SPI_RXState.2261,r24
+ 822 0840 00C0      		rjmp .L43
+ 823               	.L57:
+ 824 0842 8091 0000 		lds r24,SPI_RxBufferIndex
+ 825 0846 E82F      		mov r30,r24
+ 826 0848 F0E0      		ldi r31,lo8(0)
+ 827 084a E050      		subi r30,lo8(-(SPI_Buffer))
+ 828 084c F040      		sbci r31,hi8(-(SPI_Buffer))
+ 829 084e 2083      		st Z,r18
+ 830 0850 8F5F      		subi r24,lo8(-(1))
+ 831 0852 8093 0000 		sts SPI_RxBufferIndex,r24
+ 832 0856 9091 0000 		lds r25,rxchksum.2263
+ 833 085a 8032      		cpi r24,lo8(32)
+ 834 085c 00F0      		brlo .L48
+ 835 085e 2917      		cp r18,r25
+ 836 0860 01F4      		brne .L49
+ 837 0862 A0E0      		ldi r26,lo8(FromNaviCtrl)
+ 838 0864 B0E0      		ldi r27,hi8(FromNaviCtrl)
+ 839 0866 E0E0      		ldi r30,lo8(SPI_Buffer)
+ 840 0868 F0E0      		ldi r31,hi8(SPI_Buffer)
+ 841 086a 80E2      		ldi r24,lo8(32)
+ 842               	.L50:
+ 843 086c 0190      		ld r0,Z+
+ 844 086e 0D92      		st X+,r0
+ 845 0870 8150      		subi r24,lo8(-(-1))
+ 846 0872 01F4      		brne .L50
+ 847 0874 81E0      		ldi r24,lo8(1)
+ 848 0876 8093 0000 		sts SPI_RxDataValid,r24
+ 849 087a 00C0      		rjmp .L51
+ 850               	.L49:
+ 851 087c 1092 0000 		sts SPI_RxDataValid,__zero_reg__
+ 852               	.L51:
+ 853 0880 1092 0000 		sts SPI_RXState.2261,__zero_reg__
+ 854 0884 00C0      		rjmp .L43
+ 855               	.L48:
+ 856 0886 920F      		add r25,r18
+ 857 0888 9093 0000 		sts rxchksum.2263,r25
+ 858               	.L43:
+ 859 088c 2091 0000 		lds r18,SPI_BufferIndex
+ 860 0890 2232      		cpi r18,lo8(34)
+ 861 0892 00F0      		brlo .+2
+ 862 0894 00C0      		rjmp .L52
+ 863 0896 4598      		cbi 40-32,5
+ 864               	/* #APP */
+ 865               	 ;  145 "spi.c" 1
+ 866 0898 0000      		nop
+ 867               	 ;  0 "" 2
+ 868               	 ;  145 "spi.c" 1
+ 869 089a 0000      		nop
+ 870               	 ;  0 "" 2
+ 871               	 ;  145 "spi.c" 1
+ 872 089c 0000      		nop
+ 873               	 ;  0 "" 2
+ 874               	 ;  145 "spi.c" 1
+ 875 089e 0000      		nop
+ 876               	 ;  0 "" 2
+ 877               	 ;  145 "spi.c" 1
+ 878 08a0 0000      		nop
+ 879               	 ;  0 "" 2
+ 880               	 ;  145 "spi.c" 1
+ 881 08a2 0000      		nop
+ 882               	 ;  0 "" 2
+ 883               	 ;  145 "spi.c" 1
+ 884 08a4 0000      		nop
+ 885               	 ;  0 "" 2
+ 886               	 ;  145 "spi.c" 1
+ 887 08a6 0000      		nop
+ 888               	 ;  0 "" 2
+ 889               	 ;  146 "spi.c" 1
+ 890 08a8 0000      		nop
+ 891               	 ;  0 "" 2
+ 892               	 ;  146 "spi.c" 1
+ 893 08aa 0000      		nop
+ 894               	 ;  0 "" 2
+ 895               	 ;  146 "spi.c" 1
+ 896 08ac 0000      		nop
+ 897               	 ;  0 "" 2
+ 898               	 ;  146 "spi.c" 1
+ 899 08ae 0000      		nop
+ 900               	 ;  0 "" 2
+ 901               	 ;  146 "spi.c" 1
+ 902 08b0 0000      		nop
+ 903               	 ;  0 "" 2
+ 904               	 ;  146 "spi.c" 1
+ 905 08b2 0000      		nop
+ 906               	 ;  0 "" 2
+ 907               	 ;  146 "spi.c" 1
+ 908 08b4 0000      		nop
+ 909               	 ;  0 "" 2
+ 910               	 ;  146 "spi.c" 1
+ 911 08b6 0000      		nop
+ 912               	 ;  0 "" 2
+ 913               	 ;  147 "spi.c" 1
+ 914 08b8 0000      		nop
+ 915               	 ;  0 "" 2
+ 916               	 ;  147 "spi.c" 1
+ 917 08ba 0000      		nop
+ 918               	 ;  0 "" 2
+ 919               	 ;  147 "spi.c" 1
+ 920 08bc 0000      		nop
+ 921               	 ;  0 "" 2
+ 922               	 ;  147 "spi.c" 1
+ 923 08be 0000      		nop
+ 924               	 ;  0 "" 2
+ 925               	 ;  147 "spi.c" 1
+ 926 08c0 0000      		nop
+ 927               	 ;  0 "" 2
+ 928               	 ;  147 "spi.c" 1
+ 929 08c2 0000      		nop
+ 930               	 ;  0 "" 2
+ 931               	 ;  147 "spi.c" 1
+ 932 08c4 0000      		nop
+ 933               	 ;  0 "" 2
+ 934               	 ;  147 "spi.c" 1
+ 935 08c6 0000      		nop
+ 936               	 ;  0 "" 2
+ 937               	/* #NOAPP */
+ 938 08c8 E091 0000 		lds r30,SPI_TX_Buffer
+ 939 08cc F091 0000 		lds r31,(SPI_TX_Buffer)+1
+ 940 08d0 E20F      		add r30,r18
+ 941 08d2 F11D      		adc r31,__zero_reg__
+ 942 08d4 8081      		ld r24,Z
+ 943 08d6 8EBD      		out 78-32,r24
+ 944 08d8 9091 0000 		lds r25,ToNaviCtrl+33
+ 945 08dc 890F      		add r24,r25
+ 946 08de 8093 0000 		sts ToNaviCtrl+33,r24
+ 947 08e2 00C0      		rjmp .L53
+ 948               	.L52:
+ 949 08e4 81E0      		ldi r24,lo8(1)
+ 950 08e6 8093 0000 		sts SPITransferCompleted,r24
+ 951               	.L53:
+ 952 08ea 2F5F      		subi r18,lo8(-(1))
+ 953 08ec 2093 0000 		sts SPI_BufferIndex,r18
+ 954               	.L54:
+ 955 08f0 0895      		ret
+ 957               	.global	FromNC_Rotate_C
+ 958               		.data
+ 961               	FromNC_Rotate_C:
+ 962 0000 20        		.byte	32
+ 963               	.global	FromNC_Rotate_S
+ 964               	.global	FromNC_Rotate_S
+ 965               		.section .bss
+ 968               	FromNC_Rotate_S:
+ 969 0000 00        		.skip 1,0
+ 970               	.global	NaviDataOkay
+ 971               		.data
+ 974               	NaviDataOkay:
+ 975 0001 FA        		.byte	-6
+ 976               	.global	SPI_CommandSequence
+ 979               	SPI_CommandSequence:
+ 980 0002 0B        		.byte	11
+ 981 0003 0A        		.byte	10
+ 982 0004 0D        		.byte	13
+ 983 0005 0B        		.byte	11
+ 984 0006 0C        		.byte	12
+ 985 0007 0E        		.byte	14
+ 986 0008 0B        		.byte	11
+ 987 0009 0F        		.byte	15
+ 988 000a 10        		.byte	16
+ 989               	.global	SPI_CommandCounter
+ 990               	.global	SPI_CommandCounter
+ 991               		.section .bss
+ 994               	SPI_CommandCounter:
+ 995 0001 00        		.skip 1,0
+ 996               	.global	NC_ErrorCode
+ 997               	.global	NC_ErrorCode
+ 1000               	NC_ErrorCode:
+ 1001 0002 00        		.skip 1,0
+ 1002               	.global	POI_KameraNick
+ 1003               	.global	POI_KameraNick
+ 1006               	POI_KameraNick:
+ 1007 0003 0000      		.skip 2,0
+ 1008               	.global	MagVec
+ 1009               	.global	MagVec
+ 1012               	MagVec:
+ 1013 0005 0000 0000 		.skip 6,0
+ 1013      0000 
+ 1014               		.lcomm rxchksum.2263,1
+ 1015               		.lcomm SPI_RXState.2261,1
+ 1016               		.comm GPSInfo,8,1
+ 1017               		.comm NC_Version,5,1
+ 1018               		.comm FromNaviCtrl_Value,5,1
+ 1019               		.comm ToNaviCtrl,34,1
+ 1020               		.comm FromNaviCtrl,32,1
+ 1021               		.comm SPI_BufferIndex,1,1
+ 1022               		.comm SPI_RxBufferIndex,1,1
+ 1023               		.comm SPI_Buffer,32,1
+ 1024               		.comm SPI_TX_Buffer,2,1
+ 1025               		.comm SPITransferCompleted,1,1
+ 1026               		.comm SPI_ChkSum,1,1
+ 1027               		.comm SPI_RxDataValid,1,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 spi.c
+     /tmp/cckl2LkW.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cckl2LkW.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cckl2LkW.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cckl2LkW.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cckl2LkW.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cckl2LkW.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cckl2LkW.s:13     .text:0000000000000000 SPI_MasterInit
+                            *COM*:0000000000000001 SPITransferCompleted
+                            *COM*:0000000000000022 ToNaviCtrl
+                            *COM*:0000000000000005 FromNaviCtrl_Value
+                            *COM*:0000000000000001 SPI_RxDataValid
+     /tmp/cckl2LkW.s:43     .text:0000000000000042 UpdateSPI_Buffer
+     /tmp/cckl2LkW.s:974    .data:0000000000000001 NaviDataOkay
+                            *COM*:0000000000000020 FromNaviCtrl
+     /tmp/cckl2LkW.s:1012   .bss:0000000000000005 MagVec
+     /tmp/cckl2LkW.s:961    .data:0000000000000000 FromNC_Rotate_C
+     /tmp/cckl2LkW.s:968    .bss:0000000000000000 FromNC_Rotate_S
+     /tmp/cckl2LkW.s:1006   .bss:0000000000000003 POI_KameraNick
+                            *COM*:0000000000000005 NC_Version
+     /tmp/cckl2LkW.s:1000   .bss:0000000000000002 NC_ErrorCode
+                            *COM*:0000000000000008 GPSInfo
+     /tmp/cckl2LkW.s:673    .text:000000000000076e SPI_StartTransmitPacket
+                            *COM*:0000000000000002 SPI_TX_Buffer
+     /tmp/cckl2LkW.s:994    .bss:0000000000000001 SPI_CommandCounter
+     /tmp/cckl2LkW.s:979    .data:0000000000000002 SPI_CommandSequence
+                            *COM*:0000000000000001 SPI_BufferIndex
+     /tmp/cckl2LkW.s:784    .text:00000000000007f0 SPI_TransmitByte
+     /tmp/cckl2LkW.s:1014   .bss:000000000000000c SPI_RXState.2261
+                            *COM*:0000000000000001 SPI_RxBufferIndex
+                             .bss:000000000000000b rxchksum.2263
+                            *COM*:0000000000000020 SPI_Buffer
+                            *COM*:0000000000000001 SPI_ChkSum
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+EE_Parameter
+IntegralNick
+__divmodsi4
+IntegralRoll
+ErsatzKompass
+__mulsi3
+GIER_GRAD_FAKTOR
+AdWertGier
+AdNeutralGier
+NaviCntAcc
+NaviAccNick
+__divmodhi4
+NaviAccRoll
+Parameter_UserParam1
+Parameter_UserParam2
+Parameter_UserParam3
+Parameter_UserParam4
+Parameter_UserParam5
+Parameter_UserParam6
+Parameter_UserParam7
+Parameter_UserParam8
+FC_StatusFlags
+GetActiveParamSet
+ControlHeading
+FC_StatusFlags2
+Capacity
+UBat
+BattLowVoltageWarning
+VarioCharacter
+PPM_in
+Poti
+WinkelOut
+HoehenWert
+SollHoehe
+SenderOkay
+DebugOut
+PlatinenVersion
+VersionInfo
+Parameter_ServoNickControl
+Parameter_ServoRollControl
+CalculateCompassTimer
+GPS_Nick
+GPS_Roll
+KompassValue
+KompassSollWert
+KompassRichtung
+beeptime
+CareFree
+FromNC_AltitudeSpeed
+FromNC_AltitudeSetpoint
+SendSPI

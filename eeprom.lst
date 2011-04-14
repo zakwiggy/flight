@@ -1,0 +1,1156 @@
+   1               		.file	"eeprom.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	RAM_Checksum
+  13               	RAM_Checksum:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 DC01      		movw r26,r24
+  17 0002 4AEA      		ldi r20,lo8(-86)
+  18 0004 20E0      		ldi r18,lo8(0)
+  19 0006 30E0      		ldi r19,hi8(0)
+  20 0008 00C0      		rjmp .L2
+  21               	.L3:
+  22 000a FD01      		movw r30,r26
+  23 000c E20F      		add r30,r18
+  24 000e F31F      		adc r31,r19
+  25 0010 8081      		ld r24,Z
+  26 0012 480F      		add r20,r24
+  27 0014 2F5F      		subi r18,lo8(-(1))
+  28 0016 3F4F      		sbci r19,hi8(-(1))
+  29               	.L2:
+  30 0018 2617      		cp r18,r22
+  31 001a 3707      		cpc r19,r23
+  32 001c 00F0      		brlo .L3
+  33 001e 842F      		mov r24,r20
+  34               	/* epilogue start */
+  35 0020 0895      		ret
+  37               	.global	ParamSet_DefaultStickMapping
+  39               	ParamSet_DefaultStickMapping:
+  40               	/* prologue: function */
+  41               	/* frame size = 0 */
+  42 0022 81E0      		ldi r24,lo8(1)
+  43 0024 8093 0000 		sts EE_Parameter+3,r24
+  44 0028 82E0      		ldi r24,lo8(2)
+  45 002a 8093 0000 		sts EE_Parameter+2,r24
+  46 002e 83E0      		ldi r24,lo8(3)
+  47 0030 8093 0000 		sts EE_Parameter+1,r24
+  48 0034 84E0      		ldi r24,lo8(4)
+  49 0036 8093 0000 		sts EE_Parameter+4,r24
+  50 003a 85E0      		ldi r24,lo8(5)
+  51 003c 8093 0000 		sts EE_Parameter+5,r24
+  52 0040 86E0      		ldi r24,lo8(6)
+  53 0042 8093 0000 		sts EE_Parameter+6,r24
+  54 0046 87E0      		ldi r24,lo8(7)
+  55 0048 8093 0000 		sts EE_Parameter+7,r24
+  56 004c 88E0      		ldi r24,lo8(8)
+  57 004e 8093 0000 		sts EE_Parameter+8,r24
+  58 0052 89E0      		ldi r24,lo8(9)
+  59 0054 8093 0000 		sts EE_Parameter+9,r24
+  60 0058 8AE0      		ldi r24,lo8(10)
+  61 005a 8093 0000 		sts EE_Parameter+10,r24
+  62 005e 8BE0      		ldi r24,lo8(11)
+  63 0060 8093 0000 		sts EE_Parameter+11,r24
+  64 0064 8CE0      		ldi r24,lo8(12)
+  65 0066 8093 0000 		sts EE_Parameter+12,r24
+  66               	/* epilogue start */
+  67 006a 0895      		ret
+  69               	.global	CommonDefaults
+  71               	CommonDefaults:
+  72               	/* prologue: function */
+  73               	/* frame size = 0 */
+  74 006c 95E5      		ldi r25,lo8(85)
+  75 006e 9093 0000 		sts EE_Parameter,r25
+  76 0072 8091 0000 		lds r24,PlatinenVersion
+  77 0076 8431      		cpi r24,lo8(20)
+  78 0078 00F0      		brlo .L8
+  79 007a 8AE0      		ldi r24,lo8(10)
+  80 007c 8093 0000 		sts EE_Parameter+32,r24
+  81 0080 1092 0000 		sts EE_Parameter+68,__zero_reg__
+  82 0084 8BE1      		ldi r24,lo8(27)
+  83 0086 8093 0000 		sts EE_Parameter+28,r24
+  84 008a 8EE4      		ldi r24,lo8(78)
+  85 008c 8093 0000 		sts EE_Parameter+65,r24
+  86 0090 8093 0000 		sts EE_Parameter+66,r24
+  87 0094 00C0      		rjmp .L9
+  88               	.L8:
+  89 0096 83E0      		ldi r24,lo8(3)
+  90 0098 8093 0000 		sts EE_Parameter+32,r24
+  91 009c 80E2      		ldi r24,lo8(32)
+  92 009e 8093 0000 		sts EE_Parameter+68,r24
+  93 00a2 8EE1      		ldi r24,lo8(30)
+  94 00a4 8093 0000 		sts EE_Parameter+28,r24
+  95 00a8 9093 0000 		sts EE_Parameter+65,r25
+  96 00ac 9093 0000 		sts EE_Parameter+66,r25
+  97               	.L9:
+  98 00b0 8AE6      		ldi r24,lo8(106)
+  99 00b2 8093 0000 		sts EE_Parameter+13,r24
+ 100 00b6 62E0      		ldi r22,lo8(2)
+ 101 00b8 6093 0000 		sts EE_Parameter+102,r22
+ 102 00bc 74E0      		ldi r23,lo8(4)
+ 103 00be 7093 0000 		sts EE_Parameter+39,r23
+ 104 00c2 1092 0000 		sts EE_Parameter+99,__zero_reg__
+ 105 00c6 1092 0000 		sts EE_Parameter+96,__zero_reg__
+ 106 00ca 48E0      		ldi r20,lo8(8)
+ 107 00cc 4093 0000 		sts EE_Parameter+26,r20
+ 108 00d0 56EE      		ldi r21,lo8(-26)
+ 109 00d2 5093 0000 		sts EE_Parameter+27,r21
+ 110 00d6 90E4      		ldi r25,lo8(64)
+ 111 00d8 9093 0000 		sts EE_Parameter+29,r25
+ 112 00dc 3EE1      		ldi r19,lo8(30)
+ 113 00de 3093 0000 		sts EE_Parameter+14,r19
+ 114 00e2 8FEF      		ldi r24,lo8(-1)
+ 115 00e4 8093 0000 		sts EE_Parameter+16,r24
+ 116 00e8 8FE0      		ldi r24,lo8(15)
+ 117 00ea 8093 0000 		sts EE_Parameter+17,r24
+ 118 00ee 3093 0000 		sts EE_Parameter+15,r19
+ 119 00f2 1092 0000 		sts EE_Parameter+19,__zero_reg__
+ 120 00f6 4093 0000 		sts EE_Parameter+20,r20
+ 121 00fa 9093 0000 		sts EE_Parameter+21,r25
+ 122 00fe 1092 0000 		sts EE_Parameter+22,__zero_reg__
+ 123 0102 8093 0000 		sts EE_Parameter+18,r24
+ 124 0106 1092 0000 		sts EE_Parameter+41,__zero_reg__
+ 125 010a 1092 0000 		sts EE_Parameter+42,__zero_reg__
+ 126 010e 1092 0000 		sts EE_Parameter+43,__zero_reg__
+ 127 0112 1092 0000 		sts EE_Parameter+44,__zero_reg__
+ 128 0116 1092 0000 		sts EE_Parameter+70,__zero_reg__
+ 129 011a 1092 0000 		sts EE_Parameter+71,__zero_reg__
+ 130 011e 1092 0000 		sts EE_Parameter+72,__zero_reg__
+ 131 0122 1092 0000 		sts EE_Parameter+73,__zero_reg__
+ 132 0126 90E8      		ldi r25,lo8(-128)
+ 133 0128 9093 0000 		sts EE_Parameter+45,r25
+ 134 012c 22E3      		ldi r18,lo8(50)
+ 135 012e 2093 0000 		sts EE_Parameter+46,r18
+ 136 0132 6093 0000 		sts EE_Parameter+101,r22
+ 137 0136 8093 0000 		sts EE_Parameter+47,r24
+ 138 013a 5093 0000 		sts EE_Parameter+48,r21
+ 139 013e 7093 0000 		sts EE_Parameter+53,r23
+ 140 0142 8DE7      		ldi r24,lo8(125)
+ 141 0144 8093 0000 		sts EE_Parameter+56,r24
+ 142 0148 8093 0000 		sts EE_Parameter+57,r24
+ 143 014c 8093 0000 		sts EE_Parameter+58,r24
+ 144 0150 9093 0000 		sts EE_Parameter+49,r25
+ 145 0154 85E5      		ldi r24,lo8(85)
+ 146 0156 8093 0000 		sts EE_Parameter+50,r24
+ 147 015a 86E4      		ldi r24,lo8(70)
+ 148 015c 8093 0000 		sts EE_Parameter+51,r24
+ 149 0160 8CED      		ldi r24,lo8(-36)
+ 150 0162 8093 0000 		sts EE_Parameter+52,r24
+ 151 0166 8CE3      		ldi r24,lo8(60)
+ 152 0168 8093 0000 		sts EE_Parameter+54,r24
+ 153 016c 1092 0000 		sts EE_Parameter+55,__zero_reg__
+ 154 0170 8FE5      		ldi r24,lo8(95)
+ 155 0172 8093 0000 		sts EE_Parameter+74,r24
+ 156 0176 83EF      		ldi r24,lo8(-13)
+ 157 0178 8093 0000 		sts EE_Parameter+76,r24
+ 158 017c 8AEA      		ldi r24,lo8(-86)
+ 159 017e 8093 0000 		sts EE_Parameter+78,r24
+ 160 0182 8093 0000 		sts EE_Parameter+79,r24
+ 161 0186 84E1      		ldi r24,lo8(20)
+ 162 0188 8093 0000 		sts EE_Parameter+75,r24
+ 163 018c 8093 0000 		sts EE_Parameter+77,r24
+ 164 0190 2093 0000 		sts EE_Parameter+59,r18
+ 165 0194 9AE5      		ldi r25,lo8(90)
+ 166 0196 9093 0000 		sts EE_Parameter+60,r25
+ 167 019a 2093 0000 		sts EE_Parameter+61,r18
+ 168 019e 1092 0000 		sts EE_Parameter+100,__zero_reg__
+ 169 01a2 8EEF      		ldi r24,lo8(-2)
+ 170 01a4 8093 0000 		sts EE_Parameter+80,r24
+ 171 01a8 24E6      		ldi r18,lo8(100)
+ 172 01aa 2093 0000 		sts EE_Parameter+81,r18
+ 173 01ae 9093 0000 		sts EE_Parameter+82,r25
+ 174 01b2 9093 0000 		sts EE_Parameter+83,r25
+ 175 01b6 9093 0000 		sts EE_Parameter+84,r25
+ 176 01ba 8BE4      		ldi r24,lo8(75)
+ 177 01bc 8093 0000 		sts EE_Parameter+85,r24
+ 178 01c0 8093 0000 		sts EE_Parameter+86,r24
+ 179 01c4 8093 0000 		sts EE_Parameter+87,r24
+ 180 01c8 1092 0000 		sts EE_Parameter+88,__zero_reg__
+ 181 01cc 86E0      		ldi r24,lo8(6)
+ 182 01ce 8093 0000 		sts EE_Parameter+89,r24
+ 183 01d2 4093 0000 		sts EE_Parameter+90,r20
+ 184 01d6 9093 0000 		sts EE_Parameter+91,r25
+ 185 01da 3093 0000 		sts EE_Parameter+92,r19
+ 186 01de 85EF      		ldi r24,lo8(-11)
+ 187 01e0 8093 0000 		sts EE_Parameter+93,r24
+ 188 01e4 2093 0000 		sts EE_Parameter+94,r18
+ 189 01e8 6093 0000 		sts EE_Parameter+95,r22
+ 190 01ec 1092 0000 		sts EE_Parameter+97,__zero_reg__
+ 191 01f0 1092 0000 		sts EE_Parameter+98,__zero_reg__
+ 192 01f4 81E2      		ldi r24,lo8(33)
+ 193 01f6 8093 0000 		sts EE_Parameter+36,r24
+ 194 01fa 8DE2      		ldi r24,lo8(45)
+ 195 01fc 8093 0000 		sts EE_Parameter+37,r24
+ 196 0200 9093 0000 		sts EE_Parameter+38,r25
+ 197               	/* epilogue start */
+ 198 0204 0895      		ret
+ 200               	.global	GetParamByte
+ 202               	GetParamByte:
+ 203               	/* prologue: function */
+ 204               	/* frame size = 0 */
+ 205 0206 0E94 0000 		call __eerd_byte_m644p
+ 206               	/* epilogue start */
+ 207 020a 0895      		ret
+ 209               	.global	EEProm_Checksum
+ 211               	EEProm_Checksum:
+ 212 020c CF92      		push r12
+ 213 020e DF92      		push r13
+ 214 0210 EF92      		push r14
+ 215 0212 FF92      		push r15
+ 216 0214 1F93      		push r17
+ 217 0216 CF93      		push r28
+ 218 0218 DF93      		push r29
+ 219               	/* prologue: function */
+ 220               	/* frame size = 0 */
+ 221 021a 6C01      		movw r12,r24
+ 222 021c 7B01      		movw r14,r22
+ 223 021e 1AEA      		ldi r17,lo8(-86)
+ 224 0220 C0E0      		ldi r28,lo8(0)
+ 225 0222 D0E0      		ldi r29,hi8(0)
+ 226 0224 00C0      		rjmp .L14
+ 227               	.L15:
+ 228 0226 CE01      		movw r24,r28
+ 229 0228 8C0D      		add r24,r12
+ 230 022a 9D1D      		adc r25,r13
+ 231 022c 0E94 0000 		call __eerd_byte_m644p
+ 232 0230 180F      		add r17,r24
+ 233 0232 2196      		adiw r28,1
+ 234               	.L14:
+ 235 0234 CE15      		cp r28,r14
+ 236 0236 DF05      		cpc r29,r15
+ 237 0238 00F0      		brlo .L15
+ 238 023a 812F      		mov r24,r17
+ 239               	/* epilogue start */
+ 240 023c DF91      		pop r29
+ 241 023e CF91      		pop r28
+ 242 0240 1F91      		pop r17
+ 243 0242 FF90      		pop r15
+ 244 0244 EF90      		pop r14
+ 245 0246 DF90      		pop r13
+ 246 0248 CF90      		pop r12
+ 247 024a 0895      		ret
+ 249               	.global	MixerTable_ReadFromEEProm
+ 251               	MixerTable_ReadFromEEProm:
+ 252 024c 1F93      		push r17
+ 253               	/* prologue: function */
+ 254               	/* frame size = 0 */
+ 255 024e 88EE      		ldi r24,lo8(1000)
+ 256 0250 93E0      		ldi r25,hi8(1000)
+ 257 0252 6DE4      		ldi r22,lo8(77)
+ 258 0254 70E0      		ldi r23,hi8(77)
+ 259 0256 0E94 0000 		call EEProm_Checksum
+ 260 025a 182F      		mov r17,r24
+ 261 025c 85E3      		ldi r24,lo8(1077)
+ 262 025e 94E0      		ldi r25,hi8(1077)
+ 263 0260 0E94 0000 		call __eerd_byte_m644p
+ 264 0264 1817      		cp r17,r24
+ 265 0266 01F4      		brne .L18
+ 266 0268 88EE      		ldi r24,lo8(1000)
+ 267 026a 93E0      		ldi r25,hi8(1000)
+ 268 026c 0E94 0000 		call __eerd_byte_m644p
+ 269 0270 8130      		cpi r24,lo8(1)
+ 270 0272 01F4      		brne .L18
+ 271 0274 80E0      		ldi r24,lo8(Mixer)
+ 272 0276 90E0      		ldi r25,hi8(Mixer)
+ 273 0278 68EE      		ldi r22,lo8(1000)
+ 274 027a 73E0      		ldi r23,hi8(1000)
+ 275 027c 4EE4      		ldi r20,lo8(78)
+ 276 027e 50E0      		ldi r21,hi8(78)
+ 277 0280 0E94 0000 		call __eerd_block_m644p
+ 278 0284 81E0      		ldi r24,lo8(1)
+ 279 0286 00C0      		rjmp .L19
+ 280               	.L18:
+ 281 0288 80E0      		ldi r24,lo8(0)
+ 282               	.L19:
+ 283               	/* epilogue start */
+ 284 028a 1F91      		pop r17
+ 285 028c 0895      		ret
+ 287               	.global	SetActiveParamSet
+ 289               	SetActiveParamSet:
+ 290               	/* prologue: function */
+ 291               	/* frame size = 0 */
+ 292 028e 682F      		mov r22,r24
+ 293 0290 8630      		cpi r24,lo8(6)
+ 294 0292 00F0      		brlo .L22
+ 295 0294 65E0      		ldi r22,lo8(5)
+ 296 0296 00C0      		rjmp .L23
+ 297               	.L22:
+ 298 0298 8823      		tst r24
+ 299 029a 01F4      		brne .L23
+ 300 029c 61E0      		ldi r22,lo8(1)
+ 301               	.L23:
+ 302 029e 82E0      		ldi r24,lo8(2)
+ 303 02a0 90E0      		ldi r25,hi8(2)
+ 304 02a2 0E94 0000 		call __eewr_byte_m644p
+ 305               	/* epilogue start */
+ 306 02a6 0895      		ret
+ 308               	.global	GetActiveParamSet
+ 310               	GetActiveParamSet:
+ 311               	/* prologue: function */
+ 312               	/* frame size = 0 */
+ 313 02a8 82E0      		ldi r24,lo8(2)
+ 314 02aa 90E0      		ldi r25,hi8(2)
+ 315 02ac 0E94 0000 		call __eerd_byte_m644p
+ 316 02b0 8630      		cpi r24,lo8(6)
+ 317 02b2 00F0      		brlo .L26
+ 318 02b4 82E0      		ldi r24,lo8(2)
+ 319 02b6 90E0      		ldi r25,hi8(2)
+ 320 02b8 63E0      		ldi r22,lo8(3)
+ 321 02ba 0E94 0000 		call __eewr_byte_m644p
+ 322 02be 83E0      		ldi r24,lo8(3)
+ 323               	.L26:
+ 324 02c0 0895      		ret
+ 326               	.global	SetParamByte
+ 328               	SetParamByte:
+ 329               	/* prologue: function */
+ 330               	/* frame size = 0 */
+ 331 02c2 0E94 0000 		call __eewr_byte_m644p
+ 332               	/* epilogue start */
+ 333 02c6 0895      		ret
+ 335               		.data
+ 336               	.LC0:
+ 337 0000 5175 6164 		.string	"Quadro"
+ 337      726F 00
+ 338 0007 00        		.string	""
+ 339               		.text
+ 340               	.global	MixerTable_Default
+ 342               	MixerTable_Default:
+ 343               	/* prologue: function */
+ 344               	/* frame size = 0 */
+ 345 02c8 81E0      		ldi r24,lo8(1)
+ 346 02ca 8093 0000 		sts Mixer,r24
+ 347 02ce E0E0      		ldi r30,lo8(Mixer+13)
+ 348 02d0 F0E0      		ldi r31,hi8(Mixer+13)
+ 349               	.L31:
+ 350 02d2 1082      		st Z,__zero_reg__
+ 351 02d4 1182      		std Z+1,__zero_reg__
+ 352 02d6 1282      		std Z+2,__zero_reg__
+ 353 02d8 1382      		std Z+3,__zero_reg__
+ 354 02da 3496      		adiw r30,4
+ 355 02dc 80E0      		ldi r24,hi8(Mixer+77)
+ 356 02de E030      		cpi r30,lo8(Mixer+77)
+ 357 02e0 F807      		cpc r31,r24
+ 358 02e2 01F4      		brne .L31
+ 359 02e4 80E4      		ldi r24,lo8(64)
+ 360 02e6 8093 0000 		sts Mixer+13,r24
+ 361 02ea FF97      		sbiw r30,63
+ 362 02ec 8083      		st Z,r24
+ 363 02ee 1092 0000 		sts Mixer+15,__zero_reg__
+ 364 02f2 8093 0000 		sts Mixer+16,r24
+ 365 02f6 8093 0000 		sts Mixer+17,r24
+ 366 02fa 90EC      		ldi r25,lo8(-64)
+ 367 02fc 9093 0000 		sts Mixer+18,r25
+ 368 0300 1092 0000 		sts Mixer+19,__zero_reg__
+ 369 0304 8093 0000 		sts Mixer+20,r24
+ 370 0308 8093 0000 		sts Mixer+21,r24
+ 371 030c 1092 0000 		sts Mixer+22,__zero_reg__
+ 372 0310 9093 0000 		sts Mixer+23,r25
+ 373 0314 9093 0000 		sts Mixer+24,r25
+ 374 0318 8093 0000 		sts Mixer+25,r24
+ 375 031c 1092 0000 		sts Mixer+26,__zero_reg__
+ 376 0320 8093 0000 		sts Mixer+27,r24
+ 377 0324 9093 0000 		sts Mixer+28,r25
+ 378 0328 3D97      		sbiw r30,13
+ 379 032a A0E0      		ldi r26,lo8(.LC0)
+ 380 032c B0E0      		ldi r27,hi8(.LC0)
+ 381 032e 87E0      		ldi r24,lo8(7)
+ 382               	.L32:
+ 383 0330 0D90      		ld r0,X+
+ 384 0332 0192      		st Z+,r0
+ 385 0334 8150      		subi r24,lo8(-(-1))
+ 386 0336 01F4      		brne .L32
+ 387 0338 E0E0      		ldi r30,lo8(Mixer)
+ 388 033a F0E0      		ldi r31,hi8(Mixer)
+ 389 033c 9AEA      		ldi r25,lo8(-86)
+ 390               	.L33:
+ 391 033e 8191      		ld r24,Z+
+ 392 0340 980F      		add r25,r24
+ 393 0342 80E0      		ldi r24,hi8(Mixer+77)
+ 394 0344 E030      		cpi r30,lo8(Mixer+77)
+ 395 0346 F807      		cpc r31,r24
+ 396 0348 01F4      		brne .L33
+ 397 034a 9093 0000 		sts Mixer+77,r25
+ 398               	/* epilogue start */
+ 399 034e 0895      		ret
+ 401               		.data
+ 402               	.LC1:
+ 403 0008 4265 6769 		.string	"Beginner"
+ 403      6E6E 6572 
+ 403      00
+ 404 0011 00        		.string	""
+ 405               		.text
+ 406               	.global	ParamSet_DefaultSet3
+ 408               	ParamSet_DefaultSet3:
+ 409               	/* prologue: function */
+ 410               	/* frame size = 0 */
+ 411 0350 0E94 0000 		call CommonDefaults
+ 412 0354 88E0      		ldi r24,lo8(8)
+ 413 0356 8093 0000 		sts EE_Parameter+23,r24
+ 414 035a 30E1      		ldi r19,lo8(16)
+ 415 035c 3093 0000 		sts EE_Parameter+24,r19
+ 416 0360 26E0      		ldi r18,lo8(6)
+ 417 0362 2093 0000 		sts EE_Parameter+25,r18
+ 418 0366 94E6      		ldi r25,lo8(100)
+ 419 0368 9093 0000 		sts EE_Parameter+30,r25
+ 420 036c 88E7      		ldi r24,lo8(120)
+ 421 036e 8093 0000 		sts EE_Parameter+31,r24
+ 422 0372 9093 0000 		sts EE_Parameter+33,r25
+ 423 0376 8093 0000 		sts EE_Parameter+34,r24
+ 424 037a 2093 0000 		sts EE_Parameter+35,r18
+ 425 037e 3093 0000 		sts EE_Parameter+40,r19
+ 426 0382 8AE5      		ldi r24,lo8(90)
+ 427 0384 8093 0000 		sts EE_Parameter+62,r24
+ 428 0388 80E5      		ldi r24,lo8(80)
+ 429 038a 8093 0000 		sts EE_Parameter+63,r24
+ 430 038e 96E4      		ldi r25,lo8(70)
+ 431 0390 9093 0000 		sts EE_Parameter+64,r25
+ 432 0394 80E2      		ldi r24,lo8(32)
+ 433 0396 8093 0000 		sts EE_Parameter+67,r24
+ 434 039a 9093 0000 		sts EE_Parameter+69,r25
+ 435 039e A0E0      		ldi r26,lo8(EE_Parameter+103)
+ 436 03a0 B0E0      		ldi r27,hi8(EE_Parameter+103)
+ 437 03a2 E0E0      		ldi r30,lo8(.LC1)
+ 438 03a4 F0E0      		ldi r31,hi8(.LC1)
+ 439 03a6 8CE0      		ldi r24,lo8(12)
+ 440               	.L39:
+ 441 03a8 0190      		ld r0,Z+
+ 442 03aa 0D92      		st X+,r0
+ 443 03ac 8150      		subi r24,lo8(-(-1))
+ 444 03ae 01F4      		brne .L39
+ 445 03b0 E0E0      		ldi r30,lo8(EE_Parameter)
+ 446 03b2 F0E0      		ldi r31,hi8(EE_Parameter)
+ 447 03b4 9AEA      		ldi r25,lo8(-86)
+ 448               	.L40:
+ 449 03b6 8191      		ld r24,Z+
+ 450 03b8 980F      		add r25,r24
+ 451 03ba 80E0      		ldi r24,hi8(EE_Parameter+115)
+ 452 03bc E030      		cpi r30,lo8(EE_Parameter+115)
+ 453 03be F807      		cpc r31,r24
+ 454 03c0 01F4      		brne .L40
+ 455 03c2 9083      		st Z,r25
+ 456               	/* epilogue start */
+ 457 03c4 0895      		ret
+ 459               		.data
+ 460               	.LC2:
+ 461 0012 4E6F 726D 		.string	"Normal"
+ 461      616C 00
+ 462 0019 00        		.string	""
+ 463               		.text
+ 464               	.global	ParamSet_DefaultSet2
+ 466               	ParamSet_DefaultSet2:
+ 467               	/* prologue: function */
+ 468               	/* frame size = 0 */
+ 469 03c6 0E94 0000 		call CommonDefaults
+ 470 03ca 8AE0      		ldi r24,lo8(10)
+ 471 03cc 8093 0000 		sts EE_Parameter+23,r24
+ 472 03d0 80E1      		ldi r24,lo8(16)
+ 473 03d2 8093 0000 		sts EE_Parameter+24,r24
+ 474 03d6 26E0      		ldi r18,lo8(6)
+ 475 03d8 2093 0000 		sts EE_Parameter+25,r18
+ 476 03dc 9AE5      		ldi r25,lo8(90)
+ 477 03de 9093 0000 		sts EE_Parameter+30,r25
+ 478 03e2 88E7      		ldi r24,lo8(120)
+ 479 03e4 8093 0000 		sts EE_Parameter+31,r24
+ 480 03e8 9093 0000 		sts EE_Parameter+33,r25
+ 481 03ec 8093 0000 		sts EE_Parameter+34,r24
+ 482 03f0 2093 0000 		sts EE_Parameter+35,r18
+ 483 03f4 20E2      		ldi r18,lo8(32)
+ 484 03f6 2093 0000 		sts EE_Parameter+40,r18
+ 485 03fa 9093 0000 		sts EE_Parameter+62,r25
+ 486 03fe 80E5      		ldi r24,lo8(80)
+ 487 0400 8093 0000 		sts EE_Parameter+63,r24
+ 488 0404 8CE3      		ldi r24,lo8(60)
+ 489 0406 8093 0000 		sts EE_Parameter+64,r24
+ 490 040a 2093 0000 		sts EE_Parameter+67,r18
+ 491 040e 8BE4      		ldi r24,lo8(75)
+ 492 0410 8093 0000 		sts EE_Parameter+69,r24
+ 493 0414 A0E0      		ldi r26,lo8(EE_Parameter+103)
+ 494 0416 B0E0      		ldi r27,hi8(EE_Parameter+103)
+ 495 0418 E0E0      		ldi r30,lo8(.LC2)
+ 496 041a F0E0      		ldi r31,hi8(.LC2)
+ 497 041c 8CE0      		ldi r24,lo8(12)
+ 498               	.L45:
+ 499 041e 0190      		ld r0,Z+
+ 500 0420 0D92      		st X+,r0
+ 501 0422 8150      		subi r24,lo8(-(-1))
+ 502 0424 01F4      		brne .L45
+ 503 0426 E0E0      		ldi r30,lo8(EE_Parameter)
+ 504 0428 F0E0      		ldi r31,hi8(EE_Parameter)
+ 505 042a 9AEA      		ldi r25,lo8(-86)
+ 506               	.L46:
+ 507 042c 8191      		ld r24,Z+
+ 508 042e 980F      		add r25,r24
+ 509 0430 80E0      		ldi r24,hi8(EE_Parameter+115)
+ 510 0432 E030      		cpi r30,lo8(EE_Parameter+115)
+ 511 0434 F807      		cpc r31,r24
+ 512 0436 01F4      		brne .L46
+ 513 0438 9083      		st Z,r25
+ 514               	/* epilogue start */
+ 515 043a 0895      		ret
+ 517               		.data
+ 518               	.LC3:
+ 519 001a 5370 6F72 		.string	"Sport"
+ 519      7400 
+ 520 0020 00        		.string	""
+ 521               		.text
+ 522               	.global	ParamSet_DefaultSet1
+ 524               	ParamSet_DefaultSet1:
+ 525               	/* prologue: function */
+ 526               	/* frame size = 0 */
+ 527 043c 0E94 0000 		call CommonDefaults
+ 528 0440 8EE0      		ldi r24,lo8(14)
+ 529 0442 8093 0000 		sts EE_Parameter+23,r24
+ 530 0446 20E1      		ldi r18,lo8(16)
+ 531 0448 2093 0000 		sts EE_Parameter+24,r18
+ 532 044c 8CE0      		ldi r24,lo8(12)
+ 533 044e 8093 0000 		sts EE_Parameter+25,r24
+ 534 0452 90E5      		ldi r25,lo8(80)
+ 535 0454 9093 0000 		sts EE_Parameter+30,r25
+ 536 0458 86E9      		ldi r24,lo8(-106)
+ 537 045a 8093 0000 		sts EE_Parameter+31,r24
+ 538 045e 9093 0000 		sts EE_Parameter+33,r25
+ 539 0462 8093 0000 		sts EE_Parameter+34,r24
+ 540 0466 86E0      		ldi r24,lo8(6)
+ 541 0468 8093 0000 		sts EE_Parameter+35,r24
+ 542 046c 80E2      		ldi r24,lo8(32)
+ 543 046e 8093 0000 		sts EE_Parameter+40,r24
+ 544 0472 8AE5      		ldi r24,lo8(90)
+ 545 0474 8093 0000 		sts EE_Parameter+62,r24
+ 546 0478 9093 0000 		sts EE_Parameter+63,r25
+ 547 047c 81E0      		ldi r24,lo8(1)
+ 548 047e 8093 0000 		sts EE_Parameter+64,r24
+ 549 0482 2093 0000 		sts EE_Parameter+67,r18
+ 550 0486 84E6      		ldi r24,lo8(100)
+ 551 0488 8093 0000 		sts EE_Parameter+69,r24
+ 552 048c A0E0      		ldi r26,lo8(EE_Parameter+103)
+ 553 048e B0E0      		ldi r27,hi8(EE_Parameter+103)
+ 554 0490 E0E0      		ldi r30,lo8(.LC3)
+ 555 0492 F0E0      		ldi r31,hi8(.LC3)
+ 556 0494 8CE0      		ldi r24,lo8(12)
+ 557               	.L51:
+ 558 0496 0190      		ld r0,Z+
+ 559 0498 0D92      		st X+,r0
+ 560 049a 8150      		subi r24,lo8(-(-1))
+ 561 049c 01F4      		brne .L51
+ 562 049e E0E0      		ldi r30,lo8(EE_Parameter)
+ 563 04a0 F0E0      		ldi r31,hi8(EE_Parameter)
+ 564 04a2 9AEA      		ldi r25,lo8(-86)
+ 565               	.L52:
+ 566 04a4 8191      		ld r24,Z+
+ 567 04a6 980F      		add r25,r24
+ 568 04a8 80E0      		ldi r24,hi8(EE_Parameter+115)
+ 569 04aa E030      		cpi r30,lo8(EE_Parameter+115)
+ 570 04ac F807      		cpc r31,r24
+ 571 04ae 01F4      		brne .L52
+ 572 04b0 9083      		st Z,r25
+ 573               	/* epilogue start */
+ 574 04b2 0895      		ret
+ 576               	.global	MixerTable_WriteToEEProm
+ 578               	MixerTable_WriteToEEProm:
+ 579               	/* prologue: function */
+ 580               	/* frame size = 0 */
+ 581 04b4 8091 0000 		lds r24,Mixer
+ 582 04b8 8130      		cpi r24,lo8(1)
+ 583 04ba 01F0      		breq .L57
+ 584 04bc 80E0      		ldi r24,lo8(0)
+ 585 04be 0895      		ret
+ 586               	.L57:
+ 587 04c0 E0E0      		ldi r30,lo8(Mixer)
+ 588 04c2 F0E0      		ldi r31,hi8(Mixer)
+ 589 04c4 9AEA      		ldi r25,lo8(-86)
+ 590               	.L59:
+ 591 04c6 8191      		ld r24,Z+
+ 592 04c8 980F      		add r25,r24
+ 593 04ca 80E0      		ldi r24,hi8(Mixer+77)
+ 594 04cc E030      		cpi r30,lo8(Mixer+77)
+ 595 04ce F807      		cpc r31,r24
+ 596 04d0 01F4      		brne .L59
+ 597 04d2 9083      		st Z,r25
+ 598 04d4 80E0      		ldi r24,lo8(Mixer)
+ 599 04d6 90E0      		ldi r25,hi8(Mixer)
+ 600 04d8 68EE      		ldi r22,lo8(1000)
+ 601 04da 73E0      		ldi r23,hi8(1000)
+ 602 04dc 4EE4      		ldi r20,lo8(78)
+ 603 04de 50E0      		ldi r21,hi8(78)
+ 604 04e0 0E94 0000 		call __eewr_block_m644p
+ 605 04e4 81E0      		ldi r24,lo8(1)
+ 606 04e6 0895      		ret
+ 608               	.global	ParamSet_WriteToEEProm
+ 610               	ParamSet_WriteToEEProm:
+ 611 04e8 1F93      		push r17
+ 612               	/* prologue: function */
+ 613               	/* frame size = 0 */
+ 614 04ea 182F      		mov r17,r24
+ 615 04ec 8091 0000 		lds r24,EE_Parameter
+ 616 04f0 8535      		cpi r24,lo8(85)
+ 617 04f2 01F0      		breq .+2
+ 618 04f4 00C0      		rjmp .L63
+ 619 04f6 1630      		cpi r17,lo8(6)
+ 620 04f8 00F0      		brlo .L64
+ 621 04fa 15E0      		ldi r17,lo8(5)
+ 622 04fc 00C0      		rjmp .L65
+ 623               	.L64:
+ 624 04fe 1123      		tst r17
+ 625 0500 01F0      		breq .L63
+ 626               	.L65:
+ 627 0502 E0E0      		ldi r30,lo8(EE_Parameter)
+ 628 0504 F0E0      		ldi r31,hi8(EE_Parameter)
+ 629 0506 9AEA      		ldi r25,lo8(-86)
+ 630               	.L66:
+ 631 0508 8191      		ld r24,Z+
+ 632 050a 980F      		add r25,r24
+ 633 050c 80E0      		ldi r24,hi8(EE_Parameter+115)
+ 634 050e E030      		cpi r30,lo8(EE_Parameter+115)
+ 635 0510 F807      		cpc r31,r24
+ 636 0512 01F4      		brne .L66
+ 637 0514 9083      		st Z,r25
+ 638 0516 812F      		mov r24,r17
+ 639 0518 90E0      		ldi r25,lo8(0)
+ 640 051a 0197      		sbiw r24,1
+ 641 051c 24E7      		ldi r18,lo8(116)
+ 642 051e 30E0      		ldi r19,hi8(116)
+ 643 0520 829F      		mul r24,r18
+ 644 0522 B001      		movw r22,r0
+ 645 0524 839F      		mul r24,r19
+ 646 0526 700D      		add r23,r0
+ 647 0528 929F      		mul r25,r18
+ 648 052a 700D      		add r23,r0
+ 649 052c 1124      		clr r1
+ 650 052e 6C59      		subi r22,lo8(-(100))
+ 651 0530 7F4F      		sbci r23,hi8(-(100))
+ 652 0532 80E0      		ldi r24,lo8(EE_Parameter)
+ 653 0534 90E0      		ldi r25,hi8(EE_Parameter)
+ 654 0536 44E7      		ldi r20,lo8(116)
+ 655 0538 50E0      		ldi r21,hi8(116)
+ 656 053a 0E94 0000 		call __eewr_block_m644p
+ 657 053e 80E0      		ldi r24,lo8(EE_Parameter+1)
+ 658 0540 90E0      		ldi r25,hi8(EE_Parameter+1)
+ 659 0542 60E5      		ldi r22,lo8(80)
+ 660 0544 70E0      		ldi r23,hi8(80)
+ 661 0546 4CE0      		ldi r20,lo8(12)
+ 662 0548 50E0      		ldi r21,hi8(12)
+ 663 054a 0E94 0000 		call __eewr_block_m644p
+ 664 054e E0E0      		ldi r30,lo8(EE_Parameter+1)
+ 665 0550 F0E0      		ldi r31,hi8(EE_Parameter+1)
+ 666 0552 6AEA      		ldi r22,lo8(-86)
+ 667               	.L67:
+ 668 0554 8191      		ld r24,Z+
+ 669 0556 680F      		add r22,r24
+ 670 0558 80E0      		ldi r24,hi8(EE_Parameter+13)
+ 671 055a E030      		cpi r30,lo8(EE_Parameter+13)
+ 672 055c F807      		cpc r31,r24
+ 673 055e 01F4      		brne .L67
+ 674 0560 8CE5      		ldi r24,lo8(92)
+ 675 0562 90E0      		ldi r25,hi8(92)
+ 676 0564 0E94 0000 		call __eewr_byte_m644p
+ 677 0568 812F      		mov r24,r17
+ 678 056a 0E94 0000 		call SetActiveParamSet
+ 679 056e 0E94 0000 		call LED_Init
+ 680 0572 81E0      		ldi r24,lo8(1)
+ 681 0574 00C0      		rjmp .L68
+ 682               	.L63:
+ 683 0576 80E0      		ldi r24,lo8(0)
+ 684               	.L68:
+ 685               	/* epilogue start */
+ 686 0578 1F91      		pop r17
+ 687 057a 0895      		ret
+ 689               	.global	SetDefaultParameter
+ 691               	SetDefaultParameter:
+ 692 057c 0F93      		push r16
+ 693 057e 1F93      		push r17
+ 694               	/* prologue: function */
+ 695               	/* frame size = 0 */
+ 696 0580 082F      		mov r16,r24
+ 697 0582 162F      		mov r17,r22
+ 698 0584 8630      		cpi r24,lo8(6)
+ 699 0586 00F4      		brsh .L73
+ 700 0588 8823      		tst r24
+ 701 058a 01F4      		brne .L74
+ 702 058c 01E0      		ldi r16,lo8(1)
+ 703 058e 00C0      		rjmp .L75
+ 704               	.L74:
+ 705 0590 8230      		cpi r24,lo8(2)
+ 706 0592 01F0      		breq .L77
+ 707 0594 8330      		cpi r24,lo8(3)
+ 708 0596 01F0      		breq .L76
+ 709 0598 8130      		cpi r24,lo8(1)
+ 710 059a 01F4      		brne .L76
+ 711               	.L75:
+ 712 059c 0E94 0000 		call ParamSet_DefaultSet1
+ 713 05a0 00C0      		rjmp .L79
+ 714               	.L77:
+ 715 05a2 0E94 0000 		call ParamSet_DefaultSet2
+ 716 05a6 00C0      		rjmp .L79
+ 717               	.L73:
+ 718 05a8 05E0      		ldi r16,lo8(5)
+ 719               	.L76:
+ 720 05aa 0E94 0000 		call ParamSet_DefaultSet3
+ 721               	.L79:
+ 722 05ae 1123      		tst r17
+ 723 05b0 01F0      		breq .L80
+ 724 05b2 80E5      		ldi r24,lo8(80)
+ 725 05b4 90E0      		ldi r25,hi8(80)
+ 726 05b6 6CE0      		ldi r22,lo8(12)
+ 727 05b8 70E0      		ldi r23,hi8(12)
+ 728 05ba 0E94 0000 		call EEProm_Checksum
+ 729 05be 182F      		mov r17,r24
+ 730 05c0 8CE5      		ldi r24,lo8(92)
+ 731 05c2 90E0      		ldi r25,hi8(92)
+ 732 05c4 0E94 0000 		call __eerd_byte_m644p
+ 733 05c8 1817      		cp r17,r24
+ 734 05ca 01F4      		brne .L80
+ 735 05cc 80E0      		ldi r24,lo8(EE_Parameter+1)
+ 736 05ce 90E0      		ldi r25,hi8(EE_Parameter+1)
+ 737 05d0 60E5      		ldi r22,lo8(80)
+ 738 05d2 70E0      		ldi r23,hi8(80)
+ 739 05d4 4CE0      		ldi r20,lo8(12)
+ 740 05d6 50E0      		ldi r21,hi8(12)
+ 741 05d8 0E94 0000 		call __eerd_block_m644p
+ 742 05dc 00C0      		rjmp .L82
+ 743               	.L80:
+ 744 05de 81E0      		ldi r24,lo8(1)
+ 745 05e0 8093 0000 		sts EE_Parameter+3,r24
+ 746 05e4 82E0      		ldi r24,lo8(2)
+ 747 05e6 8093 0000 		sts EE_Parameter+2,r24
+ 748 05ea 83E0      		ldi r24,lo8(3)
+ 749 05ec 8093 0000 		sts EE_Parameter+1,r24
+ 750 05f0 84E0      		ldi r24,lo8(4)
+ 751 05f2 8093 0000 		sts EE_Parameter+4,r24
+ 752 05f6 85E0      		ldi r24,lo8(5)
+ 753 05f8 8093 0000 		sts EE_Parameter+5,r24
+ 754 05fc 86E0      		ldi r24,lo8(6)
+ 755 05fe 8093 0000 		sts EE_Parameter+6,r24
+ 756 0602 87E0      		ldi r24,lo8(7)
+ 757 0604 8093 0000 		sts EE_Parameter+7,r24
+ 758 0608 88E0      		ldi r24,lo8(8)
+ 759 060a 8093 0000 		sts EE_Parameter+8,r24
+ 760 060e 89E0      		ldi r24,lo8(9)
+ 761 0610 8093 0000 		sts EE_Parameter+9,r24
+ 762 0614 8AE0      		ldi r24,lo8(10)
+ 763 0616 8093 0000 		sts EE_Parameter+10,r24
+ 764 061a 8BE0      		ldi r24,lo8(11)
+ 765 061c 8093 0000 		sts EE_Parameter+11,r24
+ 766 0620 8CE0      		ldi r24,lo8(12)
+ 767 0622 8093 0000 		sts EE_Parameter+12,r24
+ 768               	.L82:
+ 769 0626 802F      		mov r24,r16
+ 770 0628 0E94 0000 		call ParamSet_WriteToEEProm
+ 771               	/* epilogue start */
+ 772 062c 1F91      		pop r17
+ 773 062e 0F91      		pop r16
+ 774 0630 0895      		ret
+ 776               	.global	ParamSet_ReadFromEEProm
+ 778               	ParamSet_ReadFromEEProm:
+ 779 0632 FF92      		push r15
+ 780 0634 0F93      		push r16
+ 781 0636 1F93      		push r17
+ 782 0638 CF93      		push r28
+ 783 063a DF93      		push r29
+ 784               	/* prologue: function */
+ 785               	/* frame size = 0 */
+ 786 063c 982F      		mov r25,r24
+ 787 063e 8150      		subi r24,lo8(-(-1))
+ 788 0640 8530      		cpi r24,lo8(5)
+ 789 0642 00F0      		brlo .L85
+ 790 0644 93E0      		ldi r25,lo8(3)
+ 791               	.L85:
+ 792 0646 892F      		mov r24,r25
+ 793 0648 90E0      		ldi r25,lo8(0)
+ 794 064a 0197      		sbiw r24,1
+ 795 064c 24E7      		ldi r18,lo8(116)
+ 796 064e 30E0      		ldi r19,hi8(116)
+ 797 0650 829F      		mul r24,r18
+ 798 0652 8001      		movw r16,r0
+ 799 0654 839F      		mul r24,r19
+ 800 0656 100D      		add r17,r0
+ 801 0658 929F      		mul r25,r18
+ 802 065a 100D      		add r17,r0
+ 803 065c 1124      		clr r1
+ 804 065e E801      		movw r28,r16
+ 805 0660 CC59      		subi r28,lo8(-(100))
+ 806 0662 DF4F      		sbci r29,hi8(-(100))
+ 807 0664 CE01      		movw r24,r28
+ 808 0666 63E7      		ldi r22,lo8(115)
+ 809 0668 70E0      		ldi r23,hi8(115)
+ 810 066a 0E94 0000 		call EEProm_Checksum
+ 811 066e F82E      		mov r15,r24
+ 812 0670 C801      		movw r24,r16
+ 813 0672 8952      		subi r24,lo8(-(215))
+ 814 0674 9F4F      		sbci r25,hi8(-(215))
+ 815 0676 0E94 0000 		call __eerd_byte_m644p
+ 816 067a F816      		cp r15,r24
+ 817 067c 01F4      		brne .L86
+ 818 067e CE01      		movw r24,r28
+ 819 0680 0E94 0000 		call __eerd_byte_m644p
+ 820 0684 8535      		cpi r24,lo8(85)
+ 821 0686 01F4      		brne .L86
+ 822 0688 80E0      		ldi r24,lo8(EE_Parameter)
+ 823 068a 90E0      		ldi r25,hi8(EE_Parameter)
+ 824 068c BE01      		movw r22,r28
+ 825 068e 44E7      		ldi r20,lo8(116)
+ 826 0690 50E0      		ldi r21,hi8(116)
+ 827 0692 0E94 0000 		call __eerd_block_m644p
+ 828 0696 0E94 0000 		call LED_Init
+ 829 069a 81E0      		ldi r24,lo8(1)
+ 830 069c 00C0      		rjmp .L87
+ 831               	.L86:
+ 832 069e 80E0      		ldi r24,lo8(0)
+ 833               	.L87:
+ 834               	/* epilogue start */
+ 835 06a0 CDB7      		in r28,__SP_L__
+ 836 06a2 DEB7      		in r29,__SP_H__
+ 837 06a4 E5E0      		ldi r30, lo8(5)
+ 838 06a6 0C94 0000 		jmp __epilogue_restores__ + ((18 - 5) * 2)
+ 840               	.global	ParamSet_Init
+ 842               	ParamSet_Init:
+ 843 06aa A0E0      		ldi r26,lo8(0)
+ 844 06ac B0E0      		ldi r27,hi8(0)
+ 845 06ae E0E0      		ldi r30,lo8(gs(1f))
+ 846 06b0 F0E0      		ldi r31,hi8(gs(1f))
+ 847 06b2 0C94 0000 		jmp __prologue_saves__+((18 - 18) * 2)
+ 848               	1:
+ 849               	/* prologue: function */
+ 850               	/* frame size = 0 */
+ 851 06b6 81E0      		ldi r24,lo8(1)
+ 852 06b8 90E0      		ldi r25,hi8(1)
+ 853 06ba 0E94 0000 		call __eerd_byte_m644p
+ 854 06be 8535      		cpi r24,lo8(85)
+ 855 06c0 01F4      		brne .L90
+ 856 06c2 FF24      		clr r15
+ 857 06c4 00C0      		rjmp .L91
+ 858               	.L90:
+ 859 06c6 81E0      		ldi r24,lo8(1)
+ 860 06c8 90E0      		ldi r25,hi8(1)
+ 861 06ca 65E5      		ldi r22,lo8(85)
+ 862 06cc 0E94 0000 		call __eewr_byte_m644p
+ 863 06d0 FF24      		clr r15
+ 864 06d2 F394      		inc r15
+ 865               	.L91:
+ 866 06d4 80E5      		ldi r24,lo8(80)
+ 867 06d6 90E0      		ldi r25,hi8(80)
+ 868 06d8 6CE0      		ldi r22,lo8(12)
+ 869 06da 70E0      		ldi r23,hi8(12)
+ 870 06dc 0E94 0000 		call EEProm_Checksum
+ 871 06e0 B82E      		mov r11,r24
+ 872 06e2 8CE5      		ldi r24,lo8(92)
+ 873 06e4 90E0      		ldi r25,hi8(92)
+ 874 06e6 0E94 0000 		call __eerd_byte_m644p
+ 875 06ea E82E      		mov r14,r24
+ 876 06ec 00E0      		ldi r16,lo8(0)
+ 877 06ee C1E0      		ldi r28,lo8(1)
+ 878 06f0 D0E0      		ldi r29,hi8(1)
+ 879 06f2 F0E0      		ldi r31,lo8(__c.2367)
+ 880 06f4 CF2E      		mov r12,r31
+ 881 06f6 F0E0      		ldi r31,hi8(__c.2367)
+ 882 06f8 DF2E      		mov r13,r31
+ 883 06fa E4E0      		ldi r30,lo8(4)
+ 884 06fc 2E2E      		mov r2,r30
+ 885 06fe 75E0      		ldi r23,lo8(5)
+ 886 0700 372E      		mov r3,r23
+ 887 0702 66E0      		ldi r22,lo8(6)
+ 888 0704 462E      		mov r4,r22
+ 889 0706 57E0      		ldi r21,lo8(7)
+ 890 0708 552E      		mov r5,r21
+ 891 070a 48E0      		ldi r20,lo8(8)
+ 892 070c 642E      		mov r6,r20
+ 893 070e 39E0      		ldi r19,lo8(9)
+ 894 0710 732E      		mov r7,r19
+ 895 0712 2AE0      		ldi r18,lo8(10)
+ 896 0714 822E      		mov r8,r18
+ 897 0716 9BE0      		ldi r25,lo8(11)
+ 898 0718 992E      		mov r9,r25
+ 899 071a 8CE0      		ldi r24,lo8(12)
+ 900 071c A82E      		mov r10,r24
+ 901               	.L101:
+ 902 071e 1C2F      		mov r17,r28
+ 903 0720 FF20      		tst r15
+ 904 0722 01F4      		brne .L92
+ 905 0724 8C2F      		mov r24,r28
+ 906 0726 0E94 0000 		call ParamSet_ReadFromEEProm
+ 907 072a 8823      		tst r24
+ 908 072c 01F0      		breq .+2
+ 909 072e 00C0      		rjmp .L93
+ 910               	.L92:
+ 911 0730 00D0      		rcall .
+ 912 0732 00D0      		rcall .
+ 913 0734 0F92      		push __tmp_reg__
+ 914 0736 EDB7      		in r30,__SP_L__
+ 915 0738 FEB7      		in r31,__SP_H__
+ 916 073a 3196      		adiw r30,1
+ 917 073c ADB7      		in r26,__SP_L__
+ 918 073e BEB7      		in r27,__SP_H__
+ 919 0740 1196      		adiw r26,1
+ 920 0742 1C92      		st X,__zero_reg__
+ 921 0744 D282      		std Z+2,r13
+ 922 0746 C182      		std Z+1,r12
+ 923 0748 D483      		std Z+4,r29
+ 924 074a C383      		std Z+3,r28
+ 925 074c 0E94 0000 		call _printf_P
+ 926 0750 0F90      		pop __tmp_reg__
+ 927 0752 0F90      		pop __tmp_reg__
+ 928 0754 0F90      		pop __tmp_reg__
+ 929 0756 0F90      		pop __tmp_reg__
+ 930 0758 0F90      		pop __tmp_reg__
+ 931 075a 1230      		cpi r17,lo8(2)
+ 932 075c 01F0      		breq .L96
+ 933 075e 1330      		cpi r17,lo8(3)
+ 934 0760 01F0      		breq .L110
+ 935 0762 1130      		cpi r17,lo8(1)
+ 936 0764 01F4      		brne .L110
+ 937 0766 0E94 0000 		call ParamSet_DefaultSet1
+ 938 076a 00C0      		rjmp .L98
+ 939               	.L96:
+ 940 076c 0E94 0000 		call ParamSet_DefaultSet2
+ 941 0770 00C0      		rjmp .L98
+ 942               	.L110:
+ 943 0772 0E94 0000 		call ParamSet_DefaultSet3
+ 944               	.L98:
+ 945 0776 BE14      		cp r11,r14
+ 946 0778 01F4      		brne .L99
+ 947 077a 80E0      		ldi r24,lo8(EE_Parameter+1)
+ 948 077c 90E0      		ldi r25,hi8(EE_Parameter+1)
+ 949 077e 60E5      		ldi r22,lo8(80)
+ 950 0780 70E0      		ldi r23,hi8(80)
+ 951 0782 4CE0      		ldi r20,lo8(12)
+ 952 0784 50E0      		ldi r21,hi8(12)
+ 953 0786 0E94 0000 		call __eerd_block_m644p
+ 954 078a 00C0      		rjmp .L100
+ 955               	.L99:
+ 956 078c B1E0      		ldi r27,lo8(1)
+ 957 078e B093 0000 		sts EE_Parameter+3,r27
+ 958 0792 E2E0      		ldi r30,lo8(2)
+ 959 0794 E093 0000 		sts EE_Parameter+2,r30
+ 960 0798 F3E0      		ldi r31,lo8(3)
+ 961 079a F093 0000 		sts EE_Parameter+1,r31
+ 962 079e 2092 0000 		sts EE_Parameter+4,r2
+ 963 07a2 3092 0000 		sts EE_Parameter+5,r3
+ 964 07a6 4092 0000 		sts EE_Parameter+6,r4
+ 965 07aa 5092 0000 		sts EE_Parameter+7,r5
+ 966 07ae 6092 0000 		sts EE_Parameter+8,r6
+ 967 07b2 7092 0000 		sts EE_Parameter+9,r7
+ 968 07b6 8092 0000 		sts EE_Parameter+10,r8
+ 969 07ba 9092 0000 		sts EE_Parameter+11,r9
+ 970 07be A092 0000 		sts EE_Parameter+12,r10
+ 971               	.L100:
+ 972 07c2 812F      		mov r24,r17
+ 973 07c4 0E94 0000 		call ParamSet_WriteToEEProm
+ 974 07c8 01E0      		ldi r16,lo8(1)
+ 975               	.L93:
+ 976 07ca 2196      		adiw r28,1
+ 977 07cc C630      		cpi r28,6
+ 978 07ce D105      		cpc r29,__zero_reg__
+ 979 07d0 01F0      		breq .+2
+ 980 07d2 00C0      		rjmp .L101
+ 981 07d4 0023      		tst r16
+ 982 07d6 01F0      		breq .L102
+ 983 07d8 83E0      		ldi r24,lo8(3)
+ 984 07da 0E94 0000 		call SetActiveParamSet
+ 985               	.L102:
+ 986 07de 0E94 0000 		call GetActiveParamSet
+ 987 07e2 182F      		mov r17,r24
+ 988 07e4 0E94 0000 		call ParamSet_ReadFromEEProm
+ 989 07e8 00D0      		rcall .
+ 990 07ea 00D0      		rcall .
+ 991 07ec 0F92      		push __tmp_reg__
+ 992 07ee EDB7      		in r30,__SP_L__
+ 993 07f0 FEB7      		in r31,__SP_H__
+ 994 07f2 3196      		adiw r30,1
+ 995 07f4 ADB7      		in r26,__SP_L__
+ 996 07f6 BEB7      		in r27,__SP_H__
+ 997 07f8 1196      		adiw r26,1
+ 998 07fa 1C92      		st X,__zero_reg__
+ 999 07fc 80E0      		ldi r24,lo8(__c.2377)
+ 1000 07fe 90E0      		ldi r25,hi8(__c.2377)
+ 1001 0800 9283      		std Z+2,r25
+ 1002 0802 8183      		std Z+1,r24
+ 1003 0804 1383      		std Z+3,r17
+ 1004 0806 1482      		std Z+4,__zero_reg__
+ 1005 0808 0E94 0000 		call _printf_P
+ 1006 080c 0F90      		pop __tmp_reg__
+ 1007 080e 0F90      		pop __tmp_reg__
+ 1008 0810 0F90      		pop __tmp_reg__
+ 1009 0812 0F90      		pop __tmp_reg__
+ 1010 0814 0F90      		pop __tmp_reg__
+ 1011 0816 FF20      		tst r15
+ 1012 0818 01F4      		brne .L103
+ 1013 081a 0E94 0000 		call MixerTable_ReadFromEEProm
+ 1014 081e 8823      		tst r24
+ 1015 0820 01F4      		brne .L104
+ 1016               	.L103:
+ 1017 0822 00D0      		rcall .
+ 1018 0824 0F92      		push __tmp_reg__
+ 1019 0826 EDB7      		in r30,__SP_L__
+ 1020 0828 FEB7      		in r31,__SP_H__
+ 1021 082a 1182      		std Z+1,__zero_reg__
+ 1022 082c 80E0      		ldi r24,lo8(__c.2379)
+ 1023 082e 90E0      		ldi r25,hi8(__c.2379)
+ 1024 0830 9383      		std Z+3,r25
+ 1025 0832 8283      		std Z+2,r24
+ 1026 0834 0E94 0000 		call _printf_P
+ 1027 0838 0F90      		pop __tmp_reg__
+ 1028 083a 0F90      		pop __tmp_reg__
+ 1029 083c 0F90      		pop __tmp_reg__
+ 1030 083e 0E94 0000 		call MixerTable_Default
+ 1031 0842 0E94 0000 		call MixerTable_WriteToEEProm
+ 1032               	.L104:
+ 1033 0846 E0E0      		ldi r30,lo8(Mixer+13)
+ 1034 0848 F0E0      		ldi r31,hi8(Mixer+13)
+ 1035 084a 20E0      		ldi r18,lo8(0)
+ 1036               	.L106:
+ 1037 084c 8081      		ld r24,Z
+ 1038 084e 1816      		cp __zero_reg__,r24
+ 1039 0850 04F4      		brge .L105
+ 1040 0852 2F5F      		subi r18,lo8(-(1))
+ 1041               	.L105:
+ 1042 0854 3496      		adiw r30,4
+ 1043 0856 80E0      		ldi r24,hi8(Mixer+77)
+ 1044 0858 E030      		cpi r30,lo8(Mixer+77)
+ 1045 085a F807      		cpc r31,r24
+ 1046 085c 01F4      		brne .L106
+ 1047 085e 2093 0000 		sts RequiredMotors,r18
+ 1048 0862 ADB7      		in r26,__SP_L__
+ 1049 0864 BEB7      		in r27,__SP_H__
+ 1050 0866 1797      		sbiw r26,7
+ 1051 0868 ADBF      		out __SP_L__,r26
+ 1052 086a EDB7      		in r30,__SP_L__
+ 1053 086c FEB7      		in r31,__SP_H__
+ 1054 086e 3196      		adiw r30,1
+ 1055 0870 1196      		adiw r26,1
+ 1056 0872 1C92      		st X,__zero_reg__
+ 1057 0874 80E0      		ldi r24,lo8(__c.2384)
+ 1058 0876 90E0      		ldi r25,hi8(__c.2384)
+ 1059 0878 9283      		std Z+2,r25
+ 1060 087a 8183      		std Z+1,r24
+ 1061 087c 80E0      		ldi r24,lo8(Mixer+1)
+ 1062 087e 90E0      		ldi r25,hi8(Mixer+1)
+ 1063 0880 9483      		std Z+4,r25
+ 1064 0882 8383      		std Z+3,r24
+ 1065 0884 2583      		std Z+5,r18
+ 1066 0886 1682      		std Z+6,__zero_reg__
+ 1067 0888 0E94 0000 		call _printf_P
+ 1068 088c 0F90      		pop __tmp_reg__
+ 1069 088e 0F90      		pop __tmp_reg__
+ 1070 0890 0F90      		pop __tmp_reg__
+ 1071 0892 0F90      		pop __tmp_reg__
+ 1072 0894 EDB7      		in r30,__SP_L__
+ 1073 0896 FEB7      		in r31,__SP_H__
+ 1074 0898 1182      		std Z+1,__zero_reg__
+ 1075 089a 80E0      		ldi r24,lo8(__c.2386)
+ 1076 089c 90E0      		ldi r25,hi8(__c.2386)
+ 1077 089e 9383      		std Z+3,r25
+ 1078 08a0 8283      		std Z+2,r24
+ 1079 08a2 0E94 0000 		call _printf_P
+ 1080 08a6 0F90      		pop __tmp_reg__
+ 1081 08a8 0F90      		pop __tmp_reg__
+ 1082 08aa 0F90      		pop __tmp_reg__
+ 1083               	/* epilogue start */
+ 1084 08ac CDB7      		in r28,__SP_L__
+ 1085 08ae DEB7      		in r29,__SP_H__
+ 1086 08b0 E2E1      		ldi r30, lo8(18)
+ 1087 08b2 0C94 0000 		jmp __epilogue_restores__ + ((18 - 18) * 2)
+ 1089               	.global	SetParamWord
+ 1091               	SetParamWord:
+ 1092               	/* prologue: function */
+ 1093               	/* frame size = 0 */
+ 1094 08b6 0E94 0000 		call __eewr_word_m644p
+ 1095               	/* epilogue start */
+ 1096 08ba 0895      		ret
+ 1098               	.global	GetParamWord
+ 1100               	GetParamWord:
+ 1101               	/* prologue: function */
+ 1102               	/* frame size = 0 */
+ 1103 08bc 0E94 0000 		call __eerd_word_m644p
+ 1104               	/* epilogue start */
+ 1105 08c0 0895      		ret
+ 1107               		.section	.progmem.data,"a",@progbits
+ 1110               	__c.2386:
+ 1111 0000 0A0D 3D3D 		.string	"\n\r=============================="
+ 1111      3D3D 3D3D 
+ 1111      3D3D 3D3D 
+ 1111      3D3D 3D3D 
+ 1111      3D3D 3D3D 
+ 1114               	__c.2384:
+ 1115 0021 0A0D 4D69 		.string	"\n\rMixer-Config: '%s' (%u Motors)"
+ 1115      7865 722D 
+ 1115      436F 6E66 
+ 1115      6967 3A20 
+ 1115      2725 7327 
+ 1118               	__c.2379:
+ 1119 0042 0A0D 4765 		.string	"\n\rGenerating default Mixer Table"
+ 1119      6E65 7261 
+ 1119      7469 6E67 
+ 1119      2064 6566 
+ 1119      6175 6C74 
+ 1122               	__c.2377:
+ 1123 0063 0A0D 5573 		.string	"\n\rUsing Parameter Set %d"
+ 1123      696E 6720 
+ 1123      5061 7261 
+ 1123      6D65 7465 
+ 1123      7220 5365 
+ 1126               	__c.2367:
+ 1127 007c 0A0D 4765 		.string	"\n\rGenerating default Parameter Set %d"
+ 1127      6E65 7261 
+ 1127      7469 6E67 
+ 1127      2064 6566 
+ 1127      6175 6C74 
+ 1128               		.comm Mixer,78,1
+ 1129               		.comm RequiredMotors,1,1
+ 1130               		.comm EE_Parameter,116,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 eeprom.c
+     /tmp/ccvtzoy6.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccvtzoy6.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccvtzoy6.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccvtzoy6.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccvtzoy6.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccvtzoy6.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccvtzoy6.s:13     .text:0000000000000000 RAM_Checksum
+     /tmp/ccvtzoy6.s:39     .text:0000000000000022 ParamSet_DefaultStickMapping
+                            *COM*:0000000000000074 EE_Parameter
+     /tmp/ccvtzoy6.s:71     .text:000000000000006c CommonDefaults
+     /tmp/ccvtzoy6.s:202    .text:0000000000000206 GetParamByte
+     /tmp/ccvtzoy6.s:211    .text:000000000000020c EEProm_Checksum
+     /tmp/ccvtzoy6.s:251    .text:000000000000024c MixerTable_ReadFromEEProm
+                            *COM*:000000000000004e Mixer
+     /tmp/ccvtzoy6.s:289    .text:000000000000028e SetActiveParamSet
+     /tmp/ccvtzoy6.s:310    .text:00000000000002a8 GetActiveParamSet
+     /tmp/ccvtzoy6.s:328    .text:00000000000002c2 SetParamByte
+     /tmp/ccvtzoy6.s:342    .text:00000000000002c8 MixerTable_Default
+     /tmp/ccvtzoy6.s:408    .text:0000000000000350 ParamSet_DefaultSet3
+     /tmp/ccvtzoy6.s:466    .text:00000000000003c6 ParamSet_DefaultSet2
+     /tmp/ccvtzoy6.s:524    .text:000000000000043c ParamSet_DefaultSet1
+     /tmp/ccvtzoy6.s:578    .text:00000000000004b4 MixerTable_WriteToEEProm
+     /tmp/ccvtzoy6.s:610    .text:00000000000004e8 ParamSet_WriteToEEProm
+     /tmp/ccvtzoy6.s:691    .text:000000000000057c SetDefaultParameter
+     /tmp/ccvtzoy6.s:778    .text:0000000000000632 ParamSet_ReadFromEEProm
+     /tmp/ccvtzoy6.s:842    .text:00000000000006aa ParamSet_Init
+     /tmp/ccvtzoy6.s:1126   .progmem.data:000000000000007c __c.2367
+     /tmp/ccvtzoy6.s:1122   .progmem.data:0000000000000063 __c.2377
+     /tmp/ccvtzoy6.s:1118   .progmem.data:0000000000000042 __c.2379
+                            *COM*:0000000000000001 RequiredMotors
+     /tmp/ccvtzoy6.s:1114   .progmem.data:0000000000000021 __c.2384
+     /tmp/ccvtzoy6.s:1110   .progmem.data:0000000000000000 __c.2386
+     /tmp/ccvtzoy6.s:1091   .text:00000000000008b6 SetParamWord
+     /tmp/ccvtzoy6.s:1100   .text:00000000000008bc GetParamWord
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+PlatinenVersion
+__eerd_byte_m644p
+__eerd_block_m644p
+__eewr_byte_m644p
+__eewr_block_m644p
+LED_Init
+__epilogue_restores__
+__prologue_saves__
+_printf_P
+__eewr_word_m644p
+__eerd_word_m644p

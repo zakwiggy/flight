@@ -11,7 +11,7 @@ extern unsigned char MaxMenue;
 extern unsigned char MenuePunkt;
 extern unsigned char RemoteKeys;
 
-#define LCD_printfxy(x,y,format, args...)  { DispPtr = y * 20 + x; _printf_P(&Menu_Putchar,PSTR(format) , ## args);}
+#define LCD_printfxy(x,y,format, args...) ;
 #define LCD_printf(format, args...)        {  _printf_P(&Menu_Putchar, PSTR(format) , ## args);}
 
 #endif //_MENU_H

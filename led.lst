@@ -1,0 +1,303 @@
+   1               		.file	"led.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	LED_Init
+  13               	LED_Init:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16 0000 87B1      		in r24,39-32
+  17 0002 8C60      		ori r24,lo8(12)
+  18 0004 87B9      		out 39-32,r24
+  19 0006 4298      		cbi 40-32,2
+  20 0008 4398      		cbi 40-32,3
+  21 000a 1092 0000 		sts J16Blinkcount,__zero_reg__
+  22 000e 80E8      		ldi r24,lo8(-128)
+  23 0010 8093 0000 		sts J16Mask,r24
+  24 0014 1092 0000 		sts J17Blinkcount,__zero_reg__
+  25 0018 8093 0000 		sts J17Mask,r24
+  26               	/* epilogue start */
+  27 001c 0895      		ret
+  29               	.global	LED_Update
+  31               	LED_Update:
+  32               	/* prologue: function */
+  33               	/* frame size = 0 */
+  34 001e 8091 0000 		lds r24,delay.2231
+  35 0022 8150      		subi r24,lo8(-(-1))
+  36 0024 8093 0000 		sts delay.2231,r24
+  37 0028 8F5F      		subi r24,lo8(-(1))
+  38 002a 01F0      		breq .+2
+  39 002c 00C0      		rjmp .L38
+  40 002e 84E0      		ldi r24,lo8(4)
+  41 0030 8093 0000 		sts delay.2231,r24
+  42 0034 8091 0000 		lds r24,FC_StatusFlags
+  43 0038 8073      		andi r24,lo8(48)
+  44 003a 01F4      		brne .L5
+  45 003c 8091 0000 		lds r24,VersionInfo+6
+  46 0040 80FF      		sbrs r24,0
+  47 0042 00C0      		rjmp .L6
+  48               	.L5:
+  49 0044 8091 0000 		lds r24,EE_Parameter+78
+  50 0048 8823      		tst r24
+  51 004a 01F0      		breq .L7
+  52 004c 8091 0000 		lds r24,J16Warn.2234
+  53 0050 8823      		tst r24
+  54 0052 01F4      		brne .L8
+  55 0054 84E0      		ldi r24,lo8(4)
+  56 0056 8093 0000 		sts J16Blinkcount,r24
+  57               	.L8:
+  58 005a 81E0      		ldi r24,lo8(1)
+  59 005c 8093 0000 		sts J16Warn.2234,r24
+  60               	.L7:
+  61 0060 8091 0000 		lds r24,EE_Parameter+79
+  62 0064 8823      		tst r24
+  63 0066 01F0      		breq .L9
+  64 0068 8091 0000 		lds r24,J17Warn.2235
+  65 006c 8823      		tst r24
+  66 006e 01F4      		brne .L10
+  67 0070 84E0      		ldi r24,lo8(4)
+  68 0072 8093 0000 		sts J17Blinkcount,r24
+  69               	.L10:
+  70 0076 81E0      		ldi r24,lo8(1)
+  71 0078 8093 0000 		sts J17Warn.2235,r24
+  72 007c 00C0      		rjmp .L9
+  73               	.L6:
+  74 007e 1092 0000 		sts J16Warn.2234,__zero_reg__
+  75 0082 1092 0000 		sts J17Warn.2235,__zero_reg__
+  76 0086 8091 0000 		lds r24,EE_Parameter+74
+  77 008a 8093 0000 		sts J16Bitmask.2232,r24
+  78 008e 8091 0000 		lds r24,EE_Parameter+76
+  79 0092 8093 0000 		sts J17Bitmask.2233,r24
+  80               	.L9:
+  81 0096 8091 0000 		lds r24,J16Warn.2234
+  82 009a 8823      		tst r24
+  83 009c 01F4      		brne .L11
+  84 009e 8091 0000 		lds r24,EE_Parameter+100
+  85 00a2 982F      		mov r25,r24
+  86 00a4 84FF      		sbrs r24,4
+  87 00a6 00C0      		rjmp .L12
+  88 00a8 8091 0000 		lds r24,MotorenEin
+  89 00ac 8823      		tst r24
+  90 00ae 01F4      		brne .L12
+  91 00b0 95FF      		sbrs r25,5
+  92 00b2 00C0      		rjmp .L24
+  93 00b4 00C0      		rjmp .L42
+  94               	.L12:
+  95 00b6 8091 0000 		lds r24,EE_Parameter+75
+  96 00ba 883F      		cpi r24,lo8(-8)
+  97 00bc 00F0      		brlo .L15
+  98 00be 8091 0000 		lds r24,Parameter_J16Timing
+  99 00c2 8D3D      		cpi r24,lo8(-35)
+ 100 00c4 00F0      		brlo .L16
+ 101 00c6 8091 0000 		lds r24,J16Bitmask.2232
+ 102 00ca 87FF      		sbrs r24,7
+ 103 00cc 00C0      		rjmp .L24
+ 104 00ce 00C0      		rjmp .L42
+ 105               	.L16:
+ 106 00d0 8A30      		cpi r24,lo8(10)
+ 107 00d2 00F4      		brsh .L15
+ 108 00d4 8091 0000 		lds r24,J16Bitmask.2232
+ 109 00d8 87FF      		sbrs r24,7
+ 110 00da 00C0      		rjmp .L42
+ 111 00dc 00C0      		rjmp .L24
+ 112               	.L15:
+ 113 00de 8091 0000 		lds r24,J16Blinkcount
+ 114 00e2 8150      		subi r24,lo8(-(-1))
+ 115 00e4 8093 0000 		sts J16Blinkcount,r24
+ 116 00e8 8F5F      		subi r24,lo8(-(1))
+ 117 00ea 01F4      		brne .L14
+ 118 00ec 8091 0000 		lds r24,Parameter_J16Timing
+ 119 00f0 8150      		subi r24,lo8(-(-1))
+ 120 00f2 8093 0000 		sts J16Blinkcount,r24
+ 121 00f6 8091 0000 		lds r24,J16Mask
+ 122 00fa 8130      		cpi r24,lo8(1)
+ 123 00fc 01F4      		brne .L19
+ 124 00fe 80E8      		ldi r24,lo8(-128)
+ 125 0100 00C0      		rjmp .L39
+ 126               	.L19:
+ 127 0102 8695      		lsr r24
+ 128               	.L39:
+ 129 0104 8093 0000 		sts J16Mask,r24
+ 130 0108 8091 0000 		lds r24,J16Bitmask.2232
+ 131 010c 00C0      		rjmp .L47
+ 132               	.L11:
+ 133 010e 8091 0000 		lds r24,J16Blinkcount
+ 134 0112 8150      		subi r24,lo8(-(-1))
+ 135 0114 8093 0000 		sts J16Blinkcount,r24
+ 136 0118 8F5F      		subi r24,lo8(-(1))
+ 137 011a 01F4      		brne .L14
+ 138 011c 89E0      		ldi r24,lo8(9)
+ 139 011e 8093 0000 		sts J16Blinkcount,r24
+ 140 0122 8091 0000 		lds r24,J16Mask
+ 141 0126 8130      		cpi r24,lo8(1)
+ 142 0128 01F4      		brne .L22
+ 143 012a 80E8      		ldi r24,lo8(-128)
+ 144 012c 00C0      		rjmp .L40
+ 145               	.L22:
+ 146 012e 8695      		lsr r24
+ 147               	.L40:
+ 148 0130 8093 0000 		sts J16Mask,r24
+ 149 0134 8091 0000 		lds r24,EE_Parameter+78
+ 150               	.L47:
+ 151 0138 9091 0000 		lds r25,J16Mask
+ 152 013c 8923      		and r24,r25
+ 153 013e 01F0      		breq .L24
+ 154               	.L42:
+ 155 0140 429A      		sbi 40-32,2
+ 156 0142 00C0      		rjmp .L14
+ 157               	.L24:
+ 158 0144 4298      		cbi 40-32,2
+ 159               	.L14:
+ 160 0146 8091 0000 		lds r24,J17Warn.2235
+ 161 014a 8823      		tst r24
+ 162 014c 01F0      		breq .+2
+ 163 014e 00C0      		rjmp .L25
+ 164 0150 8091 0000 		lds r24,EE_Parameter+100
+ 165 0154 982F      		mov r25,r24
+ 166 0156 84FF      		sbrs r24,4
+ 167 0158 00C0      		rjmp .L26
+ 168 015a 8091 0000 		lds r24,MotorenEin
+ 169 015e 8823      		tst r24
+ 170 0160 01F4      		brne .L26
+ 171 0162 96FF      		sbrs r25,6
+ 172 0164 00C0      		rjmp .L34
+ 173 0166 00C0      		rjmp .L45
+ 174               	.L26:
+ 175 0168 8091 0000 		lds r24,EE_Parameter+77
+ 176 016c 883F      		cpi r24,lo8(-8)
+ 177 016e 00F0      		brlo .L28
+ 178 0170 8091 0000 		lds r24,Parameter_J17Timing
+ 179 0174 8D3D      		cpi r24,lo8(-35)
+ 180 0176 00F0      		brlo .L29
+ 181 0178 8091 0000 		lds r24,J17Bitmask.2233
+ 182 017c 87FF      		sbrs r24,7
+ 183 017e 00C0      		rjmp .L34
+ 184 0180 00C0      		rjmp .L45
+ 185               	.L29:
+ 186 0182 8A30      		cpi r24,lo8(10)
+ 187 0184 00F4      		brsh .L28
+ 188 0186 8091 0000 		lds r24,J17Bitmask.2233
+ 189 018a 87FF      		sbrs r24,7
+ 190 018c 00C0      		rjmp .L45
+ 191 018e 00C0      		rjmp .L34
+ 192               	.L28:
+ 193 0190 8091 0000 		lds r24,J17Blinkcount
+ 194 0194 8150      		subi r24,lo8(-(-1))
+ 195 0196 8093 0000 		sts J17Blinkcount,r24
+ 196 019a 8F5F      		subi r24,lo8(-(1))
+ 197 019c 01F4      		brne .L38
+ 198 019e 8091 0000 		lds r24,Parameter_J17Timing
+ 199 01a2 8150      		subi r24,lo8(-(-1))
+ 200 01a4 8093 0000 		sts J17Blinkcount,r24
+ 201 01a8 8091 0000 		lds r24,J17Mask
+ 202 01ac 8130      		cpi r24,lo8(1)
+ 203 01ae 01F4      		brne .L32
+ 204 01b0 80E8      		ldi r24,lo8(-128)
+ 205 01b2 00C0      		rjmp .L43
+ 206               	.L32:
+ 207 01b4 8695      		lsr r24
+ 208               	.L43:
+ 209 01b6 8093 0000 		sts J17Mask,r24
+ 210 01ba 8091 0000 		lds r24,J17Bitmask.2233
+ 211 01be 9091 0000 		lds r25,J17Mask
+ 212 01c2 8923      		and r24,r25
+ 213 01c4 01F4      		brne .L45
+ 214               	.L34:
+ 215 01c6 4398      		cbi 40-32,3
+ 216 01c8 0895      		ret
+ 217               	.L25:
+ 218 01ca 8091 0000 		lds r24,J17Blinkcount
+ 219 01ce 8150      		subi r24,lo8(-(-1))
+ 220 01d0 8093 0000 		sts J17Blinkcount,r24
+ 221 01d4 8F5F      		subi r24,lo8(-(1))
+ 222 01d6 01F4      		brne .L38
+ 223 01d8 89E0      		ldi r24,lo8(9)
+ 224 01da 8093 0000 		sts J17Blinkcount,r24
+ 225 01de 8091 0000 		lds r24,J17Mask
+ 226 01e2 8130      		cpi r24,lo8(1)
+ 227 01e4 01F4      		brne .L35
+ 228 01e6 80E8      		ldi r24,lo8(-128)
+ 229 01e8 00C0      		rjmp .L44
+ 230               	.L35:
+ 231 01ea 8695      		lsr r24
+ 232               	.L44:
+ 233 01ec 8093 0000 		sts J17Mask,r24
+ 234 01f0 8091 0000 		lds r24,EE_Parameter+79
+ 235 01f4 9091 0000 		lds r25,J17Mask
+ 236 01f8 8923      		and r24,r25
+ 237 01fa 01F0      		breq .L37
+ 238               	.L45:
+ 239 01fc 439A      		sbi 40-32,3
+ 240 01fe 0895      		ret
+ 241               	.L37:
+ 242 0200 4398      		cbi 40-32,3
+ 243               	.L38:
+ 244 0202 0895      		ret
+ 246               	.global	LED1_Timing
+ 247               	.global	LED1_Timing
+ 248               		.section .bss
+ 251               	LED1_Timing:
+ 252 0000 0000      		.skip 2,0
+ 253               	.global	LED2_Timing
+ 254               	.global	LED2_Timing
+ 257               	LED2_Timing:
+ 258 0002 0000      		.skip 2,0
+ 259               	.global	J16Blinkcount
+ 260               	.global	J16Blinkcount
+ 263               	J16Blinkcount:
+ 264 0004 00        		.skip 1,0
+ 265               	.global	J16Mask
+ 266               		.data
+ 269               	J16Mask:
+ 270 0000 01        		.byte	1
+ 271               	.global	J17Blinkcount
+ 272               	.global	J17Blinkcount
+ 273               		.section .bss
+ 276               	J17Blinkcount:
+ 277 0005 00        		.skip 1,0
+ 278               	.global	J17Mask
+ 279               		.data
+ 282               	J17Mask:
+ 283 0001 01        		.byte	1
+ 284               		.lcomm J17Warn.2235,1
+ 285               		.lcomm J16Warn.2234,1
+ 286               		.lcomm J17Bitmask.2233,1
+ 287               		.lcomm J16Bitmask.2232,1
+ 288               		.lcomm delay.2231,1
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 led.c
+     /tmp/ccFAwJh3.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccFAwJh3.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccFAwJh3.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccFAwJh3.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccFAwJh3.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccFAwJh3.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccFAwJh3.s:13     .text:0000000000000000 LED_Init
+     /tmp/ccFAwJh3.s:263    .bss:0000000000000004 J16Blinkcount
+     /tmp/ccFAwJh3.s:269    .data:0000000000000000 J16Mask
+     /tmp/ccFAwJh3.s:276    .bss:0000000000000005 J17Blinkcount
+     /tmp/ccFAwJh3.s:282    .data:0000000000000001 J17Mask
+     /tmp/ccFAwJh3.s:31     .text:000000000000001e LED_Update
+     /tmp/ccFAwJh3.s:287    .bss:000000000000000a delay.2231
+     /tmp/ccFAwJh3.s:284    .bss:0000000000000007 J16Warn.2234
+                             .bss:0000000000000006 J17Warn.2235
+     /tmp/ccFAwJh3.s:286    .bss:0000000000000009 J16Bitmask.2232
+     /tmp/ccFAwJh3.s:285    .bss:0000000000000008 J17Bitmask.2233
+     /tmp/ccFAwJh3.s:251    .bss:0000000000000000 LED1_Timing
+     /tmp/ccFAwJh3.s:257    .bss:0000000000000002 LED2_Timing
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+FC_StatusFlags
+VersionInfo
+EE_Parameter
+MotorenEin
+Parameter_J16Timing
+Parameter_J17Timing

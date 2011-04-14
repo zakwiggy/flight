@@ -1,0 +1,71 @@
+   1               		.file	"libfc.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.global	LIBFC_Init
+  13               	LIBFC_Init:
+  14               	/* prologue: function */
+  15               	/* frame size = 0 */
+  16               	/* epilogue start */
+  17 0000 0895      		ret
+  19               	.global	LIBFC_Polling
+  21               	LIBFC_Polling:
+  22               	/* prologue: function */
+  23               	/* frame size = 0 */
+  24               	/* epilogue start */
+  25 0002 0895      		ret
+  27               	.global	LIBFC_ReceiverInit
+  29               	LIBFC_ReceiverInit:
+  30               	/* prologue: function */
+  31               	/* frame size = 0 */
+  32               	/* epilogue start */
+  33 0004 0895      		ret
+  35               	.global	LIBFC_JetiBox_Putchar
+  37               	LIBFC_JetiBox_Putchar:
+  38               	/* prologue: function */
+  39               	/* frame size = 0 */
+  40               	/* epilogue start */
+  41 0006 0895      		ret
+  43               	.global	LIBFC_JetiBox_SetPos
+  45               	LIBFC_JetiBox_SetPos:
+  46               	/* prologue: function */
+  47               	/* frame size = 0 */
+  48               	/* epilogue start */
+  49 0008 0895      		ret
+  51               	.global	LIBFC_JetiBox_Clear
+  53               	LIBFC_JetiBox_Clear:
+  54               	/* prologue: function */
+  55               	/* frame size = 0 */
+  56               	/* epilogue start */
+  57 000a 0895      		ret
+  59               	.global	LIBFC_GetCPUType
+  61               	LIBFC_GetCPUType:
+  62               	/* prologue: function */
+  63               	/* frame size = 0 */
+  64               	/* epilogue start */
+  65 000c 0895      		ret
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 libfc.c
+     /tmp/ccjRwHfg.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/ccjRwHfg.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/ccjRwHfg.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/ccjRwHfg.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/ccjRwHfg.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccjRwHfg.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccjRwHfg.s:13     .text:0000000000000000 LIBFC_Init
+     /tmp/ccjRwHfg.s:21     .text:0000000000000002 LIBFC_Polling
+     /tmp/ccjRwHfg.s:29     .text:0000000000000004 LIBFC_ReceiverInit
+     /tmp/ccjRwHfg.s:37     .text:0000000000000006 LIBFC_JetiBox_Putchar
+     /tmp/ccjRwHfg.s:45     .text:0000000000000008 LIBFC_JetiBox_SetPos
+     /tmp/ccjRwHfg.s:53     .text:000000000000000a LIBFC_JetiBox_Clear
+     /tmp/ccjRwHfg.s:61     .text:000000000000000c LIBFC_GetCPUType
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss

@@ -57,7 +57,7 @@ unsigned char SendVersionToNavi = 1;
 unsigned char BattLowVoltageWarning = 94;
 unsigned int FlugMinuten = 0,FlugMinutenGesamt = 0;
 unsigned int FlugSekunden = 0;
-pVoidFnct_pVoidFnctChar_const_fmt _printf_P;
+
 unsigned char FoundMotors = 0;
 unsigned char JetiBeep = 0; // to allow any Morse-Beeping of the Jeti-Box
 

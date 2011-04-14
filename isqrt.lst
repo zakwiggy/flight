@@ -1,0 +1,209 @@
+   1               	# 1 "isqrt.S"
+   1               	;-----------------------------------------------------------------------------;
+   0               	
+   0               	
+   2               	; Fast integer squareroot routines for avr-gcc project          (C)ChaN, 2008
+   3               	; http://elm-chan.org/docs/avrlib/sqrt32.S
+   4               	;-----------------------------------------------------------------------------;
+   5               	; uint16_t isqrt32 (uint32_t n);
+   6               	; uint8_t isqrt16 (uint16_t n);
+   7               	; uint16_t ihypot (int16_t x, int16_t y);
+   8               	
+   9               	;-----------------------------------------------------------------------------:
+  10               	; 32bit integer squareroot
+  11               	;-----------------------------------------------------------------------------;
+  12               	;   uint16_t isqrt32 (
+  13               	;     uint32_t n
+  14               	;   );
+  15               	;
+  16               	; Return Value:
+  17               	;   Squareroot of n.
+  18               	;
+  19               	; Size  = 53 words
+  20               	; Clock = 532..548 cycles
+  21               	; Stack = 0 byte
+  22               	
+  23               	.global isqrt32
+  24               	.func isqrt32
+  25               	
+  26               	isqrt32:
+  26:isqrt.S       **** 	clr	r0
+  27:isqrt.S       **** 	clr	r18
+  28:isqrt.S       **** 	clr	r19
+  29:isqrt.S       **** 	clr	r20
+  30:isqrt.S       **** 	ldi	r21, 1
+  31:isqrt.S       **** 	clr	r27
+  32:isqrt.S       **** 	clr	r30
+  33:isqrt.S       **** 	clr	r31
+  34:isqrt.S       **** 	ldi	r26, 16
+  35:isqrt.S       **** 1:	lsl	r22
+  36:isqrt.S       **** 	rol	r23
+  37:isqrt.S       **** 	rol	r24
+  38:isqrt.S       **** 	rol	r25
+  39:isqrt.S       **** 	rol	r0
+  40:isqrt.S       **** 	rol	r18
+  41:isqrt.S       **** 	rol	r19
+  42:isqrt.S       **** 	rol	r20
+  43:isqrt.S       **** 	lsl	r22
+  44:isqrt.S       **** 	rol	r23
+  45:isqrt.S       **** 	rol	r24
+  46:isqrt.S       **** 	rol	r25
+  47:isqrt.S       **** 	rol	r0
+  48:isqrt.S       **** 	rol	r18
+  49:isqrt.S       **** 	rol	r19
+  50:isqrt.S       **** 	rol	r20
+  51:isqrt.S       **** 	brpl	2f
+  52:isqrt.S       **** 	add	r0, r21
+  53:isqrt.S       **** 	adc	r18, r27
+  54:isqrt.S       **** 	adc	r19, r30
+  55:isqrt.S       **** 	adc	r20, r31
+  56:isqrt.S       **** 	rjmp	3f
+  57:isqrt.S       **** 2:	sub	r0, r21
+  58:isqrt.S       **** 	sbc	r18, r27
+  59:isqrt.S       **** 	sbc	r19, r30
+  60:isqrt.S       **** 	sbc	r20, r31
+  61:isqrt.S       **** 3:	lsl	r21
+  62:isqrt.S       **** 	rol	r27
+  63:isqrt.S       **** 	rol	r30
+  64:isqrt.S       **** 	andi	r21, 0b11111000
+  65:isqrt.S       **** 	ori	r21, 0b00000101
+  66:isqrt.S       **** 	sbrc	r20, 7
+  67:isqrt.S       **** 	subi	r21, 2
+  68:isqrt.S       **** 	dec	r26
+  69:isqrt.S       **** 	brne	1b
+  70:isqrt.S       **** 	lsr	r30
+  71:isqrt.S       **** 	ror	r27
+  72:isqrt.S       **** 	ror	r21
+  73:isqrt.S       **** 	lsr	r30
+  74:isqrt.S       **** 	ror	r27
+  75:isqrt.S       **** 	ror	r21
+  76:isqrt.S       **** 	mov	r24, r21
+  77:isqrt.S       **** 	mov	r25, r27
+  78:isqrt.S       **** 	ret
+  80               	.endfunc
+  81               	
+  82               	
+  83               	
+  84               	;-----------------------------------------------------------------------------:
+  85               	; 16bit integer squareroot
+  86               	;-----------------------------------------------------------------------------;
+  87               	;   uint8_t isqrt16 (
+  88               	;     uint16_t n
+  89               	;   );
+  90               	;
+  91               	; Return Value:
+  92               	;   Squareroot of n.
+  93               	;
+  94               	; Size  = 33 words
+  95               	; Clock = 181..189 cycles
+  96               	; Stack = 0 byte
+  97               	
+  98               	.global isqrt16
+  99               	.func isqrt16
+ 100               	
+ 101               	isqrt16:
+ 101:isqrt.S       **** 	clr	r18
+ 102:isqrt.S       **** 	clr	r19
+ 103:isqrt.S       **** 	ldi	r20, 1
+ 104:isqrt.S       **** 	clr	r21
+ 105:isqrt.S       **** 	ldi	r22, 8
+ 106:isqrt.S       **** 1:	lsl	r24
+ 107:isqrt.S       **** 	rol	r25
+ 108:isqrt.S       **** 	rol	r18
+ 109:isqrt.S       **** 	rol	r19
+ 110:isqrt.S       **** 	lsl	r24
+ 111:isqrt.S       **** 	rol	r25
+ 112:isqrt.S       **** 	rol	r18
+ 113:isqrt.S       **** 	rol	r19
+ 114:isqrt.S       **** 	brpl	2f
+ 115:isqrt.S       **** 	add	r18, r20
+ 116:isqrt.S       **** 	adc	r19, r21
+ 117:isqrt.S       **** 	rjmp	3f
+ 118:isqrt.S       **** 2:	sub	r18, r20
+ 119:isqrt.S       **** 	sbc	r19, r21
+ 120:isqrt.S       **** 3:	lsl	r20
+ 121:isqrt.S       **** 	rol	r21
+ 122:isqrt.S       **** 	andi	r20, 0b11111000
+ 123:isqrt.S       **** 	ori	r20, 0b00000101
+ 124:isqrt.S       **** 	sbrc	r19, 7
+ 125:isqrt.S       **** 	subi	r20, 2
+ 126:isqrt.S       **** 	dec	r22
+ 127:isqrt.S       **** 	brne	1b
+ 128:isqrt.S       **** 	lsr	r21
+ 129:isqrt.S       **** 	ror	r20
+ 130:isqrt.S       **** 	lsr	r21
+ 131:isqrt.S       **** 	ror	r20
+ 132:isqrt.S       **** 	mov	r24, r20
+ 133:isqrt.S       **** 	ret
+ 135               	.endfunc
+ 136               	
+ 137               	
+ 138               	
+ 139               	;-----------------------------------------------------------------------------:
+ 140               	; 16bit integer hypot (megaAVR is required)
+ 141               	;-----------------------------------------------------------------------------;
+ 142               	;   uint16_t ihypot (
+ 143               	;     int16_t x,
+ 144               	;     int16_t y
+ 145               	;   );
+ 146               	;
+ 147               	; Return Value:
+ 148               	;   Squareroot of (x*x + y*y)
+ 149               	;
+ 150               	; Size  = 42 words
+ 151               	; Clock = 581..597 cycles
+ 152               	; Stack = 0 byte
+ 153               	
+ 154               	.global ihypot
+ 155               	.func ihypot
+ 156               	
+ 157               	ihypot:
+ 157:isqrt.S       **** 	clr	r26
+ 158:isqrt.S       **** 	sbrs	r25, 7
+ 159:isqrt.S       **** 	rjmp	1f
+ 160:isqrt.S       **** 	com	r24
+ 161:isqrt.S       **** 	com	r25
+ 162:isqrt.S       **** 	adc	r24, r26
+ 163:isqrt.S       **** 	adc	r25, r26
+ 164:isqrt.S       **** 1:	sbrs	r23, 7
+ 165:isqrt.S       **** 	rjmp	2f
+ 166:isqrt.S       **** 	com	r22
+ 167:isqrt.S       **** 	com	r23
+ 168:isqrt.S       **** 	adc	r22, r26
+ 169:isqrt.S       **** 	adc	r23, r26
+ 170:isqrt.S       **** 2:	mul	r22, r22
+ 171:isqrt.S       **** 	movw	r18, r0
+ 172:isqrt.S       **** 	mul	r23, r23
+ 173:isqrt.S       **** 	movw	r20, r0
+ 174:isqrt.S       **** 	mul	r22, r23
+ 175:isqrt.S       **** 	add	r19, r0
+ 176:isqrt.S       **** 	adc	r20, r1
+ 177:isqrt.S       **** 	adc	r21, r26
+ 178:isqrt.S       **** 	add	r19, r0
+ 179:isqrt.S       **** 	adc	r20, r1
+ 180:isqrt.S       **** 	adc	r21, r26
+ 181:isqrt.S       **** 	mul	r24, r24
+ 182:isqrt.S       **** 	movw	r30, r0
+ 183:isqrt.S       **** 	mul	r25, r25
+ 184:isqrt.S       **** 	add	r18, r30
+ 185:isqrt.S       **** 	adc	r19, r31
+ 186:isqrt.S       **** 	adc	r20, r0
+ 187:isqrt.S       **** 	adc	r21, r1
+ 188:isqrt.S       **** 	mul	r24, r25
+ 189:isqrt.S       **** 	add	r19, r0
+ 190:isqrt.S       **** 	adc	r20, r1
+ 191:isqrt.S       **** 	adc	r21, r26
+ 192:isqrt.S       **** 	add	r19, r0
+ 193:isqrt.S       **** 	adc	r20, r1
+ 194:isqrt.S       **** 	adc	r21, r26
+ 195:isqrt.S       **** 	movw	r24, r20
+ 196:isqrt.S       **** 	movw	r22, r18
+ 197:isqrt.S       **** 	clr	r1
+ 198:isqrt.S       **** 	rjmp	isqrt32
+ 200               	.endfunc
+DEFINED SYMBOLS
+             isqrt.S:26     .text:0000000000000000 isqrt32
+             isqrt.S:101    .text:000000000000006a isqrt16
+             isqrt.S:157    .text:00000000000000ac ihypot
+
+NO UNDEFINED SYMBOLS

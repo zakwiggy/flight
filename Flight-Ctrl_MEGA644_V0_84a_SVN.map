@@ -1,0 +1,2148 @@
+Archive member included because of file (symbol)
+
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+                              fc.o (__addsf3)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o) (__addsf3x)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+                              fc.o (__fixunssfsi)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+                              fc.o (__floatsisf)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_inf)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_nan)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_pscA)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_pscB)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o) (__fp_round)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_split3)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o) (__fp_zero)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+                              uart.o (__mulsi3)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+                              main.o (__udivmodqi4)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+                              timer0.o (__udivmodhi4)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+                              uart.o (__divmodhi4)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+                              uart.o (__divmodsi4)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+                              main.o (__prologue_saves__)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+                              uart.o (__epilogue_restores__)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+                              /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o (exit)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+                              analog.o (__tablejump2__)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+                              main.o (__do_copy_data)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+                              main.o (__do_clear_bss)
+/usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+                              /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o) (__udivmodsi4)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+                              uart.o (memcpy_P)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+                              eeprom.o (__eerd_block_m644p)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+                              eeprom.o (__eerd_byte_m644p)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+                              eeprom.o (__eerd_word_m644p)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+                              eeprom.o (__eewr_block_m644p)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+                              eeprom.o (__eewr_byte_m644p)
+/usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                              eeprom.o (__eewr_word_m644p)
+
+Allocating common symbols
+Common symbol       size              file
+
+KopplungsteilNickRoll
+                    0x2               fc.o
+MesswertGierBias    0x2               fc.o
+SPITransferCompleted
+                    0x1               spi.o
+KopplungsteilRollNick
+                    0x2               fc.o
+RequiredMotors      0x1               eeprom.o
+Parameter_Servo4    0x1               fc.o
+GPSInfo             0x8               spi.o
+EE_Parameter        0x74              eeprom.o
+DiffRoll            0x2               fc.o
+MesswertRoll        0x2               fc.o
+TrimNick            0x2               fc.o
+Parameter_NaviGpsP  0x1               fc.o
+ErsatzKompassInGrad
+                    0x2               fc.o
+GyroFaktorGier      0x1               fc.o
+MittelIntegralRoll2
+                    0x4               fc.o
+Parameter_NaviGpsModeControl
+                    0x1               fc.o
+TrimRoll            0x2               fc.o
+SPI_TX_Buffer       0x2               spi.o
+MesswertNick        0x2               fc.o
+NC_Version          0x5               spi.o
+SPI_BufferIndex     0x1               spi.o
+Aktuell_ay          0x2               analog.o
+ToNaviCtrl          0x22              spi.o
+Data3D              0xe               uart.o
+Parameter_NaviGpsI  0x1               fc.o
+Capacity            0x7               capacity.o
+Timer3D             0x2               uart.o
+SPI_ChkSum          0x1               spi.o
+RohMesswertRoll     0x2               fc.o
+MIN_GAS             0x1               fc.o
+Parameter_NaviGpsACC
+                    0x1               fc.o
+MittelIntegralNick2
+                    0x4               fc.o
+Channels            0x1               rc.o
+Debug_Timer         0x2               uart.o
+RohMesswertNick     0x2               fc.o
+IntegralFaktorGier  0x1               fc.o
+DiffNick            0x2               fc.o
+MittelIntegralNick  0x4               fc.o
+Parameter_Servo3    0x1               fc.o
+VersionInfo         0xa               uart.o
+MotorTest           0x10              uart.o
+SPI_RxBufferIndex   0x1               spi.o
+NaviAccNick         0x2               fc.o
+Parameter_J16Timing
+                    0x1               fc.o
+MittelIntegralRoll  0x4               fc.o
+NeutralAccZ_float   0x4               analog.o
+Parameter_Servo5    0x1               fc.o
+SPI_RxDataValid     0x1               spi.o
+PPM_in              0x34              rc.o
+WinkelOut           0x8               uart.o
+ExternControl       0xb               uart.o
+IntegralFaktor      0x1               fc.o
+Aktuell_az          0x2               analog.o
+FromNaviCtrl        0x20              spi.o
+StartLuftdruck      0x2               analog.o
+tmp_motorwert       0x18              fc.o
+Kompass_Timer       0x2               uart.o
+RxdBuffer           0xaa              uart.o
+Mixer               0x4e              eeprom.o
+Display_Timer       0x2               uart.o
+Parameter_NaviOperatingRadius
+                    0x1               fc.o
+TxdBuffer           0xaa              uart.o
+SPI_Buffer          0x20              spi.o
+PrintZiel           0x1               printf_P.o
+Aktuell_Nick        0x2               analog.o
+Aktuell_Roll        0x2               analog.o
+Aktuell_ax          0x2               analog.o
+Parameter_NaviWindCorrection
+                    0x1               fc.o
+s                   0x1               fc.o
+h                   0x1               fc.o
+Mittelwert_AccNick  0x2               fc.o
+Parameter_NaviSpeedCompensation
+                    0x1               fc.o
+DebugOut            0x42              uart.o
+DruckOffsetSetting  0x1               analog.o
+FromNaviCtrl_Value  0x5               spi.o
+BLConfig            0x8               twimaster.o
+Motor               0x60              twimaster.o
+Aktuell_Gier        0x2               analog.o
+Parameter_J17Timing
+                    0x1               fc.o
+MAX_GAS             0x1               fc.o
+MesswertGier        0x2               fc.o
+Parameter_J16Bitmask
+                    0x1               fc.o
+ConfirmFrame        0x1               uart.o
+NaviAccRoll         0x2               fc.o
+GyroFaktor          0x1               fc.o
+m                   0x1               fc.o
+ErsatzKompass       0x4               fc.o
+Mittelwert_AccRoll  0x2               fc.o
+Parameter_NaviGpsGain
+                    0x1               fc.o
+PPM_diff            0x34              rc.o
+Parameter_ExternalControl
+                    0x1               fc.o
+Parameter_J17Bitmask
+                    0x1               fc.o
+Parameter_NaviGpsD  0x1               fc.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x0000000000000000 0x0000000000020000 xr
+data             0x0000000000800060 0x000000000000ffa0 rw !x
+eeprom           0x0000000000810000 0x0000000000010000 rw !x
+fuse             0x0000000000820000 0x0000000000000400 rw !x
+lock             0x0000000000830000 0x0000000000000400 rw !x
+signature        0x0000000000840000 0x0000000000000400 rw !x
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+LOAD main.o
+LOAD uart.o
+LOAD timer0.o
+LOAD analog.o
+LOAD menu.o
+LOAD eeprom.o
+LOAD twimaster.o
+LOAD rc.o
+LOAD fc.o
+LOAD GPS.o
+LOAD spi.o
+LOAD led.o
+LOAD Spektrum.o
+LOAD mymath.o
+LOAD jetimenu.o
+LOAD capacity.o
+LOAD debug.o
+LOAD libfc.o
+LOAD printf_P.o
+LOAD isqrt.o
+LOAD /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a
+LOAD /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a
+LOAD /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a
+LOAD /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x0000000000000000     0xc230
+ *(.vectors)
+ .vectors       0x0000000000000000       0x7c /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+                0x0000000000000000                __vectors
+                0x0000000000000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ .progmem.gcc_sw_table
+                0x000000000000007c       0x24 analog.o
+ .progmem.gcc_sw_table
+                0x00000000000000a0       0x2e twimaster.o
+ *(.progmem*)
+ .progmem.data  0x00000000000000ce      0x120 main.o
+ .progmem.data  0x00000000000001ee      0x200 uart.o
+                0x00000000000001ee                ANALOG_TEXT
+ .progmem.data  0x00000000000003ee       0x39 analog.o
+ .progmem.data  0x0000000000000427       0xa2 eeprom.o
+ .progmem.data  0x00000000000004c9       0x18 fc.o
+ .progmem.data  0x00000000000004e1       0xb6 mymath.o
+                0x00000000000004e1                pgm_sinlookup
+ .progmem.data  0x0000000000000597       0xe7 jetimenu.o
+                0x0000000000000597                JetiBox_Menu
+                0x000000000000067e                . = ALIGN (0x2)
+                0x000000000000067e                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000000000000067e        0x0 linker stubs
+ *(.trampolines*)
+                0x000000000000067e                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000000000000067e                __ctors_start = .
+ *(.ctors)
+                0x000000000000067e                __ctors_end = .
+                0x000000000000067e                __dtors_start = .
+ *(.dtors)
+                0x000000000000067e                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000000000000067e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+                0x000000000000067e                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000000000000067e        0xc /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000000000000068a       0x16 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+                0x000000000000068a                __do_copy_data
+ .init4         0x00000000000006a0       0x10 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000006a0                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000000000006b0        0x8 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+ *(.init9)
+ *(.text)
+ .text          0x00000000000006b8        0x4 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+                0x00000000000006b8                __vector_28
+                0x00000000000006b8                __vector_1
+                0x00000000000006b8                __bad_interrupt
+                0x00000000000006b8                __vector_6
+                0x00000000000006b8                __vector_3
+                0x00000000000006b8                __vector_23
+                0x00000000000006b8                __vector_30
+                0x00000000000006b8                __vector_25
+                0x00000000000006b8                __vector_11
+                0x00000000000006b8                __vector_13
+                0x00000000000006b8                __vector_17
+                0x00000000000006b8                __vector_19
+                0x00000000000006b8                __vector_7
+                0x00000000000006b8                __vector_27
+                0x00000000000006b8                __vector_5
+                0x00000000000006b8                __vector_4
+                0x00000000000006b8                __vector_2
+                0x00000000000006b8                __vector_21
+                0x00000000000006b8                __vector_15
+                0x00000000000006b8                __vector_29
+                0x00000000000006b8                __vector_8
+                0x00000000000006b8                __vector_14
+                0x00000000000006b8                __vector_10
+                0x00000000000006b8                __vector_16
+ .text          0x00000000000006bc      0xa00 main.o
+                0x00000000000006bc                LipoDetection
+                0x00000000000007da                CalMk3Mag
+                0x000000000000084c                main
+ .text          0x00000000000010bc     0x1482 uart.o
+                0x00000000000010bc                __vector_22
+                0x0000000000001128                AddCRC
+                0x0000000000001186                Decode64
+                0x000000000000123c                uart_putchar
+                0x000000000000124c                UART_Init
+                0x00000000000012be                SendOutData
+                0x0000000000001422                DatenUebertragung
+                0x0000000000001a5c                BearbeiteRxDaten
+                0x0000000000002356                __vector_20
+ .text          0x000000000000253e      0x8fa timer0.o
+                0x000000000000253e                __vector_18
+                0x0000000000002744                SetDelay
+                0x0000000000002758                CheckDelay
+                0x000000000000276e                Delay_ms
+                0x000000000000279a                Delay_ms_Mess
+                0x00000000000027da                TIMER2_Init
+                0x0000000000002828                Timer_Init
+                0x0000000000002858                CalculateServo
+                0x0000000000002b6c                __vector_9
+ .text          0x0000000000002e38      0xa06 analog.o
+                0x0000000000002e38                ADC_Init
+                0x0000000000002e44                __vector_24
+                0x00000000000035b2                SucheGyroOffset
+                0x0000000000003782                SucheLuftruckOffset
+ .text          0x000000000000383e       0xea menu.o
+                0x000000000000383e                LcdClear
+                0x0000000000003850                Menu_Putchar
+                0x0000000000003866                Menu
+ .text          0x0000000000003928      0x8c2 eeprom.o
+                0x0000000000003928                RAM_Checksum
+                0x000000000000394a                ParamSet_DefaultStickMapping
+                0x0000000000003994                CommonDefaults
+                0x0000000000003b2e                GetParamByte
+                0x0000000000003b34                EEProm_Checksum
+                0x0000000000003b74                MixerTable_ReadFromEEProm
+                0x0000000000003bb6                SetActiveParamSet
+                0x0000000000003bd0                GetActiveParamSet
+                0x0000000000003bea                SetParamByte
+                0x0000000000003bf0                MixerTable_Default
+                0x0000000000003c78                ParamSet_DefaultSet3
+                0x0000000000003cee                ParamSet_DefaultSet2
+                0x0000000000003d64                ParamSet_DefaultSet1
+                0x0000000000003ddc                MixerTable_WriteToEEProm
+                0x0000000000003e10                ParamSet_WriteToEEProm
+                0x0000000000003ea4                SetDefaultParameter
+                0x0000000000003f5a                ParamSet_ReadFromEEProm
+                0x0000000000003fd2                ParamSet_Init
+                0x00000000000041de                SetParamWord
+                0x00000000000041e4                GetParamWord
+ .text          0x00000000000041ea      0x8e8 twimaster.o
+                0x00000000000041ea                I2C_Init
+                0x000000000000423c                I2C_Reset
+                0x0000000000004298                __vector_26
+                0x0000000000004846                I2C_ReadBLConfig
+                0x0000000000004988                I2C_WriteBLConfig
+ .text          0x0000000000004ad2      0x49e rc.o
+                0x0000000000004ad2                rc_sum_init
+                0x0000000000004b12                __vector_12
+ .text          0x0000000000004f70     0x55f8 fc.o
+                0x0000000000004f70                CopyDebugValues
+                0x0000000000005190                Mittelwert
+                0x0000000000005f40                SendMotorData
+                0x0000000000005fba                ParameterZuordnung
+                0x0000000000006524                CalibrierMittelwert
+                0x000000000000664a                SetNeutral
+                0x0000000000006b8e                Piep
+                0x0000000000006bd8                MotorRegler
+ .text          0x000000000000a568       0x54 GPS.o
+                0x000000000000a568                GPS_Neutral
+                0x000000000000a5aa                GPS_BerechneZielrichtung
+ .text          0x000000000000a5bc      0x8f2 spi.o
+                0x000000000000a5bc                SPI_MasterInit
+                0x000000000000a5fe                UpdateSPI_Buffer
+                0x000000000000ad2a                SPI_StartTransmitPacket
+                0x000000000000adac                SPI_TransmitByte
+ .text          0x000000000000aeae      0x204 led.o
+                0x000000000000aeae                LED_Init
+                0x000000000000aecc                LED_Update
+ .text          0x000000000000b0b2      0x31e Spektrum.o
+                0x000000000000b0b2                SpektrumUartInit
+                0x000000000000b162                SpektrumParser
+ .text          0x000000000000b3d0       0xac mymath.o
+                0x000000000000b3d0                c_sin_8192
+                0x000000000000b46a                c_cos_8192
+ .text          0x000000000000b47c      0x680 jetimenu.o
+                0x000000000000b47c                JetiBox_Update
+                0x000000000000b51a                Menu_PosInfo
+                0x000000000000b67a                Menu_Battery
+                0x000000000000b768                Menu_Temperature
+                0x000000000000b8ba                Menu_Status
+ .text          0x000000000000bafc      0x1a6 capacity.o
+                0x000000000000bafc                Capacity_Update
+                0x000000000000bc74                Capacity_Init
+ .text          0x000000000000bca2        0x0 debug.o
+ .text          0x000000000000bca2        0xe libfc.o
+                0x000000000000bca2                LIBFC_Init
+                0x000000000000bca4                LIBFC_Polling
+                0x000000000000bca6                LIBFC_ReceiverInit
+                0x000000000000bca8                LIBFC_JetiBox_Putchar
+                0x000000000000bcaa                LIBFC_JetiBox_SetPos
+                0x000000000000bcac                LIBFC_JetiBox_Clear
+                0x000000000000bcae                LIBFC_GetCPUType
+ .text          0x000000000000bcb0       0x1e printf_P.o
+                0x000000000000bcb0                Putchar
+                0x000000000000bcb2                PRINT
+                0x000000000000bcb4                PRINTP
+                0x000000000000bcb6                PAD_SP
+                0x000000000000bcb8                PAD_0
+                0x000000000000bcba                _printf_P
+ .text          0x000000000000bcce      0x100 isqrt.o
+                0x000000000000bcce                isqrt32
+                0x000000000000bd38                isqrt16
+                0x000000000000bd7a                ihypot
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+ .text          0x000000000000bdce        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                0x000000000000bdce                . = ALIGN (0x2)
+ *(.text.*)
+ .text.avr-libc.fplib
+                0x000000000000bdce        0xa /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+                0x000000000000bdce                __subsf3
+                0x000000000000bdd0                __addsf3
+ .text.avr-libc.fplib
+                0x000000000000bdd8       0xc0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+                0x000000000000bdf2                __addsf3x
+ .text.avr-libc.fplib
+                0x000000000000be98       0x58 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+                0x000000000000be98                __fixunssfsi
+ .text.avr-libc.fplib
+                0x000000000000bef0       0x7a /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+                0x000000000000bef0                __floatunsisf
+                0x000000000000bef4                __floatsisf
+ .text.avr-libc.fplib
+                0x000000000000bf6a        0xc /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+                0x000000000000bf6a                __fp_inf
+ .text.avr-libc.fplib
+                0x000000000000bf76        0x6 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+                0x000000000000bf76                __fp_nan
+ .text.avr-libc.fplib
+                0x000000000000bf7c        0xe /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+                0x000000000000bf7c                __fp_pscA
+ .text.avr-libc.fplib
+                0x000000000000bf8a        0xe /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+                0x000000000000bf8a                __fp_pscB
+ .text.avr-libc.fplib
+                0x000000000000bf98       0x22 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+                0x000000000000bf98                __fp_round
+ .text.avr-libc.fplib
+                0x000000000000bfba       0x44 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+                0x000000000000bfba                __fp_split3
+                0x000000000000bfca                __fp_splitA
+ .text.avr-libc.fplib
+                0x000000000000bffe        0xe /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+                0x000000000000bffe                __fp_zero
+                0x000000000000c000                __fp_szero
+ .text.libgcc   0x000000000000c00c       0x3e /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+                0x000000000000c00c                __mulsi3
+ .text.libgcc   0x000000000000c04a       0x18 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+                0x000000000000c04a                __udivmodqi4
+ .text.libgcc   0x000000000000c062       0x28 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+                0x000000000000c062                __udivmodhi4
+ .text.libgcc   0x000000000000c08a       0x26 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+                0x000000000000c08a                __divmodhi4
+                0x000000000000c08a                _div
+ .text.libgcc   0x000000000000c0b0       0x36 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+                0x000000000000c0b0                __divmodsi4
+ .text.libgcc   0x000000000000c0e6       0x38 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+                0x000000000000c0e6                __prologue_saves__
+ .text.libgcc   0x000000000000c11e       0x36 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+                0x000000000000c11e                __epilogue_restores__
+ .text.libgcc   0x000000000000c154        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x000000000000c154        0xc /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+                0x000000000000c154                __tablejump2__
+                0x000000000000c158                __tablejump__
+ .text.libgcc   0x000000000000c160        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc   0x000000000000c160        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x000000000000c160       0x44 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+                0x000000000000c160                __udivmodsi4
+ .text.avr-libc
+                0x000000000000c1a4       0x12 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+                0x000000000000c1a4                memcpy_P
+ .text.avr-libc
+                0x000000000000c1b6       0x20 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+                0x000000000000c1b6                __eerd_block_m644p
+                0x000000000000c1ba                __eerd_blraw_m644p
+ .text.avr-libc
+                0x000000000000c1d6       0x10 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+                0x000000000000c1d6                __eerd_byte_m644p
+ .text.avr-libc
+                0x000000000000c1e6        0xc /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+                0x000000000000c1e6                __eerd_word_m644p
+ .text.avr-libc
+                0x000000000000c1f2       0x14 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+                0x000000000000c1f2                __eewr_block_m644p
+ .text.avr-libc
+                0x000000000000c206       0x1c /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+                0x000000000000c206                __eewr_byte_m644p
+                0x000000000000c208                __eewr_r18_m644p
+ .text.avr-libc
+                0x000000000000c222        0xa /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                0x000000000000c222                __eewr_word_m644p
+                0x000000000000c22c                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x000000000000c22c        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+                0x000000000000c22c                exit
+                0x000000000000c22c                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x000000000000c22c        0x4 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+ *(.fini0)
+                0x000000000000c230                _etext = .
+
+.data           0x0000000000800100       0xf4 load address 0x000000000000c230
+                0x0000000000800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+ .data          0x0000000000800100        0x4 main.o
+                0x0000000000800100                PlatinenVersion
+                0x0000000000800101                SendVersionToNavi
+                0x0000000000800102                BattLowVoltageWarning
+ .data          0x0000000000800104        0x4 uart.o
+                0x0000000000800104                UebertragungAbgeschlossen
+                0x0000000000800105                DebugTextAnforderung
+                0x0000000000800106                PcZugriff
+                0x0000000000800107                MeineSlaveAdresse
+ .data          0x0000000000800108        0x8 timer0.o
+                0x0000000000800108                CalculateServoSignals
+                0x0000000000800109                ServoNickOffset
+                0x000000000080010b                ServoRollOffset
+                0x000000000080010d                BeepMuster
+ .data          0x0000000000800110       0x10 analog.o
+                0x0000000000800110                UBat
+                0x0000000000800112                HiResNick
+                0x0000000000800114                HiResRoll
+                0x0000000000800116                Luftdruck
+                0x000000000080011a                MessLuftdruck
+                0x000000000080011c                AnalogOffsetNick
+                0x000000000080011d                AnalogOffsetRoll
+                0x000000000080011e                AnalogOffsetGier
+                0x000000000080011f                AdReady
+ .data          0x0000000000800120       0x51 menu.o
+                0x0000000000800120                DisplayBuff
+                0x0000000000800170                MaxMenue
+ .data          0x0000000000800171       0x21 eeprom.o
+ .data          0x0000000000800192        0x2 twimaster.o
+                0x0000000000800192                I2CTimeout
+ .data          0x0000000000800194        0x1 rc.o
+                0x0000000000800194                NewPpmData
+ .data          0x0000000000800195       0x50 fc.o
+                0x0000000000800195                KompassValue
+                0x0000000000800197                CalculateCompassTimer
+                0x0000000000800198                KompassFusion
+                0x0000000000800199                KompassSignalSchlecht
+                0x000000000080019b                Umschlag180Nick
+                0x000000000080019f                Umschlag180Roll
+                0x00000000008001a3                carefree_old
+                0x00000000008001a4                Ki
+                0x00000000008001a6                Parameter_Luftdruck_D
+                0x00000000008001a7                Parameter_MaxHoehe
+                0x00000000008001a8                Parameter_Hoehe_P
+                0x00000000008001a9                Parameter_Hoehe_ACC_Wirkung
+                0x00000000008001aa                Parameter_KompassWirkung
+                0x00000000008001ab                Parameter_Hoehe_GPS_Z
+                0x00000000008001ac                Parameter_Gyro_D
+                0x00000000008001ad                Parameter_Gyro_P
+                0x00000000008001ae                Parameter_Gyro_I
+                0x00000000008001af                Parameter_Gyro_Gier_P
+                0x00000000008001b0                Parameter_Gyro_Gier_I
+                0x00000000008001b1                Parameter_Gier_P
+                0x00000000008001b2                Parameter_I_Faktor
+                0x00000000008001b3                Parameter_ServoNickControl
+                0x00000000008001b4                Parameter_ServoRollControl
+                0x00000000008001b5                Parameter_LoopGasLimit
+                0x00000000008001b6                Parameter_AchsKopplung1
+                0x00000000008001b7                Parameter_AchsKopplung2
+                0x00000000008001b8                Parameter_CouplingYawCorrection
+                0x00000000008001b9                Parameter_DynamicStability
+                0x00000000008001ba                sintab
+                0x00000000008001d9                ExternHoehenValue
+                0x00000000008001db                GIER_GRAD_FAKTOR
+                0x00000000008001df                VarioCharacter
+ .data          0x00000000008001e5        0x0 GPS.o
+ .data          0x00000000008001e5        0xb spi.o
+                0x00000000008001e5                FromNC_Rotate_C
+                0x00000000008001e6                NaviDataOkay
+                0x00000000008001e7                SPI_CommandSequence
+ .data          0x00000000008001f0        0x2 led.o
+                0x00000000008001f0                J16Mask
+                0x00000000008001f1                J17Mask
+ .data          0x00000000008001f2        0x1 Spektrum.o
+ .data          0x00000000008001f3        0x0 mymath.o
+ .data          0x00000000008001f3        0x0 jetimenu.o
+ .data          0x00000000008001f3        0x0 capacity.o
+ .data          0x00000000008001f3        0x0 debug.o
+ .data          0x00000000008001f3        0x0 libfc.o
+ .data          0x00000000008001f3        0x0 printf_P.o
+ .data          0x00000000008001f3        0x0 isqrt.o
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+ .data          0x00000000008001f3        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00000000008001f4                . = ALIGN (0x2)
+ *fill*         0x00000000008001f3        0x1 00
+                0x00000000008001f4                _edata = .
+                0x00000000008001f4                PROVIDE (__data_end, .)
+
+.bss            0x00000000008001f4      0x6a6
+                0x00000000008001f4                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00000000008001f4        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+ .bss           0x00000000008001f4        0x9 main.o
+                0x00000000008001f4                FlugMinuten
+                0x00000000008001f6                FlugMinutenGesamt
+                0x00000000008001f8                FlugSekunden
+                0x00000000008001fa                FoundMotors
+                0x00000000008001fb                JetiBeep
+ .bss           0x00000000008001fd       0x22 uart.o
+                0x00000000008001fd                GetExternalControl
+                0x00000000008001fe                DebugDisplayAnforderung1
+                0x00000000008001ff                DebugDisplayAnforderung
+                0x0000000000800200                DebugDataAnforderung
+                0x0000000000800201                GetVersionAnforderung
+                0x0000000000800202                GetPPMChannelAnforderung
+                0x0000000000800203                DisplayLine
+                0x0000000000800204                SioTmp
+                0x0000000000800205                NeuerDatensatzEmpfangen
+                0x0000000000800206                NeueKoordinateEmpfangen
+                0x0000000000800207                CntCrcError
+                0x0000000000800208                AnzahlEmpfangsBytes
+                0x0000000000800209                pRxData
+                0x000000000080020b                RxDataLen
+                0x000000000080020c                PC_DebugTimeout
+                0x000000000080020d                PC_MotortestActive
+                0x000000000080020e                DebugDataIntervall
+                0x0000000000800210                Intervall3D
+                0x0000000000800212                Display_Interval
+                0x0000000000800214                AboTimeOut
+                0x0000000000800216                JetiUpdateModeActive
+ .bss           0x000000000080021f       0x17 timer0.o
+                0x000000000080021f                CountMilliseconds
+                0x0000000000800221                UpdateMotor
+                0x0000000000800222                cntKompass
+                0x0000000000800224                beeptime
+                0x0000000000800226                SendSPI
+                0x0000000000800227                ServoActive
+                0x0000000000800228                RemainingPulse
+                0x000000000080022a                ServoNickValue
+                0x000000000080022c                ServoRollValue
+ .bss           0x0000000000800236       0x32 analog.o
+                0x0000000000800236                AdWertNickFilter
+                0x0000000000800238                AdWertRollFilter
+                0x000000000080023a                AdWertGierFilter
+                0x000000000080023c                AdWertNick
+                0x000000000080023e                AdWertRoll
+                0x0000000000800240                AdWertGier
+                0x0000000000800242                AdWertAccRoll
+                0x0000000000800244                AdWertAccNick
+                0x0000000000800246                AdWertAccHoch
+                0x0000000000800248                messanzahl_AccHoch
+                0x0000000000800249                SummenHoehe
+                0x000000000080024d                ExpandBaro
+                0x000000000080024e                VarioMeter
+                0x0000000000800250                ZaehlMessungen
+ .bss           0x0000000000800268        0x3 menu.o
+                0x0000000000800268                DispPtr
+                0x0000000000800269                MenuePunkt
+                0x000000000080026a                RemoteKeys
+ .bss           0x000000000080026b        0x0 eeprom.o
+ .bss           0x000000000080026b       0x10 twimaster.o
+                0x000000000080026b                twi_state
+                0x000000000080026c                dac_channel
+                0x000000000080026d                motor_write
+                0x000000000080026e                motor_read
+                0x000000000080026f                I2C_TransferActive
+                0x0000000000800270                MissingMotor
+                0x0000000000800271                BLFlags
+                0x0000000000800272                BLConfig_WriteMask
+                0x0000000000800274                BLConfig_ReadMask
+ .bss           0x000000000080027b       0x71 rc.o
+                0x000000000080027b                tmpChannels
+ .bss           0x00000000008002ec      0x101 fc.o
+                0x00000000008002ec                BaroExpandActive
+                0x00000000008002ee                AdNeutralNick
+                0x00000000008002f0                AdNeutralRoll
+                0x00000000008002f2                AdNeutralGier
+                0x00000000008002f4                StartNeutralRoll
+                0x00000000008002f6                StartNeutralNick
+                0x00000000008002f8                NeutralAccX
+                0x00000000008002fa                NeutralAccY
+                0x00000000008002fc                NaviCntAcc
+                0x00000000008002fe                NeutralAccZ
+                0x0000000000800300                ControlHeading
+                0x0000000000800301                IntegralNick
+                0x0000000000800305                IntegralNick2
+                0x0000000000800309                IntegralRoll
+                0x000000000080030d                IntegralRoll2
+                0x0000000000800311                IntegralAccNick
+                0x0000000000800315                IntegralAccRoll
+                0x0000000000800319                IntegralAccZ
+                0x000000000080031d                Integral_Gier
+                0x0000000000800321                Mess_IntegralNick
+                0x0000000000800325                Mess_IntegralNick2
+                0x0000000000800329                Mess_IntegralRoll
+                0x000000000080032d                Mess_IntegralRoll2
+                0x0000000000800331                Mess_Integral_Gier
+                0x0000000000800335                Mess_Integral_Gier2
+                0x0000000000800339                SummeNick
+                0x000000000080033d                SummeRoll
+                0x0000000000800341                Mess_Integral_Hoch
+                0x0000000000800345                KompassSollWert
+                0x0000000000800347                KompassRichtung
+                0x0000000000800349                HoehenReglerAktiv
+                0x000000000080034a                TrichterFlug
+                0x000000000080034b                GierGyroFehler
+                0x000000000080034d                Poti
+                0x0000000000800356                SenderOkay
+                0x0000000000800357                StickNick
+                0x0000000000800359                StickRoll
+                0x000000000080035b                StickGier
+                0x000000000080035d                StickGas
+                0x000000000080035f                MotorenEin
+                0x0000000000800360                StartTrigger
+                0x0000000000800361                HoehenWert
+                0x0000000000800365                SollHoehe
+                0x0000000000800369                FromNC_AltitudeSetpoint
+                0x000000000080036d                FromNC_AltitudeSpeed
+                0x000000000080036e                CompassGierSetpoint
+                0x0000000000800370                LageKorrekturRoll
+                0x0000000000800372                LageKorrekturNick
+                0x0000000000800374                HoverGas
+                0x0000000000800376                Looping_Nick
+                0x0000000000800377                Looping_Roll
+                0x0000000000800378                Looping_Links
+                0x0000000000800379                Looping_Rechts
+                0x000000000080037a                Looping_Unten
+                0x000000000080037b                Looping_Oben
+                0x000000000080037c                Parameter_UserParam1
+                0x000000000080037d                Parameter_UserParam2
+                0x000000000080037e                Parameter_UserParam3
+                0x000000000080037f                Parameter_UserParam4
+                0x0000000000800380                Parameter_UserParam5
+                0x0000000000800381                Parameter_UserParam6
+                0x0000000000800382                Parameter_UserParam7
+                0x0000000000800383                Parameter_UserParam8
+                0x0000000000800384                CareFree
+                0x0000000000800385                ExternStickNick
+                0x0000000000800387                ExternStickRoll
+                0x0000000000800389                ExternStickGier
+                0x000000000080038b                MaxStickNick
+                0x000000000080038d                MaxStickRoll
+                0x000000000080038f                modell_fliegt
+                0x0000000000800391                FC_StatusFlags
+                0x0000000000800392                FC_StatusFlags2
+ .bss           0x00000000008003ed       0x18 GPS.o
+                0x00000000008003ed                GPS_Nick
+                0x00000000008003ef                GPS_Roll
+                0x00000000008003f1                GPS_Nick2
+                0x00000000008003f3                GPS_Roll2
+                0x00000000008003f5                GpsAktuell_X
+                0x00000000008003f9                GpsAktuell_Y
+                0x00000000008003fd                GpsZiel_X
+                0x0000000000800401                GpsZiel_Y
+ .bss           0x0000000000800405        0xd spi.o
+                0x0000000000800405                FromNC_Rotate_S
+                0x0000000000800406                SPI_CommandCounter
+                0x0000000000800407                NC_ErrorCode
+                0x0000000000800408                POI_KameraNick
+                0x000000000080040a                MagVec
+ .bss           0x0000000000800412        0xb led.o
+                0x0000000000800412                LED1_Timing
+                0x0000000000800414                LED2_Timing
+                0x0000000000800416                J16Blinkcount
+                0x0000000000800417                J17Blinkcount
+ .bss           0x000000000080041d        0x5 Spektrum.o
+                0x000000000080041d                SpektrumTimer
+ .bss           0x0000000000800422        0x0 mymath.o
+ .bss           0x0000000000800422        0x2 jetimenu.o
+ .bss           0x0000000000800424        0xa capacity.o
+                0x0000000000800424                update_timer
+ .bss           0x000000000080042e        0x0 debug.o
+ .bss           0x000000000080042e        0x0 libfc.o
+ .bss           0x000000000080042e        0x0 printf_P.o
+ .bss           0x000000000080042e        0x0 isqrt.o
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+ .bss           0x000000000080042e        0x0 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x000000000080042e      0x1da uart.o
+                0x000000000080042e                Data3D
+                0x000000000080043c                Timer3D
+                0x000000000080043e                Debug_Timer
+                0x0000000000800440                VersionInfo
+                0x000000000080044a                MotorTest
+                0x000000000080045a                WinkelOut
+                0x0000000000800462                ExternControl
+                0x000000000080046d                Kompass_Timer
+                0x000000000080046f                RxdBuffer
+                0x0000000000800519                Display_Timer
+                0x000000000080051b                TxdBuffer
+                0x00000000008005c5                DebugOut
+                0x0000000000800607                ConfirmFrame
+ COMMON         0x0000000000800608       0x13 analog.o
+                0x0000000000800608                Aktuell_ay
+                0x000000000080060a                NeutralAccZ_float
+                0x000000000080060e                Aktuell_az
+                0x0000000000800610                StartLuftdruck
+                0x0000000000800612                Aktuell_Nick
+                0x0000000000800614                Aktuell_Roll
+                0x0000000000800616                Aktuell_ax
+                0x0000000000800618                DruckOffsetSetting
+                0x0000000000800619                Aktuell_Gier
+ COMMON         0x000000000080061b       0xc3 eeprom.o
+                0x000000000080061b                RequiredMotors
+                0x000000000080061c                EE_Parameter
+                0x0000000000800690                Mixer
+ COMMON         0x00000000008006de       0x68 twimaster.o
+                0x00000000008006de                BLConfig
+                0x00000000008006e6                Motor
+ COMMON         0x0000000000800746       0x69 rc.o
+                0x0000000000800746                Channels
+                0x0000000000800747                PPM_in
+                0x000000000080077b                PPM_diff
+ COMMON         0x00000000008007af       0x68 fc.o
+                0x00000000008007af                KopplungsteilNickRoll
+                0x00000000008007b1                MesswertGierBias
+                0x00000000008007b3                KopplungsteilRollNick
+                0x00000000008007b5                Parameter_Servo4
+                0x00000000008007b6                DiffRoll
+                0x00000000008007b8                MesswertRoll
+                0x00000000008007ba                TrimNick
+                0x00000000008007bc                Parameter_NaviGpsP
+                0x00000000008007bd                ErsatzKompassInGrad
+                0x00000000008007bf                GyroFaktorGier
+                0x00000000008007c0                MittelIntegralRoll2
+                0x00000000008007c4                Parameter_NaviGpsModeControl
+                0x00000000008007c5                TrimRoll
+                0x00000000008007c7                MesswertNick
+                0x00000000008007c9                Parameter_NaviGpsI
+                0x00000000008007ca                RohMesswertRoll
+                0x00000000008007cc                MIN_GAS
+                0x00000000008007cd                Parameter_NaviGpsACC
+                0x00000000008007ce                MittelIntegralNick2
+                0x00000000008007d2                RohMesswertNick
+                0x00000000008007d4                IntegralFaktorGier
+                0x00000000008007d5                DiffNick
+                0x00000000008007d7                MittelIntegralNick
+                0x00000000008007db                Parameter_Servo3
+                0x00000000008007dc                NaviAccNick
+                0x00000000008007de                Parameter_J16Timing
+                0x00000000008007df                MittelIntegralRoll
+                0x00000000008007e3                Parameter_Servo5
+                0x00000000008007e4                IntegralFaktor
+                0x00000000008007e5                tmp_motorwert
+                0x00000000008007fd                Parameter_NaviOperatingRadius
+                0x00000000008007fe                Parameter_NaviWindCorrection
+                0x00000000008007ff                s
+                0x0000000000800800                h
+                0x0000000000800801                Mittelwert_AccNick
+                0x0000000000800803                Parameter_NaviSpeedCompensation
+                0x0000000000800804                Parameter_J17Timing
+                0x0000000000800805                MAX_GAS
+                0x0000000000800806                MesswertGier
+                0x0000000000800808                Parameter_J16Bitmask
+                0x0000000000800809                NaviAccRoll
+                0x000000000080080b                GyroFaktor
+                0x000000000080080c                m
+                0x000000000080080d                ErsatzKompass
+                0x0000000000800811                Mittelwert_AccRoll
+                0x0000000000800813                Parameter_NaviGpsGain
+                0x0000000000800814                Parameter_ExternalControl
+                0x0000000000800815                Parameter_J17Bitmask
+                0x0000000000800816                Parameter_NaviGpsD
+ COMMON         0x0000000000800817       0x7b spi.o
+                0x0000000000800817                SPITransferCompleted
+                0x0000000000800818                GPSInfo
+                0x0000000000800820                SPI_TX_Buffer
+                0x0000000000800822                NC_Version
+                0x0000000000800827                SPI_BufferIndex
+                0x0000000000800828                ToNaviCtrl
+                0x000000000080084a                SPI_ChkSum
+                0x000000000080084b                SPI_RxBufferIndex
+                0x000000000080084c                SPI_RxDataValid
+                0x000000000080084d                FromNaviCtrl
+                0x000000000080086d                SPI_Buffer
+                0x000000000080088d                FromNaviCtrl_Value
+ COMMON         0x0000000000800892        0x7 capacity.o
+                0x0000000000800892                Capacity
+ COMMON         0x0000000000800899        0x1 printf_P.o
+                0x0000000000800899                PrintZiel
+                0x000000000080089a                PROVIDE (__bss_end, .)
+                0x000000000000c230                __data_load_start = LOADADDR (.data)
+                0x000000000000c324                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x000000000080089a        0x0
+                0x000000000080089a                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x000000000080089a                PROVIDE (__noinit_end, .)
+                0x000000000080089a                _end = .
+                0x000000000080089a                PROVIDE (__heap_start, .)
+
+.eeprom         0x0000000000810000        0x0
+ *(.eeprom*)
+                0x0000000000810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab           0x0000000000000000     0x213c
+ *(.stab)
+ .stab          0x0000000000000000      0x6b4 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+ .stab          0x00000000000006b4      0x66c isqrt.o
+                                        0x678 (size before relaxing)
+ .stab          0x0000000000000d20       0x78 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+                                         0x84 (size before relaxing)
+ .stab          0x0000000000000d98      0x4bc /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+                                        0x4c8 (size before relaxing)
+ .stab          0x0000000000001254      0x240 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+                                        0x24c (size before relaxing)
+ .stab          0x0000000000001494      0x318 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+                                        0x324 (size before relaxing)
+ .stab          0x00000000000017ac       0x78 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+                                         0x84 (size before relaxing)
+ .stab          0x0000000000001824       0x54 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+                                         0x60 (size before relaxing)
+ .stab          0x0000000000001878       0x84 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+                                         0x90 (size before relaxing)
+ .stab          0x00000000000018fc       0x84 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+                                         0x90 (size before relaxing)
+ .stab          0x0000000000001980       0xfc /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+                                        0x108 (size before relaxing)
+ .stab          0x0000000000001a7c      0x1d4 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+                                        0x1e0 (size before relaxing)
+ .stab          0x0000000000001c50       0x90 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+                                         0x9c (size before relaxing)
+ .stab          0x0000000000001ce0       0x84 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+                                         0x90 (size before relaxing)
+ .stab          0x0000000000001d64      0x108 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+                                        0x114 (size before relaxing)
+ .stab          0x0000000000001e6c       0x90 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+                                         0x9c (size before relaxing)
+ .stab          0x0000000000001efc       0x6c /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+                                         0x78 (size before relaxing)
+ .stab          0x0000000000001f68       0x9c /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+                                         0xa8 (size before relaxing)
+ .stab          0x0000000000002004       0xe4 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+                                         0xf0 (size before relaxing)
+ .stab          0x00000000000020e8       0x54 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                                         0x60 (size before relaxing)
+
+.stabstr        0x0000000000000000      0x3d9
+ *(.stabstr)
+ .stabstr       0x0000000000000000      0x3d9 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info)
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(Flight-Ctrl_MEGA644_V0_84a_SVN.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+ADC_Init                                          analog.o
+                                                  main.o
+ANALOG_TEXT                                       uart.o
+AboTimeOut                                        uart.o
+AdNeutralGier                                     fc.o
+                                                  spi.o
+                                                  rc.o
+AdNeutralNick                                     fc.o
+                                                  rc.o
+                                                  analog.o
+AdNeutralRoll                                     fc.o
+                                                  rc.o
+                                                  analog.o
+AdReady                                           analog.o
+                                                  fc.o
+                                                  timer0.o
+                                                  main.o
+AdWertAccHoch                                     analog.o
+                                                  fc.o
+AdWertAccNick                                     analog.o
+                                                  fc.o
+AdWertAccRoll                                     analog.o
+                                                  fc.o
+AdWertGier                                        analog.o
+                                                  spi.o
+                                                  fc.o
+AdWertGierFilter                                  analog.o
+AdWertNick                                        analog.o
+                                                  fc.o
+AdWertNickFilter                                  analog.o
+                                                  fc.o
+AdWertRoll                                        analog.o
+                                                  fc.o
+AdWertRollFilter                                  analog.o
+                                                  fc.o
+AddCRC                                            uart.o
+Aktuell_Gier                                      analog.o
+Aktuell_Nick                                      analog.o
+Aktuell_Roll                                      analog.o
+Aktuell_ax                                        analog.o
+Aktuell_ay                                        analog.o
+Aktuell_az                                        fc.o
+                                                  analog.o
+AnalogOffsetGier                                  analog.o
+                                                  twimaster.o
+AnalogOffsetNick                                  analog.o
+                                                  twimaster.o
+AnalogOffsetRoll                                  analog.o
+                                                  twimaster.o
+AnzahlEmpfangsBytes                               uart.o
+BLConfig                                          twimaster.o
+                                                  uart.o
+BLConfig_ReadMask                                 twimaster.o
+BLConfig_WriteMask                                twimaster.o
+BLFlags                                           twimaster.o
+                                                  fc.o
+                                                  analog.o
+                                                  main.o
+BaroExpandActive                                  fc.o
+BattLowVoltageWarning                             main.o
+                                                  spi.o
+                                                  fc.o
+BearbeiteRxDaten                                  uart.o
+                                                  main.o
+BeepMuster                                        timer0.o
+                                                  fc.o
+                                                  main.o
+CalMk3Mag                                         main.o
+CalculateCompassTimer                             fc.o
+                                                  spi.o
+CalculateServo                                    timer0.o
+                                                  main.o
+CalculateServoSignals                             timer0.o
+                                                  main.o
+CalibrierMittelwert                               fc.o
+Capacity                                          capacity.o
+                                                  jetimenu.o
+                                                  spi.o
+                                                  fc.o
+Capacity_Init                                     capacity.o
+                                                  main.o
+Capacity_Update                                   capacity.o
+                                                  main.o
+CareFree                                          fc.o
+                                                  spi.o
+Channels                                          rc.o
+CheckDelay                                        timer0.o
+                                                  capacity.o
+                                                  twimaster.o
+                                                  analog.o
+                                                  uart.o
+                                                  main.o
+CntCrcError                                       uart.o
+CommonDefaults                                    eeprom.o
+CompassGierSetpoint                               fc.o
+ConfirmFrame                                      uart.o
+ControlHeading                                    fc.o
+                                                  spi.o
+CopyDebugValues                                   fc.o
+                                                  uart.o
+CountMilliseconds                                 timer0.o
+Data3D                                            uart.o
+DatenUebertragung                                 uart.o
+                                                  main.o
+DebugDataAnforderung                              uart.o
+DebugDataIntervall                                uart.o
+DebugDisplayAnforderung                           uart.o
+DebugDisplayAnforderung1                          uart.o
+DebugOut                                          spi.o
+                                                  fc.o
+                                                  uart.o
+                                                  main.o
+DebugTextAnforderung                              uart.o
+Debug_Timer                                       uart.o
+Decode64                                          uart.o
+Delay_ms                                          timer0.o
+                                                  fc.o
+Delay_ms_Mess                                     timer0.o
+                                                  fc.o
+                                                  analog.o
+DiffNick                                          fc.o
+DiffRoll                                          fc.o
+DispPtr                                           menu.o
+DisplayBuff                                       menu.o
+                                                  uart.o
+DisplayLine                                       uart.o
+Display_Interval                                  uart.o
+Display_Timer                                     uart.o
+DruckOffsetSetting                                fc.o
+                                                  analog.o
+EEProm_Checksum                                   eeprom.o
+EE_Parameter                                      jetimenu.o
+                                                  Spektrum.o
+                                                  led.o
+                                                  spi.o
+                                                  fc.o
+                                                  rc.o
+                                                  eeprom.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+                                                  main.o
+ErsatzKompass                                     jetimenu.o
+                                                  spi.o
+                                                  fc.o
+                                                  uart.o
+ErsatzKompassInGrad                               fc.o
+ExpandBaro                                        analog.o
+                                                  fc.o
+ExternControl                                     fc.o
+                                                  uart.o
+                                                  main.o
+ExternHoehenValue                                 fc.o
+ExternStickGier                                   fc.o
+                                                  main.o
+ExternStickNick                                   fc.o
+                                                  main.o
+ExternStickRoll                                   fc.o
+                                                  main.o
+FC_StatusFlags                                    fc.o
+                                                  led.o
+                                                  spi.o
+                                                  twimaster.o
+                                                  main.o
+FC_StatusFlags2                                   fc.o
+                                                  spi.o
+FlugMinuten                                       main.o
+                                                  menu.o
+FlugMinutenGesamt                                 main.o
+FlugSekunden                                      main.o
+                                                  jetimenu.o
+FoundMotors                                       main.o
+FromNC_AltitudeSetpoint                           fc.o
+                                                  spi.o
+FromNC_AltitudeSpeed                              fc.o
+                                                  spi.o
+FromNC_Rotate_C                                   spi.o
+                                                  fc.o
+FromNC_Rotate_S                                   spi.o
+                                                  fc.o
+FromNaviCtrl                                      spi.o
+                                                  fc.o
+                                                  main.o
+FromNaviCtrl_Value                                spi.o
+                                                  fc.o
+GIER_GRAD_FAKTOR                                  fc.o
+                                                  jetimenu.o
+                                                  spi.o
+                                                  uart.o
+                                                  main.o
+GPSInfo                                           jetimenu.o
+                                                  spi.o
+GPS_BerechneZielrichtung                          GPS.o
+GPS_Neutral                                       GPS.o
+                                                  fc.o
+GPS_Nick                                          GPS.o
+                                                  spi.o
+                                                  fc.o
+                                                  main.o
+GPS_Nick2                                         GPS.o
+                                                  fc.o
+GPS_Roll                                          GPS.o
+                                                  spi.o
+                                                  fc.o
+                                                  main.o
+GPS_Roll2                                         GPS.o
+                                                  fc.o
+GetActiveParamSet                                 eeprom.o
+                                                  spi.o
+                                                  fc.o
+                                                  uart.o
+GetExternalControl                                uart.o
+GetPPMChannelAnforderung                          uart.o
+GetParamByte                                      eeprom.o
+                                                  analog.o
+                                                  main.o
+GetParamWord                                      eeprom.o
+                                                  fc.o
+GetVersionAnforderung                             uart.o
+GierGyroFehler                                    fc.o
+GpsAktuell_X                                      GPS.o
+GpsAktuell_Y                                      GPS.o
+GpsZiel_X                                         GPS.o
+GpsZiel_Y                                         GPS.o
+GyroFaktor                                        fc.o
+GyroFaktorGier                                    fc.o
+HiResNick                                         analog.o
+                                                  fc.o
+HiResRoll                                         analog.o
+                                                  fc.o
+HoehenReglerAktiv                                 fc.o
+HoehenWert                                        fc.o
+                                                  jetimenu.o
+                                                  spi.o
+                                                  analog.o
+HoverGas                                          fc.o
+I2CTimeout                                        twimaster.o
+                                                  menu.o
+                                                  main.o
+I2C_Init                                          twimaster.o
+                                                  main.o
+I2C_ReadBLConfig                                  twimaster.o
+                                                  uart.o
+I2C_Reset                                         twimaster.o
+                                                  main.o
+I2C_TransferActive                                twimaster.o
+                                                  fc.o
+I2C_WriteBLConfig                                 twimaster.o
+                                                  uart.o
+IntegralAccNick                                   fc.o
+IntegralAccRoll                                   fc.o
+IntegralAccZ                                      fc.o
+IntegralFaktor                                    fc.o
+IntegralFaktorGier                                fc.o
+IntegralNick                                      fc.o
+                                                  spi.o
+                                                  timer0.o
+                                                  uart.o
+IntegralNick2                                     fc.o
+IntegralRoll                                      fc.o
+                                                  spi.o
+                                                  timer0.o
+                                                  uart.o
+IntegralRoll2                                     fc.o
+Integral_Gier                                     fc.o
+Intervall3D                                       uart.o
+J16Blinkcount                                     led.o
+J16Mask                                           led.o
+J17Blinkcount                                     led.o
+J17Mask                                           led.o
+JetiBeep                                          main.o
+JetiBox_Menu                                      jetimenu.o
+JetiBox_Update                                    jetimenu.o
+JetiUpdateModeActive                              uart.o
+                                                  main.o
+Ki                                                fc.o
+KompassFusion                                     fc.o
+KompassRichtung                                   fc.o
+                                                  spi.o
+                                                  timer0.o
+                                                  uart.o
+KompassSignalSchlecht                             fc.o
+KompassSollWert                                   fc.o
+                                                  spi.o
+                                                  timer0.o
+                                                  uart.o
+KompassValue                                      fc.o
+                                                  spi.o
+                                                  timer0.o
+                                                  uart.o
+Kompass_Timer                                     uart.o
+KopplungsteilNickRoll                             fc.o
+KopplungsteilRollNick                             fc.o
+LED1_Timing                                       led.o
+LED2_Timing                                       led.o
+LED_Init                                          led.o
+                                                  fc.o
+                                                  eeprom.o
+LED_Update                                        led.o
+                                                  main.o
+LIBFC_GetCPUType                                  libfc.o
+                                                  uart.o
+LIBFC_Init                                        libfc.o
+                                                  main.o
+LIBFC_JetiBox_Clear                               libfc.o
+                                                  jetimenu.o
+LIBFC_JetiBox_Putchar                             libfc.o
+                                                  jetimenu.o
+LIBFC_JetiBox_SetPos                              libfc.o
+                                                  jetimenu.o
+LIBFC_Polling                                     libfc.o
+                                                  main.o
+LIBFC_ReceiverInit                                libfc.o
+                                                  fc.o
+                                                  uart.o
+                                                  main.o
+LageKorrekturNick                                 fc.o
+LageKorrekturRoll                                 fc.o
+LcdClear                                          menu.o
+                                                  uart.o
+                                                  main.o
+LipoDetection                                     main.o
+                                                  fc.o
+                                                  uart.o
+Looping_Links                                     fc.o
+Looping_Nick                                      fc.o
+Looping_Oben                                      fc.o
+Looping_Rechts                                    fc.o
+Looping_Roll                                      fc.o
+Looping_Unten                                     fc.o
+Luftdruck                                         analog.o
+                                                  fc.o
+MAX_GAS                                           fc.o
+MIN_GAS                                           fc.o
+MagVec                                            spi.o
+MaxMenue                                          menu.o
+                                                  uart.o
+MaxStickNick                                      fc.o
+MaxStickRoll                                      fc.o
+MeineSlaveAdresse                                 uart.o
+Menu                                              menu.o
+                                                  uart.o
+Menu_Battery                                      jetimenu.o
+Menu_PosInfo                                      jetimenu.o
+Menu_Putchar                                      menu.o
+Menu_Status                                       jetimenu.o
+Menu_Temperature                                  jetimenu.o
+MenuePunkt                                        menu.o
+                                                  uart.o
+MessLuftdruck                                     analog.o
+                                                  fc.o
+Mess_IntegralNick                                 fc.o
+Mess_IntegralNick2                                fc.o
+Mess_IntegralRoll                                 fc.o
+Mess_IntegralRoll2                                fc.o
+Mess_Integral_Gier                                fc.o
+                                                  uart.o
+Mess_Integral_Gier2                               fc.o
+Mess_Integral_Hoch                                fc.o
+                                                  analog.o
+MesswertGier                                      fc.o
+MesswertGierBias                                  fc.o
+MesswertNick                                      fc.o
+MesswertRoll                                      fc.o
+MissingMotor                                      twimaster.o
+                                                  fc.o
+                                                  menu.o
+                                                  main.o
+MittelIntegralNick                                fc.o
+MittelIntegralNick2                               fc.o
+MittelIntegralRoll                                fc.o
+MittelIntegralRoll2                               fc.o
+Mittelwert                                        fc.o
+Mittelwert_AccNick                                fc.o
+Mittelwert_AccRoll                                fc.o
+Mixer                                             fc.o
+                                                  twimaster.o
+                                                  eeprom.o
+                                                  uart.o
+                                                  main.o
+MixerTable_Default                                eeprom.o
+MixerTable_ReadFromEEProm                         eeprom.o
+MixerTable_WriteToEEProm                          eeprom.o
+                                                  uart.o
+Motor                                             capacity.o
+                                                  jetimenu.o
+                                                  fc.o
+                                                  twimaster.o
+                                                  main.o
+MotorRegler                                       fc.o
+                                                  main.o
+MotorTest                                         fc.o
+                                                  uart.o
+MotorenEin                                        fc.o
+                                                  led.o
+                                                  rc.o
+                                                  twimaster.o
+                                                  uart.o
+                                                  main.o
+NC_ErrorCode                                      spi.o
+                                                  jetimenu.o
+                                                  fc.o
+NC_Version                                        spi.o
+                                                  main.o
+NaviAccNick                                       spi.o
+                                                  fc.o
+NaviAccRoll                                       spi.o
+                                                  fc.o
+NaviCntAcc                                        fc.o
+                                                  spi.o
+NaviDataOkay                                      spi.o
+                                                  jetimenu.o
+                                                  timer0.o
+                                                  main.o
+NeueKoordinateEmpfangen                           uart.o
+NeuerDatensatzEmpfangen                           uart.o
+NeutralAccX                                       fc.o
+                                                  analog.o
+NeutralAccY                                       fc.o
+                                                  analog.o
+NeutralAccZ                                       fc.o
+                                                  analog.o
+NeutralAccZ_float                                 analog.o
+NewPpmData                                        rc.o
+                                                  Spektrum.o
+                                                  fc.o
+PAD_0                                             printf_P.o
+PAD_SP                                            printf_P.o
+PC_DebugTimeout                                   uart.o
+PC_MotortestActive                                uart.o
+                                                  fc.o
+                                                  twimaster.o
+POI_KameraNick                                    spi.o
+                                                  timer0.o
+PPM_diff                                          Spektrum.o
+                                                  fc.o
+                                                  rc.o
+PPM_in                                            Spektrum.o
+                                                  spi.o
+                                                  fc.o
+                                                  rc.o
+                                                  timer0.o
+                                                  uart.o
+                                                  main.o
+PRINT                                             printf_P.o
+PRINTP                                            printf_P.o
+ParamSet_DefaultSet1                              eeprom.o
+ParamSet_DefaultSet2                              eeprom.o
+ParamSet_DefaultSet3                              eeprom.o
+ParamSet_DefaultStickMapping                      eeprom.o
+ParamSet_Init                                     eeprom.o
+                                                  main.o
+ParamSet_ReadFromEEProm                           eeprom.o
+                                                  fc.o
+                                                  uart.o
+ParamSet_WriteToEEProm                            eeprom.o
+                                                  uart.o
+ParameterZuordnung                                fc.o
+Parameter_AchsKopplung1                           fc.o
+Parameter_AchsKopplung2                           fc.o
+Parameter_CouplingYawCorrection                   fc.o
+Parameter_DynamicStability                        fc.o
+Parameter_ExternalControl                         fc.o
+Parameter_Gier_P                                  fc.o
+Parameter_Gyro_D                                  fc.o
+Parameter_Gyro_Gier_I                             fc.o
+Parameter_Gyro_Gier_P                             fc.o
+Parameter_Gyro_I                                  fc.o
+Parameter_Gyro_P                                  fc.o
+Parameter_Hoehe_ACC_Wirkung                       fc.o
+Parameter_Hoehe_GPS_Z                             fc.o
+Parameter_Hoehe_P                                 fc.o
+Parameter_I_Faktor                                fc.o
+Parameter_J16Bitmask                              fc.o
+Parameter_J16Timing                               led.o
+                                                  fc.o
+Parameter_J17Bitmask                              fc.o
+Parameter_J17Timing                               led.o
+                                                  fc.o
+Parameter_KompassWirkung                          fc.o
+Parameter_LoopGasLimit                            fc.o
+Parameter_Luftdruck_D                             fc.o
+Parameter_MaxHoehe                                fc.o
+Parameter_NaviGpsACC                              fc.o
+Parameter_NaviGpsD                                fc.o
+Parameter_NaviGpsGain                             fc.o
+Parameter_NaviGpsI                                fc.o
+Parameter_NaviGpsModeControl                      fc.o
+Parameter_NaviGpsP                                fc.o
+Parameter_NaviOperatingRadius                     fc.o
+Parameter_NaviSpeedCompensation                   fc.o
+Parameter_NaviWindCorrection                      fc.o
+Parameter_Servo3                                  fc.o
+                                                  timer0.o
+Parameter_Servo4                                  fc.o
+                                                  timer0.o
+Parameter_Servo5                                  fc.o
+                                                  timer0.o
+Parameter_ServoNickControl                        fc.o
+                                                  spi.o
+                                                  timer0.o
+Parameter_ServoRollControl                        fc.o
+                                                  spi.o
+                                                  timer0.o
+Parameter_UserParam1                              fc.o
+                                                  spi.o
+                                                  uart.o
+Parameter_UserParam2                              fc.o
+                                                  spi.o
+                                                  uart.o
+Parameter_UserParam3                              fc.o
+                                                  spi.o
+Parameter_UserParam4                              fc.o
+                                                  spi.o
+Parameter_UserParam5                              fc.o
+                                                  spi.o
+Parameter_UserParam6                              fc.o
+                                                  spi.o
+Parameter_UserParam7                              fc.o
+                                                  spi.o
+Parameter_UserParam8                              fc.o
+                                                  spi.o
+PcZugriff                                         uart.o
+                                                  main.o
+Piep                                              fc.o
+                                                  uart.o
+                                                  main.o
+PlatinenVersion                                   main.o
+                                                  spi.o
+                                                  fc.o
+                                                  rc.o
+                                                  eeprom.o
+                                                  analog.o
+                                                  timer0.o
+Poti                                              fc.o
+                                                  spi.o
+PrintZiel                                         printf_P.o
+Putchar                                           printf_P.o
+RAM_Checksum                                      eeprom.o
+                                                  twimaster.o
+RemainingPulse                                    timer0.o
+RemoteKeys                                        menu.o
+                                                  uart.o
+RequiredMotors                                    jetimenu.o
+                                                  twimaster.o
+                                                  eeprom.o
+                                                  main.o
+RohMesswertNick                                   fc.o
+RohMesswertRoll                                   fc.o
+RxDataLen                                         uart.o
+RxdBuffer                                         uart.o
+SPITransferCompleted                              spi.o
+SPI_Buffer                                        spi.o
+SPI_BufferIndex                                   spi.o
+SPI_ChkSum                                        spi.o
+SPI_CommandCounter                                spi.o
+SPI_CommandSequence                               spi.o
+SPI_MasterInit                                    spi.o
+                                                  main.o
+SPI_RxBufferIndex                                 spi.o
+SPI_RxDataValid                                   spi.o
+SPI_StartTransmitPacket                           spi.o
+                                                  main.o
+SPI_TX_Buffer                                     spi.o
+SPI_TransmitByte                                  spi.o
+                                                  main.o
+SendMotorData                                     fc.o
+                                                  main.o
+SendOutData                                       uart.o
+SendSPI                                           timer0.o
+                                                  spi.o
+                                                  main.o
+SendVersionToNavi                                 main.o
+                                                  fc.o
+SenderOkay                                        fc.o
+                                                  Spektrum.o
+                                                  spi.o
+                                                  rc.o
+                                                  timer0.o
+                                                  main.o
+ServoActive                                       timer0.o
+                                                  fc.o
+                                                  uart.o
+                                                  main.o
+ServoNickOffset                                   timer0.o
+ServoNickValue                                    timer0.o
+                                                  fc.o
+ServoRollOffset                                   timer0.o
+ServoRollValue                                    timer0.o
+SetActiveParamSet                                 eeprom.o
+                                                  fc.o
+SetDefaultParameter                               eeprom.o
+                                                  uart.o
+SetDelay                                          timer0.o
+                                                  capacity.o
+                                                  twimaster.o
+                                                  analog.o
+                                                  uart.o
+                                                  main.o
+SetNeutral                                        fc.o
+                                                  main.o
+SetParamByte                                      eeprom.o
+                                                  analog.o
+                                                  main.o
+SetParamWord                                      eeprom.o
+                                                  fc.o
+                                                  menu.o
+SioTmp                                            uart.o
+SollHoehe                                         fc.o
+                                                  spi.o
+SpektrumParser                                    Spektrum.o
+SpektrumTimer                                     Spektrum.o
+                                                  timer0.o
+SpektrumUartInit                                  Spektrum.o
+StartLuftdruck                                    fc.o
+                                                  analog.o
+StartNeutralNick                                  fc.o
+StartNeutralRoll                                  fc.o
+StartTrigger                                      fc.o
+StickGas                                          fc.o
+StickGier                                         fc.o
+                                                  main.o
+StickNick                                         fc.o
+                                                  main.o
+StickRoll                                         fc.o
+                                                  main.o
+SucheGyroOffset                                   analog.o
+                                                  fc.o
+SucheLuftruckOffset                               analog.o
+                                                  fc.o
+                                                  main.o
+SummeNick                                         fc.o
+                                                  uart.o
+SummeRoll                                         fc.o
+                                                  uart.o
+SummenHoehe                                       analog.o
+                                                  fc.o
+TIMER2_Init                                       timer0.o
+                                                  main.o
+Timer3D                                           uart.o
+Timer_Init                                        timer0.o
+                                                  main.o
+ToNaviCtrl                                        spi.o
+TrichterFlug                                      fc.o
+TrimNick                                          fc.o
+TrimRoll                                          fc.o
+TxdBuffer                                         uart.o
+UART_Init                                         uart.o
+                                                  main.o
+UBat                                              analog.o
+                                                  capacity.o
+                                                  jetimenu.o
+                                                  spi.o
+                                                  fc.o
+                                                  main.o
+UebertragungAbgeschlossen                         uart.o
+Umschlag180Nick                                   fc.o
+                                                  uart.o
+Umschlag180Roll                                   fc.o
+                                                  uart.o
+UpdateMotor                                       timer0.o
+                                                  main.o
+UpdateSPI_Buffer                                  spi.o
+VarioCharacter                                    fc.o
+                                                  jetimenu.o
+                                                  spi.o
+VarioMeter                                        analog.o
+                                                  fc.o
+VersionInfo                                       led.o
+                                                  spi.o
+                                                  fc.o
+                                                  menu.o
+                                                  analog.o
+                                                  uart.o
+                                                  main.o
+WinkelOut                                         spi.o
+                                                  fc.o
+                                                  uart.o
+                                                  main.o
+ZaehlMessungen                                    analog.o
+                                                  fc.o
+__addsf3                                          /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+                                                  fc.o
+__addsf3x                                         /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+__bad_interrupt                                   /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__bss_end                                         /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+__bss_start                                       /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+__data_end                                        /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+__data_load_start                                 /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+__data_start                                      /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+__divmodhi4                                       /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+                                                  jetimenu.o
+                                                  mymath.o
+                                                  Spektrum.o
+                                                  spi.o
+                                                  fc.o
+                                                  rc.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+__divmodsi4                                       /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+                                                  jetimenu.o
+                                                  spi.o
+                                                  fc.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+__do_clear_bss                                    /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_clear_bss.o)
+                                                  printf_P.o
+                                                  libfc.o
+                                                  debug.o
+                                                  capacity.o
+                                                  jetimenu.o
+                                                  mymath.o
+                                                  Spektrum.o
+                                                  led.o
+                                                  spi.o
+                                                  GPS.o
+                                                  fc.o
+                                                  rc.o
+                                                  twimaster.o
+                                                  eeprom.o
+                                                  menu.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+                                                  main.o
+__do_copy_data                                    /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_copy_data.o)
+                                                  printf_P.o
+                                                  libfc.o
+                                                  debug.o
+                                                  capacity.o
+                                                  jetimenu.o
+                                                  mymath.o
+                                                  Spektrum.o
+                                                  led.o
+                                                  spi.o
+                                                  GPS.o
+                                                  fc.o
+                                                  rc.o
+                                                  twimaster.o
+                                                  eeprom.o
+                                                  menu.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+                                                  main.o
+__eerd_block_m644p                                /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+                                                  eeprom.o
+__eerd_blraw_m644p                                /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_block_atmega644p.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+__eerd_byte_m644p                                 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_byte_atmega644p.o)
+                                                  eeprom.o
+__eerd_word_m644p                                 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eerd_word_atmega644p.o)
+                                                  eeprom.o
+__eewr_block_m644p                                /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+                                                  eeprom.o
+__eewr_byte_m644p                                 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                                                  eeprom.o
+__eewr_r18_m644p                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_byte_atmega644p.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_block_atmega644p.o)
+__eewr_word_m644p                                 /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(eewr_word_atmega644p.o)
+                                                  eeprom.o
+__epilogue_restores__                             /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_epilogue.o)
+                                                  printf_P.o
+                                                  jetimenu.o
+                                                  fc.o
+                                                  twimaster.o
+                                                  eeprom.o
+                                                  analog.o
+                                                  uart.o
+__fixunssfsi                                      /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+                                                  fc.o
+__floatsisf                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+                                                  fc.o
+__floatunsisf                                     /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(floatsisf.o)
+__fp_inf                                          /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_inf.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__fp_nan                                          /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_nan.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__fp_pscA                                         /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscA.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__fp_pscB                                         /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_pscB.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__fp_round                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_round.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+__fp_split3                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__fp_splitA                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_split3.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+__fp_szero                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+__fp_zero                                         /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fp_zero.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(fixunssfsi.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3x.o)
+__heap_end                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__init                                            /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__mulsi3                                          /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_mulsi3.o)
+                                                  spi.o
+                                                  fc.o
+                                                  analog.o
+                                                  timer0.o
+                                                  uart.o
+__prologue_saves__                                /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_prologue.o)
+                                                  printf_P.o
+                                                  fc.o
+                                                  eeprom.o
+                                                  analog.o
+                                                  uart.o
+                                                  main.o
+__stack                                           /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__subsf3                                          /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libm.a(addsf3.o)
+__tablejump2__                                    /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+                                                  twimaster.o
+                                                  analog.o
+__tablejump__                                     /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_tablejump.o)
+__udivmodhi4                                      /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodhi4.o)
+                                                  /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+                                                  capacity.o
+                                                  jetimenu.o
+                                                  fc.o
+                                                  analog.o
+                                                  timer0.o
+__udivmodqi4                                      /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodqi4.o)
+                                                  main.o
+__udivmodsi4                                      /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_udivmodsi4.o)
+                                                  /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodsi4.o)
+__vector_1                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_10                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_11                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_12                                       rc.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_13                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_14                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_15                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_16                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_17                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_18                                       timer0.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_19                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_2                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_20                                       uart.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_21                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_22                                       uart.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_23                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_24                                       analog.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_25                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_26                                       twimaster.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_27                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_28                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_29                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_3                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_30                                       /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_4                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_5                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_6                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_7                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_8                                        /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_9                                        timer0.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vector_default                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+__vectors                                         /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+_div                                              /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_divmodhi4.o)
+_exit                                             /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+_printf_P                                         printf_P.o
+                                                  jetimenu.o
+                                                  fc.o
+                                                  eeprom.o
+                                                  analog.o
+                                                  main.o
+beeptime                                          timer0.o
+                                                  spi.o
+                                                  fc.o
+                                                  main.o
+c_cos_8192                                        mymath.o
+                                                  fc.o
+c_sin_8192                                        mymath.o
+carefree_old                                      fc.o
+cntKompass                                        timer0.o
+dac_channel                                       twimaster.o
+exit                                              /usr/lib/gcc/avr/4.3.4/avr5/libgcc.a(_exit.o)
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+h                                                 fc.o
+ihypot                                            isqrt.o
+                                                  fc.o
+isqrt16                                           isqrt.o
+isqrt32                                           isqrt.o
+m                                                 fc.o
+main                                              main.o
+                                                  /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/crtm644p.o
+memcpy_P                                          /usr/lib/gcc/avr/4.3.4/../../../avr/lib/avr5/libc.a(memcpy_P.o)
+                                                  uart.o
+messanzahl_AccHoch                                analog.o
+modell_fliegt                                     fc.o
+                                                  analog.o
+motor_read                                        twimaster.o
+                                                  main.o
+motor_write                                       twimaster.o
+                                                  fc.o
+pRxData                                           uart.o
+pgm_sinlookup                                     mymath.o
+rc_sum_init                                       rc.o
+                                                  main.o
+s                                                 fc.o
+sintab                                            fc.o
+                                                  timer0.o
+tmpChannels                                       rc.o
+tmp_motorwert                                     fc.o
+twi_state                                         twimaster.o
+                                                  fc.o
+                                                  analog.o
+uart_putchar                                      uart.o
+update_timer                                      capacity.o
