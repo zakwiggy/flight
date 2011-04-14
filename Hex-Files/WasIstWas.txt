@@ -1,0 +1,17 @@
++++++++++++++++++++++++++
++ Flight-Ctrl:
++++++++++++++++++++++++++
+BootLoader_MEGA644_20MHZ_V0_1.hex
+   Der Bootloader wird per ISP eingespielt
+   Der Bootloader nur dann eingespielt werden, wenn noch nie ein Bootloader eingespielt wurde!
+   Danach können Softwareupdates seriell eingespielt werden.
+
+Flight-Ctrl_MEGA644_Vx_yy.hex 
+   Aktuelle Firmware 
+   Wird per serielle Schnittstelle (durch den Bootloader) eingespielt
+
+Achtung: Die Programme für den ATMEGA1284 dürfen ausschliesslich per Bootloader, also seriell eingespielt werden und NICHT per ISP
+
+Warning: do not program the ATMEGA1284 (FC2.1) via SPI. Only use the MKUSB and the Koptertool for update!
+
+   
