@@ -1,0 +1,5 @@
+git add *
+git commit -am "now"
+echo word2pass
+git push origin master
+
